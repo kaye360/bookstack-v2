@@ -15,16 +15,16 @@ require_once './lib/router.php';
 require_once './models/User.php';
 
 $route = new Router();
-$route->baseURL = 'api';
+$route->baseURL = BASE_URL;
 
 
 //route->{request method}(route, [class, method, param] )
-$route->get('/users', [User::class, 'getAll']);
+$route->get('/users', ['User', 'getAll']);
 
-$route->get('/user/:id', [User::class, 'getSingle', 'id']);
-$route->post('/user', [User::class, 'create']);
-$route->put('/user/:id', [User::class, 'edit', ':id']);
-$route->delete('/user/:id', [User::class, 'destroy', 'id']);
+$route->get('/user/:id', ['User', 'getSingle', 'id']);
+$route->post('/user', ['User', 'create']);
+$route->put('/user/:id', ['User', 'edit', ':id']);
+$route->delete('/user/:id', ['User', 'destroy', 'id']);
 
 // $route->get('/post', [User::class, 'getPost']);
 // $route->post('/post', [User::class, 'postPost']);

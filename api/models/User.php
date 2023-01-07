@@ -13,11 +13,15 @@ class User extends Database {
   }
 
   public function create() {
-    echo json_encode(['user' => 'create user']);
-  }
-
-  public function edit($id) {
-    echo json_encode(['user' => 'edit user ' . $id]);
+    $post_data = json_decode( file_get_contents('php://input'), true);
+    echo json_encode($this->createRow(
+      columns: [
+        'username' => $post_data['username'],
+        'password' => password_hash( $post_data['password'], PASSWORD_DEFAULT )
+      ], 
+      return: ['username', 'id'],
+      table : 'users'
+    ));
   }
 
   public function getSingle($id) {
@@ -31,6 +35,10 @@ class User extends Database {
     echo json_encode($this->getAllRows(
       table : 'users'
     ));
+  }
+
+  public function edit($id) {
+    echo json_encode(['user' => 'edit user ' . $id]);
   }
 
   public function destroy($id) {
