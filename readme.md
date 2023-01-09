@@ -7,4 +7,5 @@ The front end will be made with React.
 
 TODO
 
-use proper response codes on fails
+- use proper response codes on api fails
+- user auth on api routes

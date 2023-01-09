@@ -3,57 +3,32 @@
 /**
  * 
  * Common function arguments
- * $columns = assoc array of column title/value pairs sent in req ['username' => 'bob', 'email' => 'bob@bob.com']
- * $table = the MYSQL table we are working with as a string
- * $return = the columns to return in a SELECT statement ['username', 'id', 'email']
+ * -------------------------
  * 
+ * @var $columns
+ * 		assoc array of column title/value pairs sent in req
+ * 		ex: ['username' => 'bob', 'email' => 'bob@bob.com']
+ * 
+ * @var $table
+ * 		the MYSQL table we are working with as a string
+ * 
+ * @var $return
+ * 		the columns to return in a SELECT statement 
+ * 		ex: ['username', 'id', 'email']
+ * 
+ * 
+ *
  */
 
-interface InterfaceDatabase
+
+class Database
 {
 
-	public function createRow(
-		array $columns,
-		string $table,
-		array $return
-	);
-
-	public function getRowById(
-		int $id,
-		string $table,
-		array $return
-	);
-
-	public function getRowByColumnName(
-		string $column,
-		string $value,
-		string $table,
-		array $return
-	);
-
-	public function getAllRows(
-		string $table,
-		array $return
-	);
-
-	public function updateRow(
-		int $id,
-		string $table,
-		array $put_data,
-		array $return
-	);
-
-	public function destroyRowById(
-		int $id,
-		string $table,
-		array $return
-	);
-}
-
-
-class Database implements InterfaceDatabase
-{
-
+	/**
+	 * 
+	 * @var string db connection variables
+	 * 
+	 */
 	private $dsn = 'mysql:host=' . DB_HOST . ';dbname=' . DB_NAME;
 	public $dbh;
 	public $stmt;
@@ -79,14 +54,23 @@ class Database implements InterfaceDatabase
 	}
 
 
-
+	/**
+	 * 
+	 * @method return the current request body
+	 * 
+	 */
 	public function request()
 	{
 		return json_decode(file_get_contents('php://input'), true);
 	}
 
-
-
+	/**
+	 * 
+	 * @method Create a new table row
+	 * 
+	 * @return array of columns specified. Default *
+	 * 
+	 */
 	public function createRow(
 		array $columns,
 		string $table,
@@ -120,6 +104,7 @@ class Database implements InterfaceDatabase
 			$sql = "SELECT $returned_columns FROM $table WHERE id = $new_id";
 			$this->stmt = $this->dbh->prepare($sql);
 
+			// Execute and return success/fail response
 			if ($this->stmt->execute()) {
 
 				$new_row = $this->stmt->fetch(PDO::FETCH_ASSOC);
@@ -139,8 +124,13 @@ class Database implements InterfaceDatabase
 		}
 	}
 
-
-
+	/**
+	 * 
+	 * @method get one row by ID
+	 * 
+	 * @return array of columns specified. Default *
+	 * 
+	 */
 	public function getRowById(
 		int $id,
 		string $table,
@@ -179,8 +169,13 @@ class Database implements InterfaceDatabase
 			];
 	}
 
-
-
+	/**
+	 * 
+	 * @method get one row by any column
+	 * 
+	 * @return array of columns specified. Default *
+	 * 
+	 */
 	public function getRowByColumnName(
 		string $column,
 		string $value,
@@ -218,9 +213,13 @@ class Database implements InterfaceDatabase
 			];
 	}
 
-
-
-
+	/**
+	 * 
+	 * @method get all rows of a table
+	 * 
+	 * @return array of columns specified. Default *
+	 * 
+	 */
 	public function getAllRows(
 		string $table,
 		array $return = null
@@ -253,8 +252,13 @@ class Database implements InterfaceDatabase
 			];
 	}
 
-
-
+	/**
+	 * 
+	 * @method update a single row based on @var columns to update
+	 * 
+	 * @return array of columns specified. Default *
+	 * 
+	 */
 	public function updateRow(
 		int $id,
 		string $table,
@@ -296,12 +300,16 @@ class Database implements InterfaceDatabase
 		}
 	}
 
-
-
+	/**
+	 * 
+	 * @method delete one row based on id
+	 * 
+	 * @return assoc array with success element
+	 * 
+	 */
 	public function destroyRowById(
 		int $id,
 		string $table,
-		array $return = null
 	) {
 
 		try {
@@ -329,4 +337,48 @@ class Database implements InterfaceDatabase
 			];
 		}
 	}
+
+	/**
+	 * 
+	 * @method is value of column already taken
+	 * 
+	 * @return bool
+	 * 
+	 */
+	protected function is_taken(
+		string $column,
+		string $value,
+		string $table
+	) {
+
+		$sql = "SELECT $column, id from $table WHERE $column = '$value'";
+		$this->stmt = $this->dbh->prepare($sql);
+		$this->stmt->execute();
+
+		$result = $this->stmt->fetch(PDO::FETCH_ASSOC);
+
+		return empty($result) ? false : true;
+	}
+
+	/** 
+	 * 
+	 * @method checks if array of strings has forbidden characters
+	 * 
+	 * @return bool
+	 * 
+	 */
+	protected function has_forbidden_chars(array $values) {
+
+		$has_forbidden_chars = null;
+
+		foreach($values as $value) {
+			$tester = preg_match('/^[a-zA-Z0-9_\-]+$/', $value);
+			if( !(bool) $tester ) $has_forbidden_chars = true; 
+		}
+
+		return $has_forbidden_chars;
+	}
 }
+
+
+

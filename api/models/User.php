@@ -26,6 +26,29 @@ class User extends Database
 	{
 		$post_data = $this->request();
 
+		if(	empty($post_data['username']) || empty($post_data['password']) ) {
+			return [
+				'success' => false,
+				'message' => 'Username and password are required.'
+			];
+		}
+
+		$username_is_taken = $this->is_taken(
+			column: 'username',
+			value: $post_data['username'],
+			table: 'users'
+		);
+
+		if( $username_is_taken ) return [
+			'success' => false,
+			'message' => 'Username is Taken'
+		];
+
+		if( $this->has_forbidden_chars($post_data) ) return [
+			'success' => false,
+			'message' => 'Username or password have forbidden characters.'
+		];
+
 		return $this->createRow(
 			columns: [
 				'username' => $post_data['username'],
@@ -66,6 +89,7 @@ class User extends Database
 	public function edit($id)
 	{
 		$put_data = $this->request();
+
 		return $this->updateRow(
 			id: $id,
 			table: $this->table,
@@ -85,7 +109,6 @@ class User extends Database
 		return $this->destroyRowById(
 			id: $id,
 			table: $this->table,
-			return: ['username']
 		);
 	}
 
@@ -145,8 +168,8 @@ class User extends Database
 
 	private function makeUUID()
 	{
-		return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex(random_bytes(16)), 4));
 		// Found Here: https://stackoverflow.com/questions/2040240/php-function-to-generate-v4-uuid
+		return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex(random_bytes(16)), 4));
 	}
 
 	/**
@@ -156,8 +179,8 @@ class User extends Database
 	 */
 	public function reset()
 	{
-		$names = ['PietrekSmiths', 'MagdaleneLohan', 'NoreneSprionghall', 'AllieDeAmbrosi', 'MerriliDonneely', 'MindyClaricoates', 'LemmyGeockle', 'KisseeLabbe', 'KevonDouble', 'NikolaosDamrell', 'ChristineEsseby', 'UrbainJeckells', 'HillierEgentan', 'DesDotterill', 'RhianonGanny', 'UdallCastells', 'BarthEggerton', 'PerryCatterson', 'GussieHorsefield', 'ChickyGridley', 'LillaBascombe', 'MerlineSchulke', 'RoseneNorway', 'ErichaCassley', 'HalieGreenstead', 'PatricioConnors', 'RositaGindghill', 'MishaSaddleton', 'KelliBernardotte', 'EugenioGoodered', 'BennYarrell', 'LillyMartignoni', 'TimofeiDerycot', 'DanitGoricke', 'KielGyver', 'Diane-marieTivolier', 'NickolaCottee', 'DonavonIngle', 'BevinWand', 'SumnerFergyson', 'RafaelaDominik', 'CassandraChaim', 'GradeyGanderton', 'CatrinaScarbarrow', 'RafaeliaMorris', 'NoellaPennington', 'ScottyDolley', 'AnsticeTellenbroker', 'PieterPetrol', 'DeborRosenhaupt'];
 		// Fake username data from https://www.mockaroo.com/
+		$names = ['PietrekSmiths', 'MagdaleneLohan', 'NoreneSprionghall', 'AllieDeAmbrosi', 'MerriliDonneely', 'MindyClaricoates', 'LemmyGeockle', 'KisseeLabbe', 'KevonDouble', 'NikolaosDamrell', 'ChristineEsseby', 'UrbainJeckells', 'HillierEgentan', 'DesDotterill', 'RhianonGanny', 'UdallCastells', 'BarthEggerton', 'PerryCatterson', 'GussieHorsefield', 'ChickyGridley', 'LillaBascombe', 'MerlineSchulke', 'RoseneNorway', 'ErichaCassley', 'HalieGreenstead', 'PatricioConnors', 'RositaGindghill', 'MishaSaddleton', 'KelliBernardotte', 'EugenioGoodered', 'BennYarrell', 'LillyMartignoni', 'TimofeiDerycot', 'DanitGoricke', 'KielGyver', 'Diane-marieTivolier', 'NickolaCottee', 'DonavonIngle', 'BevinWand', 'SumnerFergyson', 'RafaelaDominik', 'CassandraChaim', 'GradeyGanderton', 'CatrinaScarbarrow', 'RafaeliaMorris', 'NoellaPennington', 'ScottyDolley', 'AnsticeTellenbroker', 'PieterPetrol', 'DeborRosenhaupt'];
 
 		shuffle($names);
 		$names = array_slice($names, 0, 20);
