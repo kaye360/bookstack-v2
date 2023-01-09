@@ -22,21 +22,19 @@ $route->baseURL = BASE_URL;
 $route->get('/users', ['User', 'getAll']);
 
 $route->get('/user/:id', ['User', 'getSingle', 'id']);
+
 $route->post('/user', ['User', 'create']);
+$route->post('/user/login', ['User', 'login']);
+$route->post('/user/logout', ['User', 'logout']);
+
 $route->put('/user/:id', ['User', 'edit', ':id']);
 $route->delete('/user/:id', ['User', 'destroy', 'id']);
+
+$route->get('/user-reset', ['User', 'reset']);
 
 // $route->get('/post', [User::class, 'getPost']);
 // $route->post('/post', [User::class, 'postPost']);
 // $route->put('/post', [User::class, 'putPost']);
 // $route->delete('/post', [User::class, 'deletePost']);
 
-$route->render();
-
-
-
-
-
-
-
-?>
+$route->json();
