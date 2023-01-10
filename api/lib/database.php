@@ -2,21 +2,23 @@
 
 /**
  * 
+ * Database Class
+ * 
+ * ** User Input validation should not be done here. Do it in extended classes.
+ * 
  * Common function arguments
  * -------------------------
  * 
  * @var $columns
- * 		assoc array of column title/value pairs sent in req
+ * 		assoc array of database column title/value pairs sent in req
  * 		ex: ['username' => 'bob', 'email' => 'bob@bob.com']
  * 
  * @var $table
  * 		the MYSQL table we are working with as a string
  * 
  * @var $return
- * 		the columns to return in a SELECT statement 
+ * 		the columns to return in a SELECT or PDO fetch statement 
  * 		ex: ['username', 'id', 'email']
- * 
- * 
  *
  */
 
@@ -46,6 +48,7 @@ class Database
 		try {
 			$this->dbh = new PDO($this->dsn, DB_USER, DB_PASS, $options);
 		} catch (PDOException $err) {
+			http_response_code(500);
 			return [
 				'success' => false,
 				'message' => 'Failed PDO connection'
@@ -71,7 +74,7 @@ class Database
 	 * @return array of columns specified. Default *
 	 * 
 	 */
-	public function createRow(
+	public function create_row(
 		array $columns,
 		string $table,
 		array $return = null
@@ -111,12 +114,14 @@ class Database
 				$new_row['success'] = true;
 				return $new_row;
 			} else {
+				http_response_code(400);
 				return [
 					'success' => false,
 					'message' => 'Failed to execute query'
 				];
 			}
 		} catch (Exception $error) {
+			http_response_code(400);
 			return [
 				'success' => false,
 				'message' => 'Error with query'
@@ -131,7 +136,7 @@ class Database
 	 * @return array of columns specified. Default *
 	 * 
 	 */
-	public function getRowById(
+	public function get_row_by_id(
 		int $id,
 		string $table,
 		array $return = null
@@ -151,9 +156,11 @@ class Database
 			$this->stmt->execute();
 
 			$single = $this->stmt->fetch(PDO::FETCH_ASSOC);
-			$single['success'] = true;
+			if($single) $single['success'] = true;
 
 		} catch (Exception $error) {
+
+			http_response_code(400);
 
 			return [
 				'success' => false,
@@ -161,12 +168,16 @@ class Database
 			];
 		}
 
-		return !empty($single)
-			? $single
-			: [
+
+		if( !empty($single) ) {
+			return $single;
+		} else {
+			http_response_code(404);
+			return [
 				'success' => false,
 				'message' => 'No entries found'
 			];
+		}
 	}
 
 	/**
@@ -176,7 +187,7 @@ class Database
 	 * @return array of columns specified. Default *
 	 * 
 	 */
-	public function getRowByColumnName(
+	public function get_row_by_column_name(
 		string $column,
 		string $value,
 		string $table,
@@ -199,6 +210,8 @@ class Database
 
 		} catch (Exception $error) {
 
+			http_response_code(400);
+
 			return [
 				'success' => false,
 				'message' => 'Error with query'
@@ -220,7 +233,7 @@ class Database
 	 * @return array of columns specified. Default *
 	 * 
 	 */
-	public function getAllRows(
+	public function get_all_rows(
 		string $table,
 		array $return = null
 	) {
@@ -237,6 +250,8 @@ class Database
 			$all = $this->stmt->fetchAll(PDO::FETCH_ASSOC);
 
 		} catch (Exception $error) {
+
+			http_response_code(400);
 
 			return [
 				'success' => false,
@@ -259,7 +274,7 @@ class Database
 	 * @return array of columns specified. Default *
 	 * 
 	 */
-	public function updateRow(
+	public function update_row(
 		int $id,
 		string $table,
 		array $columns,
@@ -284,7 +299,7 @@ class Database
 			$this->stmt->execute($columns);
 
 			// Return New Values
-			$all = $this->getRowById(
+			$all = $this->get_row_by_id(
 				id: $id,
 				table: $table,
 				return: $return
@@ -292,6 +307,8 @@ class Database
 			return $all;
 
 		} catch (Exception $error) {
+
+			http_response_code(400);
 
 			return [
 				'success' => false,
@@ -307,7 +324,7 @@ class Database
 	 * @return assoc array with success element
 	 * 
 	 */
-	public function destroyRowById(
+	public function destroy_row_by_id(
 		int $id,
 		string $table,
 	) {
@@ -323,6 +340,8 @@ class Database
 			if ($this->stmt->execute()) {
 				return ['success' => true];
 			} else {
+
+				http_response_code(400);
 				return [
 					'success' => false,
 					'message' => 'error with query'
@@ -331,6 +350,7 @@ class Database
 
 		} catch (\Throwable $th) {
 
+			http_response_code(400);
 			return [
 				'success' => false,
 				'message' => 'error with query'

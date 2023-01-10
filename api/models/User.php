@@ -26,30 +26,54 @@ class User extends Database
 	{
 		$post_data = $this->request();
 
-		if(	empty($post_data['username']) || empty($post_data['password']) ) {
+		// Validate inputs
+		if(	
+			empty($post_data['username']) || 
+			empty($post_data['password']) ||
+			empty($post_data['confirm_password']) 
+		) {
+			http_response_code(400);
 			return [
 				'success' => false,
-				'message' => 'Username and password are required.'
+				'message' => 'Username, password and password confirmation are required.'
 			];
 		}
 
-		$username_is_taken = $this->is_taken(
-			column: 'username',
-			value: $post_data['username'],
-			table: 'users'
-		);
+		// Validate confirmed password
+		if($post_data['password'] !== $post_data['confirm_password'] ) {
+			http_response_code(400);
+			return [
+				'success' => false,
+				'message' => 'Password and confirmed do not match'
+			];
+		}
 
-		if( $username_is_taken ) return [
-			'success' => false,
-			'message' => 'Username is Taken'
-		];
+		// Validate unique username
+		if( 
+			$this->is_taken(
+				column: 'username',
+				value: $post_data['username'],
+				table: 'users'
+			)
+		 ) {
+			http_response_code(400);
+			return [
+				'success' => false,
+				'message' => 'Username is Taken'
+			];
+		}
 
-		if( $this->has_forbidden_chars($post_data) ) return [
-			'success' => false,
-			'message' => 'Username or password have forbidden characters.'
-		];
+		// Validate Characters
+		if( $this->has_forbidden_chars($post_data) ) {
+			http_response_code(400);
+			return [
+				'success' => false,
+				'message' => 'Username or password have forbidden characters.'
+			];
+		}
 
-		return $this->createRow(
+		// Create/return User
+		return $this->create_row(
 			columns: [
 				'username' => $post_data['username'],
 				'password' => password_hash($post_data['password'], PASSWORD_DEFAULT),
@@ -65,7 +89,7 @@ class User extends Database
 
 	public function getSingle($id)
 	{
-		return $this->getRowById(
+		return $this->get_row_by_id(
 			id: $id,
 			table: $this->table,
 			return: ['username, id']
@@ -77,7 +101,7 @@ class User extends Database
 
 	public function getAll()
 	{
-		return $this->getAllRows(
+		return $this->get_all_rows(
 			table: $this->table,
 			return: ['username, id']
 		);
@@ -90,12 +114,47 @@ class User extends Database
 	{
 		$put_data = $this->request();
 
-		return $this->updateRow(
+		// Validate empty fields
+		if(	
+			empty($put_data['username']) ||
+			empty($put_data['password']) 
+		 ) {
+			http_response_code(400);
+			return [
+				'success' => false,
+				'message' => 'Username and password are required.'
+			];
+		}
+
+		// Validate password
+		if(
+			!$this->validate_password(
+				username: $put_data['username'],
+				password: $put_data['password']
+			)
+		) {
+			return[
+				'success' => false,
+				'message' => 'Incorrect password.'
+			];
+		}
+
+		// Validate characters
+		if( $this->has_forbidden_chars($put_data) ) {
+			http_response_code(400);
+			return [
+				'success' => false,
+				'message' => 'Username or password have forbidden characters.'
+			];
+		}
+
+		// Update User
+		return $this->update_row(
 			id: $id,
 			table: $this->table,
 			columns: [
 				'username' => $put_data['username'],
-				'password' => $put_data['password']
+				// 'password' => password_hash($put_data['password'], PASSWORD_DEFAULT)
 			],
 			return: ['username']
 		);
@@ -106,7 +165,7 @@ class User extends Database
 
 	public function destroy($id)
 	{
-		return $this->destroyRowById(
+		return $this->destroy_row_by_id(
 			id: $id,
 			table: $this->table,
 		);
@@ -120,7 +179,7 @@ class User extends Database
 		$post_data = $this->request();
 		$uuid = $this->makeUUID();
 
-		$user = $this->getRowByColumnName(
+		$user = $this->get_row_by_column_name(
 			column: 'username',
 			value: $post_data['username'],
 			table: 'users',
@@ -129,7 +188,7 @@ class User extends Database
 
 		if ($user['success'] && password_verify($post_data['password'], $user['password'])) {
 
-			$this->updateRow(
+			$this->update_row(
 				id: $user['id'],
 				table: $this->table,
 				columns: [
@@ -144,16 +203,20 @@ class User extends Database
 				'uuid' => $uuid
 			];
 		} else {
+
+			http_response_code(401);
 			return ['success' => false, 'message' => 'Invalid credentials'];
 		}
 	}
+
+
 
 
 	public function logout()
 	{
 		$post_data = $this->request();
 		
-		return $this->updateRow(
+		return $this->update_row(
 			id: $post_data['id'],
 			table: $this->table,
 			columns: [
@@ -166,11 +229,39 @@ class User extends Database
 
 
 
+
+	private function validate_password(
+		string $username,
+		string $password
+	) {
+
+		$user = $this->get_row_by_column_name(
+			column: 'username',
+			value: $username,
+			table: 'users',
+			return: ['username', 'password', 'id']
+		);
+
+		if (
+			$user['success'] && 
+			password_verify($password, $user['password'])
+		) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+
+
+
 	private function makeUUID()
 	{
 		// Found Here: https://stackoverflow.com/questions/2040240/php-function-to-generate-v4-uuid
 		return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex(random_bytes(16)), 4));
 	}
+
+
 
 	/**
 	 * 
@@ -190,7 +281,7 @@ class User extends Database
 		$this->stmt->execute();
 
 		foreach ($names as $name) {
-			$this->createRow(
+			$this->create_row(
 				columns: [
 					'username' => $name,
 					'password' => password_hash('123456', PASSWORD_DEFAULT)
@@ -198,7 +289,7 @@ class User extends Database
 				table: 'users'
 			);
 		}
-		$this->createRow(
+		$this->create_row(
 			columns: [
 				'username' => 'josh',
 				'password' => password_hash('123456', PASSWORD_DEFAULT)
