@@ -6,6 +6,23 @@
  * 
  * ** User Input validation should not be done here. Do it in extended classes.
  * 
+ * Database methods at a glance
+ * -------------------
+ * 
+ * PUBLIC
+ * request
+ * create_row
+ * get_row_by_id
+ * get_row_by_column_name
+ * get_all_rows
+ * update_row
+ * destroy_row_by_id
+ * 
+ * PROTECTED
+ * is_taken
+ * has_forbidden_chars
+ * 
+ * 
  * Common function arguments
  * -------------------------
  * 
@@ -28,7 +45,7 @@ class Database
 
 	/**
 	 * 
-	 * @var string db connection variables
+	 * @var $dsn $dbh $stmt - db connection/PDO variables
 	 * 
 	 */
 	private $dsn = 'mysql:host=' . DB_HOST . ';dbname=' . DB_NAME;
@@ -235,7 +252,9 @@ class Database
 	 */
 	public function get_all_rows(
 		string $table,
-		array $return = null
+		array $return = null,
+		int $id = null,
+		string $id_col = null
 	) {
 
 		try {
@@ -243,7 +262,10 @@ class Database
 			$returned_columns = isset($return)
 				? implode(', ', $return)
 				: '*';
-			$sql = "SELECT $returned_columns FROM $table";
+
+			$where = $id && $id_col ? "WHERE $id_col = $id" : '';
+
+			$sql = "SELECT $returned_columns FROM $table $where";
 			$this->stmt = $this->dbh->prepare($sql);
 			$this->stmt->execute();
 
@@ -294,7 +316,7 @@ class Database
 			$column_sql = rtrim($column_sql, ',');
 
 			// PDO query
-			$sql = "UPDATE $table set $column_sql WHERE id = $id";
+			$sql = "UPDATE $table SET $column_sql WHERE id = $id";
 			$this->stmt = $this->dbh->prepare($sql);
 			$this->stmt->execute($columns);
 
@@ -312,7 +334,7 @@ class Database
 
 			return [
 				'success' => false,
-				'message' => 'error with query'
+				'message' => 'error with query' . $error
 			];
 		}
 	}
@@ -344,7 +366,7 @@ class Database
 				http_response_code(400);
 				return [
 					'success' => false,
-					'message' => 'error with query'
+					'message' => 'Error with query'
 				];
 			}
 
@@ -353,14 +375,14 @@ class Database
 			http_response_code(400);
 			return [
 				'success' => false,
-				'message' => 'error with query'
+				'message' => 'Error with query'
 			];
 		}
 	}
 
 	/**
 	 * 
-	 * @method is value of column already taken
+	 * @method is value of column already taken. For unique columns
 	 * 
 	 * @return bool
 	 * 
@@ -387,12 +409,17 @@ class Database
 	 * @return bool
 	 * 
 	 */
-	protected function has_forbidden_chars(array $values) {
+	protected function has_forbidden_chars(
+		array $values,
+		string $regex = null
+	) {
 
 		$has_forbidden_chars = null;
 
 		foreach($values as $value) {
-			$tester = preg_match('/^[a-zA-Z0-9_\-]+$/', $value);
+			$tester = $regex 
+				? preg_match($regex, $value)
+				: preg_match('/^[a-zA-Z0-9_\-]+$/', $value);
 			if( !(bool) $tester ) $has_forbidden_chars = true; 
 		}
 

@@ -13,28 +13,31 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 require_once './config.php';
 require_once './lib/router.php';
 require_once './models/User.php';
+require_once './models/Book.php';
 
 $route = new Router();
 $route->baseURL = BASE_URL;
 
 
-//route->{request method}(route, [class, method, param] )
-$route->get('/users', ['User', 'getAll']);
-
-$route->get('/user/:id', ['User', 'getSingle', 'id']);
-
+// User Routes
+$route->get('/users', ['User', 'get_all']);
+$route->get('/user/:id', ['User', 'get_single', 'id']);
 $route->post('/user', ['User', 'create']);
 $route->post('/user/login', ['User', 'login']);
 $route->post('/user/logout', ['User', 'logout']);
-
 $route->put('/user/:id', ['User', 'edit', ':id']);
 $route->delete('/user/:id', ['User', 'destroy', 'id']);
 
-$route->get('/user-reset', ['User', 'reset']);
+// Book Routes
+$route->post('/book', ['Book', 'create']);
+$route->get('/book/:id', ['Book', 'get_single', 'id']);
+$route->get('/books/:id', ['Book', 'get_all', 'id']);
+$route->put('/book/:id', ['Book', 'edit', ':id']);
+$route->delete('/book/:id', ['Book', 'destroy', 'id']);
 
-// $route->get('/post', [User::class, 'getPost']);
-// $route->post('/post', [User::class, 'postPost']);
-// $route->put('/post', [User::class, 'putPost']);
-// $route->delete('/post', [User::class, 'deletePost']);
+// Dev Routes
+$route->get('/user-reset', ['User', 'reset']);
+$route->get('/book-reset', ['Book', 'reset']);
+
 
 $route->json();

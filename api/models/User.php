@@ -1,4 +1,28 @@
 <?php
+/**
+ * 
+ * User Methods at a glance
+ * ------------------------
+ * 
+ * PUBLIC
+ * create
+ * get_single
+ * get_all
+ * edit
+ * destroy
+ * login
+ * logout
+ * 
+ * PRIVATE
+ * validate_password
+ * makeUUID
+ * 
+ * DEV
+ * reset
+ * 
+ */
+
+
 
 
 require_once './lib/database.php';
@@ -53,7 +77,7 @@ class User extends Database
 			$this->is_taken(
 				column: 'username',
 				value: $post_data['username'],
-				table: 'users'
+				table: $this->table
 			)
 		 ) {
 			http_response_code(400);
@@ -77,7 +101,7 @@ class User extends Database
 			columns: [
 				'username' => $post_data['username'],
 				'password' => password_hash($post_data['password'], PASSWORD_DEFAULT),
-				'session' => $this->makeUUID()
+				'session' => $this->make_UUID()
 			],
 			return: ['username', 'id', 'session'],
 			table: $this->table
@@ -87,19 +111,19 @@ class User extends Database
 
 
 
-	public function getSingle($id)
+	public function get_single($id)
 	{
 		return $this->get_row_by_id(
 			id: $id,
 			table: $this->table,
-			return: ['username, id']
+			return: ['username, id', 'session']
 		);
 	}
 
 
 
 
-	public function getAll()
+	public function get_all()
 	{
 		return $this->get_all_rows(
 			table: $this->table,
@@ -135,7 +159,7 @@ class User extends Database
 		) {
 			return[
 				'success' => false,
-				'message' => 'Incorrect password.'
+				'message' => 'Invalid Credentials'
 			];
 		}
 
@@ -154,7 +178,6 @@ class User extends Database
 			table: $this->table,
 			columns: [
 				'username' => $put_data['username'],
-				// 'password' => password_hash($put_data['password'], PASSWORD_DEFAULT)
 			],
 			return: ['username']
 		);
@@ -177,36 +200,45 @@ class User extends Database
 	public function login()
 	{
 		$post_data = $this->request();
-		$uuid = $this->makeUUID();
+		$uuid = $this->make_UUID();
 
+		// Validate password
+		if(
+			!$this->validate_password(
+				username: $post_data['username'],
+				password: $post_data['password']
+			)
+		) {
+			return[
+				'success' => false,
+				'message' => 'Invalid credentials'
+			];
+		}
+
+		// Get user data
 		$user = $this->get_row_by_column_name(
 			column: 'username',
 			value: $post_data['username'],
-			table: 'users',
-			return: ['username', 'password', 'id']
+			table: $this->table,
+			return: ['username', 'id', 'session']
 		);
 
-		if ($user['success'] && password_verify($post_data['password'], $user['password'])) {
+		// Update User Session
+		$this->update_row(
+			id: $user['id'],
+			table: $this->table,
+			columns: [
+				'session' => $uuid
+			]
+		);
 
-			$this->update_row(
-				id: $user['id'],
-				table: $this->table,
-				columns: [
-					'session' => $uuid
-				]
-			);
-
-			return [
-				'success' => true,
-				'username' => $user['username'],
-				'id' => $user['id'],
-				'uuid' => $uuid
-			];
-		} else {
-
-			http_response_code(401);
-			return ['success' => false, 'message' => 'Invalid credentials'];
-		}
+		// Return User Data
+		return [
+			'success' => true,
+			'username' => $user['username'],
+			'id' => $user['id'],
+			'uuid' => $uuid
+		];
 	}
 
 
@@ -238,7 +270,7 @@ class User extends Database
 		$user = $this->get_row_by_column_name(
 			column: 'username',
 			value: $username,
-			table: 'users',
+			table: $this->table,
 			return: ['username', 'password', 'id']
 		);
 
@@ -255,7 +287,7 @@ class User extends Database
 
 
 
-	private function makeUUID()
+	private function make_UUID()
 	{
 		// Found Here: https://stackoverflow.com/questions/2040240/php-function-to-generate-v4-uuid
 		return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex(random_bytes(16)), 4));
@@ -286,7 +318,7 @@ class User extends Database
 					'username' => $name,
 					'password' => password_hash('123456', PASSWORD_DEFAULT)
 				],
-				table: 'users'
+				table: $this->table
 			);
 		}
 		$this->create_row(
@@ -294,7 +326,7 @@ class User extends Database
 				'username' => 'josh',
 				'password' => password_hash('123456', PASSWORD_DEFAULT)
 			],
-			table: 'users'
+			table: $this->table
 		);
 
 		return 'Users table reset';
