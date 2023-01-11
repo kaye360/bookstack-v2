@@ -133,6 +133,72 @@ class Book extends Database {
 
 
 
+  public function like() 
+  {
+    $put_data = $this->request();
+
+    // Validate request
+    if (
+      empty($put_data['id']) ||
+      empty($put_data['user_id'])
+    ) {
+      return [
+        'success' => false,
+        'message' => 'Book ID and user ID are required.'
+      ];
+    }
+
+    // Get current book likes
+    $current_book = $this->get_row_by_id(
+      id: $put_data['id'],
+      table: $this->table,
+      return: ['likes']
+    );
+
+    if ( !array_key_exists('likes', $current_book)) {
+      return [
+        'success' => false,
+        'message' => 'This book doesn\'t exist'
+      ];
+    }
+
+    $current_book['likes'] = json_decode($current_book['likes'], true);
+
+    // Toggle Like
+    if( in_array( $put_data['user_id'], $current_book['likes'] ) ) {
+
+      // UnLike
+      $user_id_key = array_search($put_data['user_id'], $current_book['likes']);
+      unset( $current_book['likes'][$user_id_key] );      
+  
+      return $this->update_row(
+        id: $put_data['id'],
+        table: $this->table,
+        columns: [
+          'likes' => json_encode($current_book['likes'])
+        ],
+        return: ['likes']
+      );
+
+    } else {
+
+      // Like
+      array_push( $current_book['likes'], $put_data['user_id'] );
+  
+      return $this->update_row(
+      	id: $put_data['id'],
+      	table: $this->table,
+      	columns: [
+          'likes' => json_encode($current_book['likes'])
+      	],
+        return: ['likes']
+      );
+    }
+  }
+
+
+
+
   public function destroy($id) 
   {
 		return $this->destroy_row_by_id(
