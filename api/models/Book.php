@@ -5,6 +5,18 @@
  * Books Methods at a glance
  * -------------------------
  * 
+ * PUBLIC
+ * create
+ * get_single
+ * get_all
+ * edit
+ * like
+ * toggle_read_status
+ * destroy
+ * 
+ * DEV
+ * reset
+ * 
  */
 
 require_once './lib/database.php';
@@ -16,7 +28,7 @@ class Book extends Database {
 
 
 
-  private $table = 'books';
+  private const TABLE = 'books';
 
 
   function __construct() 
@@ -55,7 +67,7 @@ class Book extends Database {
         'user_id' => $post_data['user_id']
       ],
       return: ['title', 'id'],
-      table: $this->table
+      table: self::TABLE
     );
   }
 
@@ -66,7 +78,7 @@ class Book extends Database {
   {
     return $this->get_row_by_id(
       id: $id,
-      table: $this->table,
+      table: self::TABLE,
     );
   }
 
@@ -78,7 +90,7 @@ class Book extends Database {
     return $this->get_all_rows(
       id: $id,
       id_col: 'user_id',
-      table: $this->table,
+      table: self::TABLE,
     );
   }
 
@@ -120,7 +132,7 @@ class Book extends Database {
 		// Update Book
 		return $this->update_row(
 			id: $id,
-			table: $this->table,
+			table: self::TABLE,
 			columns: [
         'isbn' => $put_data['isbn'],
         'title' => $put_data['title'],
@@ -142,6 +154,7 @@ class Book extends Database {
       empty($put_data['id']) ||
       empty($put_data['user_id'])
     ) {
+      http_response_code(400);
       return [
         'success' => false,
         'message' => 'Book ID and user ID are required.'
@@ -151,11 +164,12 @@ class Book extends Database {
     // Get current book likes
     $current_book = $this->get_row_by_id(
       id: $put_data['id'],
-      table: $this->table,
+      table: self::TABLE,
       return: ['likes']
     );
 
     if ( !array_key_exists('likes', $current_book)) {
+      http_response_code(404);
       return [
         'success' => false,
         'message' => 'This book doesn\'t exist'
@@ -173,7 +187,7 @@ class Book extends Database {
   
       return $this->update_row(
         id: $put_data['id'],
-        table: $this->table,
+        table: self::TABLE,
         columns: [
           'likes' => json_encode($current_book['likes'])
         ],
@@ -187,7 +201,7 @@ class Book extends Database {
   
       return $this->update_row(
       	id: $put_data['id'],
-      	table: $this->table,
+      	table: self::TABLE,
       	columns: [
           'likes' => json_encode($current_book['likes'])
       	],
@@ -199,11 +213,48 @@ class Book extends Database {
 
 
 
+  public function toggle_read_status() 
+  {
+    $put_data = $this->request();
+
+    // Validate request
+    if ( empty($put_data['id']) ) {
+      http_response_code(400);
+      return [
+        'success' => false,
+        'message' => 'Book ID is required.'
+      ];
+    }
+
+    // Get current book read status
+    $current_book = $this->get_row_by_id(
+      id: $put_data['id'],
+      table: self::TABLE,
+      return: ['is_read']
+    );
+
+    // Get new read status
+    $new_read_status = ($current_book['is_read'] === 'true') ? 'false' : 'true';
+
+    // Update status
+    return $this->update_row(
+      id: $put_data['id'],
+      table: self::TABLE,
+      columns: [
+        'is_read' => $new_read_status
+      ],
+      return: ['is_read']
+    );
+  }
+
+
+
+
   public function destroy($id) 
   {
 		return $this->destroy_row_by_id(
 			id: $id,
-			table: $this->table,
+			table: self::TABLE,
 		);
   }
 
@@ -235,7 +286,7 @@ class Book extends Database {
           'cover_url' => 'cover_url',
           'user_id' => $book['user_id']
         ],
-        table: $this->table
+        table: self::TABLE
       );
     }
 

@@ -162,6 +162,13 @@ class Database
 		$id = trim($id);
 		$id = filter_var($id);
 
+		if ( is_null($id) ) {
+			return [
+				'success' => false,
+				'message' => 'No ID specified'
+			];
+		}
+
 		try {
 			$returned_columns = isset($return)
 				? implode(', ', $return)
