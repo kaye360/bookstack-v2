@@ -75,6 +75,8 @@ class Router
 				break;
 		}
 
+		// var_dump($route_methods);
+
 		$this->class = isset($route_methods[$this->url][0])
 			? new $route_methods[$this->url][0]
 			: false;

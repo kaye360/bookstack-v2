@@ -162,7 +162,7 @@ class Database
 		$id = trim($id);
 		$id = filter_var($id);
 
-		if ( is_null($id) ) {
+		if (is_null($id)) {
 			return [
 				'success' => false,
 				'message' => 'No ID specified'
@@ -180,8 +180,7 @@ class Database
 			$this->stmt->execute();
 
 			$single = $this->stmt->fetch(PDO::FETCH_ASSOC);
-			if($single) $single['success'] = true;
-
+			if ($single) $single['success'] = true;
 		} catch (Exception $error) {
 
 			http_response_code(400);
@@ -193,7 +192,7 @@ class Database
 		}
 
 
-		if( !empty($single) ) {
+		if (!empty($single)) {
 			return $single;
 		} else {
 			http_response_code(404);
@@ -231,7 +230,6 @@ class Database
 
 			$single = $this->stmt->fetch(PDO::FETCH_ASSOC);
 			if (!empty($single)) $single['success'] = true;
-
 		} catch (Exception $error) {
 
 			http_response_code(400);
@@ -277,7 +275,6 @@ class Database
 			$this->stmt->execute();
 
 			$all = $this->stmt->fetchAll(PDO::FETCH_ASSOC);
-
 		} catch (Exception $error) {
 
 			http_response_code(400);
@@ -334,7 +331,6 @@ class Database
 				return: $return
 			);
 			return $all;
-
 		} catch (Exception $error) {
 
 			http_response_code(400);
@@ -376,7 +372,6 @@ class Database
 					'message' => 'Error with query'
 				];
 			}
-
 		} catch (\Throwable $th) {
 
 			http_response_code(400);
@@ -423,16 +418,27 @@ class Database
 
 		$has_forbidden_chars = null;
 
-		foreach($values as $value) {
-			$tester = $regex 
+		foreach ($values as $value) {
+			$tester = $regex
 				? preg_match($regex, $value)
 				: preg_match('/^[a-zA-Z0-9_\-]+$/', $value);
-			if( !(bool) $tester ) $has_forbidden_chars = true; 
+			if (!(bool) $tester) $has_forbidden_chars = true;
 		}
 
 		return $has_forbidden_chars;
 	}
+
+
+
+	/**
+	 * 
+	 * @method checks if string too long
+	 * 
+	 * @return bool
+	 * 
+	 */
+	protected function has_too_many_chars(string $string, int $limit)
+	{
+		return strlen($string) > $limit;
+	}
 }
-
-
-

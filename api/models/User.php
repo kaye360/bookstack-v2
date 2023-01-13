@@ -33,7 +33,7 @@ require_once './lib/database.php';
 class User extends Database
 {
 
-	private $table = 'users';
+	private const TABLE = 'users';
 
 
 
@@ -77,7 +77,7 @@ class User extends Database
 			$this->is_taken(
 				column: 'username',
 				value: $post_data['username'],
-				table: $this->table
+				table: self::TABLE
 			)
 		 ) {
 			http_response_code(400);
@@ -104,7 +104,7 @@ class User extends Database
 				'session' => $this->make_UUID()
 			],
 			return: ['username', 'id', 'session'],
-			table: $this->table
+			table: self::TABLE
 		);
 	}
 
@@ -115,7 +115,7 @@ class User extends Database
 	{
 		return $this->get_row_by_id(
 			id: $id,
-			table: $this->table,
+			table: self::TABLE,
 			return: ['username, id', 'session']
 		);
 	}
@@ -126,7 +126,7 @@ class User extends Database
 	public function get_all()
 	{
 		return $this->get_all_rows(
-			table: $this->table,
+			table: self::TABLE,
 			return: ['username, id']
 		);
 	}
@@ -175,7 +175,7 @@ class User extends Database
 		// Update User
 		return $this->update_row(
 			id: $id,
-			table: $this->table,
+			table: self::TABLE,
 			columns: [
 				'username' => $put_data['username'],
 			],
@@ -190,7 +190,7 @@ class User extends Database
 	{
 		return $this->destroy_row_by_id(
 			id: $id,
-			table: $this->table,
+			table: self::TABLE,
 		);
 	}
 
@@ -219,14 +219,14 @@ class User extends Database
 		$user = $this->get_row_by_column_name(
 			column: 'username',
 			value: $post_data['username'],
-			table: $this->table,
+			table: self::TABLE,
 			return: ['username', 'id', 'session']
 		);
 
 		// Update User Session
 		$this->update_row(
 			id: $user['id'],
-			table: $this->table,
+			table: self::TABLE,
 			columns: [
 				'session' => $uuid
 			]
@@ -250,7 +250,7 @@ class User extends Database
 		
 		return $this->update_row(
 			id: $post_data['id'],
-			table: $this->table,
+			table: self::TABLE,
 			columns: [
 				'session' => null
 			],
@@ -270,7 +270,7 @@ class User extends Database
 		$user = $this->get_row_by_column_name(
 			column: 'username',
 			value: $username,
-			table: $this->table,
+			table: self::TABLE,
 			return: ['username', 'password', 'id']
 		);
 
@@ -318,7 +318,7 @@ class User extends Database
 					'username' => $name,
 					'password' => password_hash('123456', PASSWORD_DEFAULT)
 				],
-				table: $this->table
+				table: self::TABLE
 			);
 		}
 		$this->create_row(
@@ -326,7 +326,7 @@ class User extends Database
 				'username' => 'josh',
 				'password' => password_hash('123456', PASSWORD_DEFAULT)
 			],
-			table: $this->table
+			table: self::TABLE
 		);
 
 		return 'Users table reset';
