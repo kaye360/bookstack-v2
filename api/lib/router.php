@@ -75,8 +75,6 @@ class Router
 				break;
 		}
 
-		// var_dump($route_methods);
-
 		$this->class = isset($route_methods[$this->url][0])
 			? new $route_methods[$this->url][0]
 			: false;
@@ -86,6 +84,8 @@ class Router
 		$this->params = isset($route_methods[$this->url][2])
 			? $route_methods[$this->url][2]
 			: false;
+
+		
 
 		if (empty($this->class)) return ['error' => 'No class specified'];
 
