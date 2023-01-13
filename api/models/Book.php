@@ -75,12 +75,24 @@ class Book extends Database
 
 
 
+	/**
+	 * @todo possbily make this into 1 sql query instead of 2
+	 */
 	public function get_single($id)
 	{
-		return $this->get_row_by_id(
+		$book = $this->get_row_by_id(
 			id: $id,
 			table: self::TABLE,
 		);
+		
+		$book['comments'] = $this->get_all_rows(
+			id: $id,
+			id_col : 'book_id',
+			table: 'comments'
+		);
+
+		return $book;
+		
 	}
 
 
@@ -179,7 +191,7 @@ class Book extends Database
 
 		$current_book['likes'] = json_decode($current_book['likes'], true);
 
-		// Toggle Like
+		// Toggle Like/Unlike
 		if (in_array($put_data['user_id'], $current_book['likes'])) {
 
 			// UnLike
