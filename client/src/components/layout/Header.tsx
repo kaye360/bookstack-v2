@@ -6,7 +6,7 @@ export default function Header() {
     let userNavlink: string = 'text-slate-200'
 
     return(
-        <header>
+        <header className="fixed bottom-0 left-0 right-0 sm:relative">
 
             <nav className="flex items-center justify-between p-2 border border-slate-400">
 
