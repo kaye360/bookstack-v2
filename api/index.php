@@ -36,7 +36,6 @@ require_once './models/Comment.php';
 
 /**
  * Routes
- * $route->json() renders route data to JSON
  */
 require_once './routes/routes.php';
 $route->json();
