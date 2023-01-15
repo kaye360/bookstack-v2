@@ -3,12 +3,18 @@ import React from "react"
 type propTypes = {
     title: string,
     username?: string,
+    likes?: number,
+    commentCount?: number,
+    isRead?: boolean,
     showInfo?: boolean,
 }
 
 export default function Book({ 
     title = '', 
     username, 
+    likes,
+    commentCount,
+    isRead,
     showInfo = false
 } : propTypes) {
 
@@ -18,7 +24,7 @@ export default function Book({
                 Book Cover
                 { showInfo && 
                     <div className="absolute left-2 bottom-2">
-                        💖17 💬5
+                        💖{likes} 💬{commentCount} {isRead ? '☑️' : '🔲' }
                     </div> }
             </div>
             <div>{title}</div>

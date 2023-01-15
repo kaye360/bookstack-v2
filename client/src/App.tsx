@@ -43,7 +43,7 @@ function App() {
 		<div className="w-100 max-w-6xl border mx-auto border-slate-300 ">
 		<Header /> 
 
-		<main>
+		<main className="flex flex-col gap-8 py-8 px-2">
 		<Routes>
 			{/* Public Routes */}
 			<Route path="/"			element={<Home />} />

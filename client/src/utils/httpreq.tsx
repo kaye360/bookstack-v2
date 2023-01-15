@@ -14,6 +14,10 @@ class httpReq {
         return axios.get(url)
     }
 
+    static post(url:string) {
+        
+    }
+
 }
 
 
