@@ -88,16 +88,16 @@ class Router
 		
 
 		if (empty($this->class)) {
-			http_response_code(400);
+			// http_response_code(400);
 			return ['error' => 'No class specified'];
 		}
 		
 		if (empty($this->method)) {
-			http_response_code(400);
+			// http_response_code(400);
 			return ['error' => 'No method specified'];
 		}
 		
-		http_response_code(200);
+		// http_response_code(200);
 		return call_user_func_array([$this->class, $this->method], [$this->params]);
 	}
 

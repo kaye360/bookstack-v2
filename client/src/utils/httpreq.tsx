@@ -14,8 +14,12 @@ class httpReq {
         return axios.get(url)
     }
 
-    static post(url:string) {
-        
+    static post(url:string, postData:string) {
+        return axios.post(url, postData, {
+            headers : {
+                'Content-Type': 'application/json;charset=UTF-8',
+            }
+        })
     }
 
 }

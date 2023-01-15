@@ -65,7 +65,7 @@ class Database
 		try {
 			$this->dbh = new PDO($this->dsn, DB_USER, DB_PASS, $options);
 		} catch (PDOException $err) {
-			http_response_code(500);
+			// http_response_code(500);
 			return [
 				'success' => false,
 				'message' => 'Failed PDO connection'
@@ -131,14 +131,14 @@ class Database
 				$new_row['success'] = true;
 				return $new_row;
 			} else {
-				http_response_code(400);
+				// http_response_code(400);
 				return [
 					'success' => false,
 					'message' => 'Failed to execute query'
 				];
 			}
 		} catch (Exception $error) {
-			http_response_code(400);
+			// http_response_code(400);
 			return [
 				'success' => false,
 				'message' => 'Error with query'
@@ -183,7 +183,7 @@ class Database
 			if ($single) $single['success'] = true;
 		} catch (Exception $error) {
 
-			http_response_code(400);
+			// http_response_code(400);
 
 			return [
 				'success' => false,
@@ -195,7 +195,7 @@ class Database
 		if (!empty($single)) {
 			return $single;
 		} else {
-			http_response_code(404);
+			// http_response_code(404);
 			return [
 				'success' => false,
 				'message' => 'No entries found'
@@ -232,7 +232,7 @@ class Database
 			if (!empty($single)) $single['success'] = true;
 		} catch (Exception $error) {
 
-			http_response_code(400);
+			// http_response_code(400);
 
 			return [
 				'success' => false,
@@ -270,14 +270,14 @@ class Database
 
 			$where = $id && $id_col ? "WHERE $id_col = $id" : '';
 
-			$sql = "SELECT $returned_columns FROM $table $where";
+			$sql = "SELECT $returned_columns FROM $table $where ORDER BY id DESC";
 			$this->stmt = $this->dbh->prepare($sql);
 			$this->stmt->execute();
 
 			$all = $this->stmt->fetchAll(PDO::FETCH_ASSOC);
 		} catch (Exception $error) {
 
-			http_response_code(400);
+			// http_response_code(400);
 
 			return [
 				'success' => false,
@@ -333,7 +333,7 @@ class Database
 			return $all;
 		} catch (Exception $error) {
 
-			http_response_code(400);
+			// http_response_code(400);
 
 			return [
 				'success' => false,
@@ -366,7 +366,7 @@ class Database
 				return ['success' => true];
 			} else {
 
-				http_response_code(400);
+				// http_response_code(400);
 				return [
 					'success' => false,
 					'message' => 'Error with query'
@@ -374,7 +374,7 @@ class Database
 			}
 		} catch (\Throwable $th) {
 
-			http_response_code(400);
+			// http_response_code(400);
 			return [
 				'success' => false,
 				'message' => 'Error with query'

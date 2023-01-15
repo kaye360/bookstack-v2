@@ -1,24 +1,33 @@
 import React, { useState } from "react"
-import { GOOGLE_KEY } from "../../config"
+import { API_BASE_URL, GOOGLE_KEY } from "../../config"
 import httpReq from "../../utils/httpReq"
 import Loader from "../layout/Loader"
 
-export default function AddBookModal() {
+
+interface propType {
+    setShowModal: Function
+}
+
+export default function AddBookModal({setShowModal} : propType) {
 
 
     /**
      * @todo clean this up
      */
-    const [isFormSubmitted, setIsFormSubmitted] = useState(false)
+    const [isSearchFormSubmitted, setIsSearchFormSubmitted] = useState(false)
     const [isbnField, setIsbnField] = useState(false) 
 
-    const [isError, setIsError] = useState(false)
+    const [isSearchError, setIsSearchError] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [title, setTitle] = useState(false)
     const [author, setAuthor] = useState(false)
     const [cover, setCover] = useState('notfound.png')
     const [pages, setPages] = useState(false)
     const [isRead, setIsread] = useState(false)
+
+    const [isAddError, setIsAddError] = useState(false)
+    const [isAdding, setIsAdding] = useState(false)
+    const [isAdded, setIsAdded] = useState(false)
 
     /**
      * @todo make this with useQuery
@@ -30,10 +39,10 @@ export default function AddBookModal() {
         setTitle(false)
         setAuthor(false)
         setCover('notfound.png')
-        setIsError(false)
+        setIsSearchError(false)
         
         setIsLoading(true)
-        setIsFormSubmitted(true)
+        setIsSearchFormSubmitted(true)
 
         const res: any = await httpReq.get(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbnField}&key=${GOOGLE_KEY}`)
 
@@ -48,10 +57,10 @@ export default function AddBookModal() {
                 ? res.data.items[0].volumeInfo.imageLinks.thumbnail 
                 : false
             )
-            setIsError(false)
+            setIsSearchError(false)
         } else {
             // Book Not found
-            setIsError(true)
+            setIsSearchError(true)
         }
 
         setIsLoading(false)
@@ -60,10 +69,32 @@ export default function AddBookModal() {
 
     async function handleAdd(e: any) {
         e.preventDefault()
+
+        setIsAdding(true)
+
+        const postData = JSON.stringify( {
+            isbn : isbnField,
+            title : title,
+            author : author,
+            is_read : isRead ? "true" : "false",
+            cover_url : cover,
+            user_id : 21
+        })
+
+        const res = await httpReq.post(API_BASE_URL + '/book', postData)
+        console.log(res)
+
+        if(!res.data.success) {
+            setIsAdding(false)
+            setIsAddError(true)
+        }
+        
+        setIsAdded(true)
+        setIsAdding(false)
     }
 
     function clearSearch() {
-        setIsFormSubmitted(false)
+        setIsSearchFormSubmitted(false)
         setTitle(false)
         setAuthor(false)
         setCover('notfound.png')
@@ -73,10 +104,16 @@ export default function AddBookModal() {
     return(
         <div className="fixed inset-0 grid items-center px-3 bg-slate-700 z-50 bg-opacity-95">
 
-            <div className="flex flex-col gap-8 bg-slate-200 w-full max-w-xl mx-auto p-4">
+            <div className="relative flex flex-col gap-8 bg-slate-200 w-full max-w-xl mx-auto p-4">
                 <h2 className="text-md font-bold">
                     Add Book
                 </h2>
+
+                <button 
+                    className="absolute right-4 top-2"
+                    onClick={ () => setShowModal(false) }>
+                    ✖
+                </button>
 
                 <div>
                     <form onSubmit={handleSearch}>
@@ -89,7 +126,10 @@ export default function AddBookModal() {
                                 <input 
                                     className="w-full focus:outline-none"
                                     type="text" 
-                                    onChange={ (e:any) => setIsbnField(e.target.value) } 
+                                    onChange={ (e:any) => {
+                                        setIsbnField(e.target.value) 
+                                        clearSearch()
+                                    }} 
                                 />
 
                                 <input type="reset" value="✖" className="cursor-pointer opacity-40" />
@@ -101,11 +141,17 @@ export default function AddBookModal() {
                     </form>
                 </div>
 
-                { isFormSubmitted && <>
-                    <div className="flex items-center gap-4 mt-4">
+                { isSearchFormSubmitted && <>
+
+                    <div>
                         {isLoading && <Loader /> }
-                        {isError && 'No books were found with that ISBN. Please try another one.'}
-                        {cover && <img src={cover} /> }
+                        {isSearchError && 'No books were found with that ISBN. Please try another one.'}
+                    </div>
+
+
+                    {!isSearchError && <>
+                    <div className="flex items-center gap-4 mt-4">
+                        {cover !=='notfound.png' && <img src={cover} /> }
 
                         <div>
                             <span className="block text-2xl">{title}</span>
@@ -132,6 +178,16 @@ export default function AddBookModal() {
                                 bg-rose-200 hover:bg-transparent border hover:border-rose-300">Clear Search</button>
                         </form>
                     </div>
+
+                    { isAdding && <div>Adding Book...</div>}
+
+                    { isAddError && <div>There was a problem adding the book.</div> }
+
+                    { isAdded && <div>{title} was successfully added to your library.</div> }
+
+
+                    </>
+                    }
                 </>
                 }
 

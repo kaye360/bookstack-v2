@@ -49,7 +49,7 @@ class Book extends Database
 			empty($post_data['isbn']) ||
 			empty($post_data['user_id'])
 		) {
-			http_response_code(400);
+			// http_response_code(400);
 			return [
 				'success' => false,
 				'message' => 'ISBN and User Id are required'
@@ -120,7 +120,7 @@ class Book extends Database
 			empty($put_data['isbn']) ||
 			empty($put_data['user_id'])
 		) {
-			http_response_code(400);
+			// http_response_code(400);
 			return [
 				'success' => false,
 				'message' => 'ISBN and User Id are required'
@@ -136,7 +136,7 @@ class Book extends Database
 			],
 			regex: '/^[a-zA-Z0-9_\- :]+$/'
 		)) {
-			http_response_code(400);
+			// http_response_code(400);
 			return [
 				'success' => false,
 				'message' => 'Username or password have forbidden characters.'
@@ -168,7 +168,7 @@ class Book extends Database
 			empty($put_data['id']) ||
 			empty($put_data['user_id'])
 		) {
-			http_response_code(400);
+			// http_response_code(400);
 			return [
 				'success' => false,
 				'message' => 'Book ID and user ID are required.'
@@ -183,7 +183,7 @@ class Book extends Database
 		);
 
 		if (!array_key_exists('likes', $current_book)) {
-			http_response_code(404);
+			// http_response_code(404);
 			return [
 				'success' => false,
 				'message' => 'This book doesn\'t exist'
@@ -232,7 +232,7 @@ class Book extends Database
 
 		// Validate request
 		if (empty($put_data['id'])) {
-			http_response_code(400);
+			// http_response_code(400);
 			return [
 				'success' => false,
 				'message' => 'Book ID is required.'

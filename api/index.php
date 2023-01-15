@@ -39,4 +39,5 @@ require_once './models/Comment.php';
  * Routes
  */
 require_once './routes/routes.php';
+http_response_code(200);
 $route->json();

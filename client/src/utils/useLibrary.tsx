@@ -14,7 +14,7 @@ export const useLibrary = (userId) => {
     interface Library {
         author: string,
         commentCount : number,
-        cover_url: string,
+        coverUrl: string,
         id: number,
         isRead: boolean,
         isbn: string, 
