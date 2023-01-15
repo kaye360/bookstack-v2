@@ -100,6 +100,7 @@ class Book extends Database
 
 	public function get_all($id)
 	{
+		$id = $id === 'all' ? false : $id;
 		return $this->get_all_rows(
 			id: $id,
 			id_col: 'user_id',

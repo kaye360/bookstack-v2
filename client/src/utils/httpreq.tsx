@@ -10,7 +10,7 @@ import axios from "axios"
 
 class httpReq {
 
-    get(url: string) {
+    static get(url: string) {
         return axios.get(url)
     }
 

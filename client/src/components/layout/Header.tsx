@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import Logo from "./Logo";
 
 export default function Header() {
@@ -13,20 +14,21 @@ export default function Header() {
                 <Logo/>
 
                 <ul className="flex items-center gap-4">
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/explore">Explore</a></li>
-                    <li><a href="/about">About</a></li>
-                    <li><a href="/account">Login/Sign Up</a></li>
+                    <li><Link to="/">Home</Link></li>
+                    <li><Link to="/explore">Explore</Link></li>
+                    <li><Link to="/about">About</Link></li>
+                    <li><Link to="/account">Login/Sign Up</Link></li>
                 </ul>
 
             </nav>
 
             <nav>
                 <ul className="flex items-center justify-end gap-4 bg-slate-700 text-slate-200 p-2">
-                    <li><a className={userNavlink} href="/library">Library</a></li>
-                    <li><a className={userNavlink} href="/feed">Feed</a></li>
-                    <li><a className={userNavlink} href="/notifications">Notifs</a></li>
-                    <li><a className={userNavlink} href="/user/username">Profile</a></li>
+                    <li><Link className={userNavlink} to="/dashboard">Dashboard</Link></li>
+                    <li><Link className={userNavlink} to="/library">Library</Link></li>
+                    <li><Link className={userNavlink} to="/feed">Feed</Link></li>
+                    <li><Link className={userNavlink} to="/notifications">Notifs</Link></li>
+                    <li><Link className={userNavlink} to="/user/username">Profile</Link></li>
                 </ul>
             </nav>
 
