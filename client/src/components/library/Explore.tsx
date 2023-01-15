@@ -2,8 +2,9 @@ import React from "react";
 import { useQuery } from "react-query";
 import { API_BASE_URL } from "../../config";
 import httpReq from "../../utils/httpReq";
-import Book from "../Book";
+import Book from "./Book";
 import Loader from "../layout/Loader"
+import { Link } from "react-router-dom";
 
 export default function Explore() {
 
@@ -20,11 +21,13 @@ export default function Explore() {
 
             { isFetched && 
                 <div className="grid grid-cols-3 md:grid-cols-6 gap-4">
-                    { exploreBooks && exploreBooks.map( (book: { title:string }) => {
-                        return <Book title={book.title} />
+                    { exploreBooks && exploreBooks.map( (book: { title:string, id:number }) => {
+                        return <Book title={book.title} showInfo={true} key={book.id} />
                     })}
                 </div>
             }
+
+            <Link to="/explore">Explore the community</Link>
         </section>
     )
 }

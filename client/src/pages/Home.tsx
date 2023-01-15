@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import Hero from "../components/home/Hero";
-import Explore from "../components/home/Explore";
+
+import Hero from "../components/layout/Hero";
+import Explore from "../components/library/Explore";
 
 export default function Home() {
 
@@ -15,11 +16,11 @@ export default function Home() {
                 Screenshot
             </div>
 
-            <div className="rounded border border-slate-300 aspect-video py-12">
+            <div className="aspect-video py-12">
                 About the App. Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores expedita sed repellat quas quae debitis unde corrupti aperiam nemo nesciunt?
             </div>
 
-            <div className="rounded border border-slate-300 aspect-video">
+            <div className="aspect-video">
                 About the App . Lorem ipsum dolor sit amet consectetur, adipisicing elit. Doloremque, impedit! Voluptate, incidunt molestias iste amet consequatur dolore enim quibusdam. Minus perspiciatis labore fugiat deleniti provident, asperiores laboriosam repudiandae consequuntur incidunt!
             </div>
 
@@ -30,7 +31,7 @@ export default function Home() {
         </div>
 
         <Explore />
-        
+
     </div>)
 
 }

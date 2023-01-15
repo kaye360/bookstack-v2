@@ -1,8 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useNotifications } from "../../utils/useNotifications";
 import Logo from "./Logo";
 
 export default function Header() {
+
+    const { amount: notificationsAmount } = useNotifications()
 
     let userNavlink: string = 'text-slate-200'
 
@@ -27,7 +30,11 @@ export default function Header() {
                     <li><Link className={userNavlink} to="/dashboard">Dashboard</Link></li>
                     <li><Link className={userNavlink} to="/library">Library</Link></li>
                     <li><Link className={userNavlink} to="/feed">Feed</Link></li>
-                    <li><Link className={userNavlink} to="/notifications">Notifs</Link></li>
+                    <li>
+                        <Link className={userNavlink} to="/notifications">
+                            Notifs {notificationsAmount}
+                        </Link>
+                    </li>
                     <li><Link className={userNavlink} to="/user/username">Profile</Link></li>
                 </ul>
             </nav>

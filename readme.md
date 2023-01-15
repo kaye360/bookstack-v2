@@ -7,6 +7,7 @@ The front end will be made with React.
 
 TODO
 
+- make community feed api endpoints and db table
 - make route to get 10 newest books added to db for Explore Component
 - use proper response codes on api fails
 - user auth on api routes

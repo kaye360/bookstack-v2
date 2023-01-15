@@ -1,10 +1,10 @@
 import React from "react";
-import SignInUp from "../components/SignInUp";
+import SignInUp from "../components/layout/SignInUp";
 
 export default function ProtectedPage() {
 
     return(
-    <section>
+    <section className="min-h-screen">
         ProtectedPage
         
         <SignInUp />

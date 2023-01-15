@@ -6,11 +6,14 @@
 
 // Dependencies
 import React from "react"
+import { useQuery } from "react-query"
 import { Route, Routes } from "react-router-dom"
-import Footer from "./components/layout/Footer"
+import httpReq from "./utils/httpReq"
+import { API_BASE_URL } from "./config"
 
 // Components
 import Header from "./components/layout/Header"
+import Footer from "./components/layout/Footer"
 
 // Pages
 import About from "./pages/About"
@@ -29,6 +32,12 @@ import ProtectedPage from "./pages/ProtectedPage"
 function App() {
 
 	const isLoggedIn: boolean = true
+
+	// Notifications
+	 const { data, isError, isLoading } = useQuery(
+		'notifications',
+		() => httpReq.get(API_BASE_URL + '/notifications/new/21')
+	)
 
 	return (
 		<div className="w-100 max-w-6xl border mx-auto border-slate-300 ">
