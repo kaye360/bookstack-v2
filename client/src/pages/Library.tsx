@@ -24,7 +24,6 @@ export default function Library() {
 
         <section className="grid gap-4 grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 auto-rows-[250px]">
             { library.map( book => {
-                console.log(book)
                 return <Book 
                     title={book.title} 
                     cover={book.coverUrl}

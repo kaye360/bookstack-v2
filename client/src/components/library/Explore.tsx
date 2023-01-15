@@ -7,12 +7,17 @@ import Loader from "../layout/Loader"
 import { Link } from "react-router-dom";
 
 export default function Explore() {
+    
+    async function getBooks() {
+        const res = await httpReq.get(API_BASE_URL + '/books/all')
+        const data = await res.json()
+        return data
+    }
 
     const { data, isLoading, isError, isFetched} = useQuery(
-        'usersBooks',
-        () => httpReq.get(API_BASE_URL + '/books/all')
+        'usersBooks', getBooks
     )
-    let exploreBooks = data?.data.slice(-6).reverse()
+    let exploreBooks = data?.slice(-6).reverse()
 
     return(
         <section className="flex flex-col gap-4 bg-slate-50 py-8">

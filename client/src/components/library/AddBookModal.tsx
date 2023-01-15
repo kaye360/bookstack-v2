@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import { QueryClient, useQuery, useQueryClient } from "react-query"
 import { API_BASE_URL, GOOGLE_KEY } from "../../config"
 import httpReq from "../../utils/httpReq"
 import Loader from "../layout/Loader"
@@ -10,101 +11,109 @@ interface propType {
 
 export default function AddBookModal({setShowModal} : propType) {
 
-
     /**
-     * @todo clean this up
+     * Form States
      */
     const [isSearchFormSubmitted, setIsSearchFormSubmitted] = useState(false)
-    const [isbnField, setIsbnField] = useState(false) 
-
-    const [isSearchError, setIsSearchError] = useState(false)
-    const [isLoading, setIsLoading] = useState(false)
-    const [title, setTitle] = useState(false)
-    const [author, setAuthor] = useState(false)
-    const [cover, setCover] = useState('notfound.png')
-    const [pages, setPages] = useState(false)
-    const [isRead, setIsread] = useState(false)
-
-    const [isAddError, setIsAddError] = useState(false)
-    const [isAdding, setIsAdding] = useState(false)
-    const [isAdded, setIsAdded] = useState(false)
+    const [isbnField, setIsbnField] = useState('') 
+    const [isRead, setIsRead] = useState(false)
 
     /**
-     * @todo make this with useQuery
+     * useQuery functions
      */
-    async function handleSearch(e: any) {
-        e.preventDefault()
-        if(!isbnField) return
+    const queryClient = useQueryClient()
 
-        setTitle(false)
-        setAuthor(false)
-        setCover('notfound.png')
-        setIsSearchError(false)
-        
-        setIsLoading(true)
-        setIsSearchFormSubmitted(true)
+    // Search query
+    const { 
+        data: searchResult, 
+        isLoading: searchIsLoading, 
+        isError: searchIsError,
+        isSuccess: searchIsSuccess,
+        refetch : refetchSearch
+    } = useQuery('searchGoogleBooksAPI', searchBooks, { 
+        enabled : false,
+        refetchOnWindowFocus: false,
+    })
 
+    // Add query
+    const {
+        data: addResult,
+        isLoading: addIsLoading,
+        isError: addIsError,
+        isSuccess: addIsSuccess,
+        refetch: addRefetch
+    } = useQuery('addBook', addBook, { 
+        enabled : false,
+        refetchOnWindowFocus: false,
+    })
+
+    /**
+     * Search Logic
+     */
+    async function searchBooks() {
         const res: any = await httpReq.get(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbnField}&key=${GOOGLE_KEY}`)
-
-
-        if( res.data.totalItems !== 0) {
-            // Book was found
-
-            setTitle(res.data.items[0].volumeInfo.title)
-            setAuthor(res.data.items[0].volumeInfo.authors[0])
-            setCover(
-                (res.data.items[0].volumeInfo.imageLinks !== undefined) 
-                ? res.data.items[0].volumeInfo.imageLinks.thumbnail 
-                : false
-            )
-            setIsSearchError(false)
-        } else {
-            // Book Not found
-            setIsSearchError(true)
-        }
-
-        setIsLoading(false)
-
+        const data = await res.json()
+        return data
     }
 
-    async function handleAdd(e: any) {
+    function handleSearch(e: any) {
+        queryClient.removeQueries('searchGoogleBooksAPI', { exact : true } )
+        queryClient.removeQueries('addBook', { exact : true } )
         e.preventDefault()
+        setIsSearchFormSubmitted(true)
+        refetchSearch()
+    }
 
-        setIsAdding(true)
+    let title: string = ''
+    let author:string = ''
+    let cover:string = ''
+    
+    if (searchResult && searchResult.totalItems > 0) {
+        title = searchResult.items[0].volumeInfo.title
+        author = searchResult.items[0].volumeInfo.authors[0]
+        cover = searchResult.items[0].volumeInfo.imageLinks !== undefined
+                    ? searchResult?.items[0]?.volumeInfo.imageLinks.thumbnail 
+                    : false
+    }
 
-        const postData = JSON.stringify( {
+    function clearSearch(e) {
+        e.preventDefault()
+        setIsSearchFormSubmitted(false)
+        setIsbnField('')
+        queryClient.removeQueries('searchGoogleBooksAPI', { exact : true } )
+        queryClient.removeQueries('addBook', { exact : true } )
+    }
+
+    /**
+     * Add logic
+     */
+
+    async function addBook() {
+
+        const postData =  {
             isbn : isbnField,
             title : title,
             author : author,
             is_read : isRead ? "true" : "false",
             cover_url : cover,
             user_id : 21
-        })
+        }
 
         const res = await httpReq.post(API_BASE_URL + '/book', postData)
-        console.log(res)
-
-        if(!res.data.success) {
-            setIsAdding(false)
-            setIsAddError(true)
-        }
-        
-        setIsAdded(true)
-        setIsAdding(false)
+        const data = await res.json()
     }
 
-    function clearSearch() {
-        setIsSearchFormSubmitted(false)
-        setTitle(false)
-        setAuthor(false)
-        setCover('notfound.png')
-        setIsread(false)
+    function handleAdd(e: any) {
+        e.preventDefault()
+        addRefetch()
     }
 
     return(
         <div className="fixed inset-0 grid items-center px-3 bg-slate-700 z-50 bg-opacity-95">
 
-            <div className="relative flex flex-col gap-8 bg-slate-200 w-full max-w-xl mx-auto p-4">
+            <div className="relative rounded-xl flex flex-col gap-8 bg-slate-200 w-full max-w-xl mx-auto p-4">
+
+                {/* SEARCH FORM HEADER */}
                 <h2 className="text-md font-bold">
                     Add Book
                 </h2>
@@ -115,8 +124,9 @@ export default function AddBookModal({setShowModal} : propType) {
                     ✖
                 </button>
 
+                {/* SEARCH FORM */}
                 <div>
-                    <form onSubmit={handleSearch}>
+                    <form onSubmit={ handleSearch }>
 
                         <label> 
                             Enter an ISBN number:
@@ -126,13 +136,18 @@ export default function AddBookModal({setShowModal} : propType) {
                                 <input 
                                     className="w-full focus:outline-none"
                                     type="text" 
+                                    value={ isbnField }
                                     onChange={ (e:any) => {
                                         setIsbnField(e.target.value) 
-                                        clearSearch()
                                     }} 
                                 />
 
-                                <input type="reset" value="✖" className="cursor-pointer opacity-40" />
+                                <button
+                                    className="cursor-pointer opacity-40"
+                                    onClick={ clearSearch }
+                                >
+                                    ✖
+                                </button>
                                 <input type="submit" value='Search' 
                                     className="rounded cursor-pointer hover:bg-slate-400" />
                             </div>
@@ -141,15 +156,26 @@ export default function AddBookModal({setShowModal} : propType) {
                     </form>
                 </div>
 
-                { isSearchFormSubmitted && <>
+                {/* SEARCH IS LOADING */}
+                { searchIsLoading && <Loader /> }
 
-                    <div>
-                        {isLoading && <Loader /> }
-                        {isSearchError && 'No books were found with that ISBN. Please try another one.'}
+                {/* SEARCH ERROR */}
+                { searchIsError && 
+                    <div className="pt-4 pb-8 px-2">
+                        Something went wrong with your search
                     </div>
+                }
 
+                {/* NO BOOKS FOUND IN SEARCH*/}
+                { searchIsSuccess && searchResult.totalItems === 0 &&
+                    <div className="pt-4 pb-8 px-2">
+                        No books were found with that ISBN. Please try another one.
+                    </div>
+                }
 
-                    {!isSearchError && <>
+                {/* BOOKS ARE FOUND */}
+                { isSearchFormSubmitted && searchIsSuccess && searchResult.totalItems > 0 &&
+                    <>
                     <div className="flex items-center gap-4 mt-4">
                         {cover !=='notfound.png' && <img src={cover} /> }
 
@@ -161,10 +187,10 @@ export default function AddBookModal({setShowModal} : propType) {
                     </div>
 
                     <div>
-                        <form onSubmit={handleAdd}>
+                        <form onSubmit={ handleAdd }>
                             <label className="block">
                                 I have read this book: &nbsp;
-                                <input type="checkbox" defaultChecked={false} onChange={() => setIsread(!isRead)} />
+                                <input type="checkbox" defaultChecked={false} onChange={() => setIsRead(!isRead)} />
                             </label>
 
                             <input type="submit" value="Add To Library" 
@@ -178,20 +204,23 @@ export default function AddBookModal({setShowModal} : propType) {
                                 bg-rose-200 hover:bg-transparent border hover:border-rose-300">Clear Search</button>
                         </form>
                     </div>
-
-                    { isAdding && <div>Adding Book...</div>}
-
-                    { isAddError && <div>There was a problem adding the book.</div> }
-
-                    { isAdded && <div>{title} was successfully added to your library.</div> }
-
-
                     </>
-                    }
-                </>
+                }
+                  
+                {/* BOOK IS ADDING */}
+                { addIsLoading && <div className="pt-4 pb-8 px-2">Adding Book...</div> }
+
+                {/* ERROR ADDING BOOK */}
+                { addIsError && <div className="pt-4 pb-8 px-2">There was an error, please try again.</div> }
+
+                {/* BOOK IS ADDED */}
+                { addIsSuccess && 
+                    <div className="pt-0 pb-8 px-2">
+                        {title} was added successfully!
+                    </div>
                 }
 
-            </div>
-        </div>
+            </div>  {/* Dialog */}
+        </div> // Overlay
     )
 }
