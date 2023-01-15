@@ -21,20 +21,21 @@ export default function Book({
 } : propTypes) {
 
     return (
-        <div className="text-sm">
-            <div className="relative rounded-xl bg-slate-200 h-52">
-                {cover?.startsWith('http') &&
-                    <img src={cover} className="w-100 w-full h-full object-cover rounded-xl" />
+        <div className="flex flex-col justify-end relative text-sm bg-slate-200 h-full rounded-xl overflow-hidden">
+                {cover?.startsWith('http') 
+                    ? <img src={cover} className="absolute inset-0 z-10 object-cover h-full" />
+                    : <span className="absolute block inset-0 text-2xl text-slate-400 text-center">Cover not available</span>
                 }
 
                 { showInfo && 
-                    <div className="absolute left-0 right-0 bottom-0 flex justify-between p-1 bg-slate-900 text-slate-200">
+                    <div className="relative z-20 flex justify-between p-1 bg-slate-900 text-slate-200">
                         <span>💖{likes}</span>
                         <span>💬{commentCount}</span>
                         <span>{isRead ? '☑️' : '🔲' }</span>
-                    </div> }
-            </div>
-            <div>{title}</div>
+                    </div>
+                }
+
+                <div className="relative z-20 bg-white h-12 overflow-hidden">{title}</div>
             { username && <div>{username}</div>}
         </div>
         

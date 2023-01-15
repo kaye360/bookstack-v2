@@ -22,10 +22,11 @@ export default function PreviewUsersLibrary() {
         <section className="flex flex-col gap-4 bg-slate-50 py-8">
             <h2 className="text-4xl">Your Library</h2>
             { isLoading && <Loader />}
-            <div className="grid grid-cols-3 md:grid-cols-6 gap-4">
+            <div className="grid grid-cols-3 md:grid-cols-6 gap-4 auto-rows-[350px]">
                 { previewUsersBooks && previewUsersBooks.map( book => {
                     return <Book 
                         title={book.title} 
+                        cover={book.coverUrl}
                         showInfo={true} 
                         commentCount={book.commentCount}
                         likes={book.likes.length}

@@ -20,7 +20,7 @@ export default function Explore() {
             { isLoading && <Loader />}
 
             { isFetched && 
-                <div className="grid grid-cols-3 md:grid-cols-6 gap-4">
+                <div className="grid grid-cols-3 md:grid-cols-6 gap-4 auto-rows-[350px]">
                     { exploreBooks && exploreBooks.map( (book: { title:string, id:number }) => {
                         return <Book title={book.title} showInfo={true} key={book.id} />
                     })}
