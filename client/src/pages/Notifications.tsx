@@ -21,7 +21,7 @@ export default function Notifications() {
                             return <li key={index}>{notification.message}, {notification.url}</li>
                         } )}
                     </ul>
-                    <button onClick={ clearRecentNotifications }>Mark as Read</button>
+                    <button onClick={ () => clearRecentNotifications() }>Mark as Read</button>
                 </>
             }
         </section>

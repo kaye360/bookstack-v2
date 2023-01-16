@@ -8,7 +8,6 @@ export const useNotifications = (userID?: number) => {
     async function getNewNotifications() {
         const res = await httpReq.get(API_BASE_URL + '/notifications/new/21')
         const data = await res.json()
-        console.log('hi')
         return data
     }
 

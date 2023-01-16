@@ -26,6 +26,7 @@ import Library from "./pages/Library"
 import Notifications from "./pages/Notifications"
 import Profile from "./pages/Profile"
 import ProtectedPage from "./pages/ProtectedPage"
+import Book from "./pages/Book"
 
 
 
@@ -54,6 +55,7 @@ function App() {
 			{/* User Routes */}
 			<Route path="/dashboard"		element={ isLoggedIn ? <Dashboard />		: <ProtectedPage />} />
 			<Route path="/library" 			element={ isLoggedIn ? <Library />			: <ProtectedPage />} />
+			<Route path="book/:id" 			element={ isLoggedIn ? <Book />				: <ProtectedPage />} />
 			<Route path="/feed" 			element={ isLoggedIn ? <Feed /> 			: <ProtectedPage />} />
 			<Route path="/notifications" 	element={ isLoggedIn ? <Notifications />	: <ProtectedPage />} />
 			<Route path="/user" 			element={ isLoggedIn ? <Profile /> 			: <ProtectedPage />} />

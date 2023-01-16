@@ -25,6 +25,7 @@ export default function PreviewUsersLibrary() {
             <div className="grid grid-cols-3 md:grid-cols-6 gap-4 auto-rows-[350px]">
                 { previewUsersBooks && previewUsersBooks.map( book => {
                     return <Book 
+                        id={book.id}
                         title={book.title} 
                         cover={book.coverUrl}
                         showInfo={true} 
