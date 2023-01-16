@@ -32,7 +32,13 @@ export default function Header() {
                     <li><Link className={userNavlink} to="/feed">Feed</Link></li>
                     <li>
                         <Link className={userNavlink} to="/notifications">
-                            Notifs {notificationsAmount}
+                            Notifications
+                            {notificationsAmount.recent > 0 &&
+                            
+                                <span className="inline-flex items-center justify-center mx-1 bg-rose-500 rounded-full aspect-square w-6">
+                                    {notificationsAmount.recent}
+                                </span>
+                            }
                         </Link>
                     </li>
                     <li><Link className={userNavlink} to="/user/username">Profile</Link></li>

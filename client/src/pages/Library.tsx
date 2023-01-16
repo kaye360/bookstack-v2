@@ -13,7 +13,7 @@ export default function Library() {
     return(<>
     
         <div className="flex justify-between">
-            <h2 className="text-4xl">Library</h2>
+            <h1 className="text-4xl">Library</h1>
 
             <div>
                 <button onClick={ () => setShowModal(true) }>Add Book</button>

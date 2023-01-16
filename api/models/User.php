@@ -257,7 +257,7 @@ class User extends Database
 		$old_notifications = json_decode($user['old_notifications'], true);
 		
 		$updated_old_notifications = array_merge($new_notifications, $old_notifications);
-		$updated_old_notifications = array_slice($updated_old_notifications, 0, 19);
+		$updated_old_notifications = array_slice($updated_old_notifications, 0, 20);
 
 		return $this->update_row(
 			id: $put_data['user_id'],

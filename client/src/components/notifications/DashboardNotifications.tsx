@@ -1,6 +1,6 @@
 import React from "react";
 import { useNotifications } from "../../utils/useNotifications";
-import Loader from "../layout/Loader";
+import { Link } from "react-router-dom";
 
 type propTypes = {
     user: number
@@ -9,29 +9,27 @@ type propTypes = {
 export default function DashboardNotifications({user} : propTypes) {
 
 
-    const {notifications = [], isLoading, isError} = useNotifications()
-    console.log(notifications)
+    const { notifications, amount } = useNotifications()
 
     return(
         <div>
             <h3 className="text-lg font-bold">Notifications</h3>
 
-            { isLoading && <Loader /> }
 
-            { isError && <p>Error loading notifications</p>}
-
-            { notifications.length === 0 &&
+            { amount.recent === 0 &&
                 <p>You have no new notifications.</p>
             }
 
             <ul>
                 {
-                    notifications.map( 
+                    notifications.recent.map( 
                         (notification : { message:string, url:string }, index) => {
                             return <li key={index}>{notification.message}</li>
                     } )
                 }
             </ul>
+
+            <Link to="/notifications">View your recent notifications</Link>
 
         </div>
     )
