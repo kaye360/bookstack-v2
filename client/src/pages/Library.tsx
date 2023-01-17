@@ -16,7 +16,7 @@ export default function Library() {
             <h1 className="text-4xl">Library</h1>
 
             <div>
-                <button onClick={ () => setShowModal(true) }>Add Book</button>
+                <button onClick={ () => setShowModal(true) }>➕ Add Book</button>
             </div>
         </div>
 

@@ -1,7 +1,8 @@
 import React, { useState } from "react"
-import { QueryClient, useQuery, useQueryClient } from "react-query"
+import { useQuery, useQueryClient } from "react-query"
 import { API_BASE_URL, GOOGLE_KEY } from "../../config"
 import httpReq from "../../utils/httpReq"
+import Modal from "../layout/Modal"
 import Loader from "../layout/Loader"
 
 
@@ -109,118 +110,140 @@ export default function AddBookModal({setShowModal} : propType) {
     }
 
     return(
-        <div className="fixed inset-0 grid items-center px-3 bg-slate-700 z-50 bg-opacity-95">
+        <Modal>
 
-            <div className="relative rounded-xl flex flex-col gap-8 bg-slate-200 w-full max-w-xl mx-auto p-4">
+            <Header 
+                setShowModal={setShowModal} 
+                handleSearch={handleSearch}
+                isbnField={isbnField}
+                setIsbnField={setIsbnField}
+                clearSearch={clearSearch}
+            />
 
-                {/* SEARCH FORM HEADER */}
-                <h2 className="text-md font-bold">
-                    Add Book
-                </h2>
+            {/* SEARCH IS LOADING */}
+            { searchIsLoading && <Loader /> }
 
-                <button 
-                    className="absolute right-4 top-2"
-                    onClick={ () => setShowModal(false) }>
-                    ✖
-                </button>
+            {/* SEARCH ERROR */}
+            { searchIsError && <div className="pt-4 pb-8 px-2">Something went wrong with your search</div> }
 
-                {/* SEARCH FORM */}
-                <div>
-                    <form onSubmit={ handleSearch }>
-
-                        <label> 
-                            Enter an ISBN number:
-
-                            <div className="flex gap-2 w-full p-4 rounded border border-slate-300  bg-white">
-
-                                <input 
-                                    className="w-full focus:outline-none"
-                                    type="text" 
-                                    value={ isbnField }
-                                    onChange={ (e:any) => {
-                                        setIsbnField(e.target.value) 
-                                    }} 
-                                />
-
-                                <button
-                                    className="cursor-pointer opacity-40"
-                                    onClick={ clearSearch }
-                                >
-                                    ✖
-                                </button>
-                                <input type="submit" value='Search' 
-                                    className="rounded cursor-pointer hover:bg-slate-400" />
-                            </div>
-                        </label>
-
-                    </form>
+            {/* NO BOOKS FOUND IN SEARCH*/}
+            { searchIsSuccess && searchResult.totalItems === 0 &&
+                <div className="pt-4 pb-8 px-2">
+                    No books were found with that ISBN. Please try another one.
                 </div>
+            }
 
-                {/* SEARCH IS LOADING */}
-                { searchIsLoading && <Loader /> }
-
-                {/* SEARCH ERROR */}
-                { searchIsError && 
-                    <div className="pt-4 pb-8 px-2">
-                        Something went wrong with your search
-                    </div>
-                }
-
-                {/* NO BOOKS FOUND IN SEARCH*/}
-                { searchIsSuccess && searchResult.totalItems === 0 &&
-                    <div className="pt-4 pb-8 px-2">
-                        No books were found with that ISBN. Please try another one.
-                    </div>
-                }
-
-                {/* BOOKS ARE FOUND */}
-                { isSearchFormSubmitted && searchIsSuccess && searchResult.totalItems > 0 &&
-                    <>
-                    <div className="flex items-center gap-4 mt-4">
-                        {cover !=='notfound.png' && <img src={cover} /> }
-
-                        <div>
-                            <span className="block text-2xl">{title}</span>
-                            <span className="block">{author}</span>
-                        </div>
-                            
-                    </div>
-
-                    <div>
-                        <form onSubmit={ handleAdd }>
-                            <label className="block">
-                                I have read this book: &nbsp;
-                                <input type="checkbox" defaultChecked={false} onChange={() => setIsRead(!isRead)} />
-                            </label>
-
-                            <input type="submit" value="Add To Library" 
-                                className="rounded cursor-pointer font-bold
-                                my-4 mr-4 px-4 py-2 
-                                bg-sky-300 hover:bg-transparent border hover:border-sky-300" />
-
-                            <button onClick={clearSearch}
-                                className="rounded cursor-pointer font-bold
-                                my-4 mr-4 px-4 py-2 
-                                bg-rose-200 hover:bg-transparent border hover:border-rose-300">Clear Search</button>
-                        </form>
-                    </div>
-                    </>
-                }
+            {/* BOOKS ARE FOUND */}
+            { isSearchFormSubmitted && searchIsSuccess && searchResult.totalItems > 0 &&
+                <BookPreview 
+                    cover={cover} 
+                    title={title} 
+                    author={author} 
+                    isRead={isRead} 
+                    setIsRead={setIsRead} 
+                    handleAdd={handleAdd} 
+                    clearSearch={clearSearch}
+                />
+            }
                   
-                {/* BOOK IS ADDING */}
-                { addIsLoading && <div className="pt-4 pb-8 px-2">Adding Book...</div> }
+            {/* BOOK IS ADDING */}
+            { addIsLoading && <div className="pt-4 pb-8 px-2">Adding Book...</div> }
 
-                {/* ERROR ADDING BOOK */}
-                { addIsError && <div className="pt-4 pb-8 px-2">There was an error, please try again.</div> }
+            {/* ERROR ADDING BOOK */}
+            { addIsError && <div className="pt-4 pb-8 px-2">There was an error, please try again.</div> }
 
-                {/* BOOK IS ADDED */}
-                { addIsSuccess && 
-                    <div className="pt-0 pb-8 px-2">
-                        {title} was added successfully!
+            {/* BOOK IS ADDED */}
+            { addIsSuccess && <div className="pt-0 pb-8 px-2"> {title} was added successfully!</div> }
+
+        </Modal>
+    )
+}
+
+
+
+
+function Header({setShowModal, handleSearch, isbnField, setIsbnField, clearSearch}) {
+
+    return (<>
+        <h2 className="text-md font-bold">
+            Add Book
+        </h2>
+
+        <button 
+            className="absolute right-4 top-2"
+            onClick={ () => setShowModal(false) }>
+            ✖
+        </button>
+
+        <div>
+            <form onSubmit={ handleSearch }>
+
+                <label> 
+                    Enter an ISBN number:
+
+                    <div className="flex gap-2 w-full p-4 rounded border border-slate-300  bg-white">
+
+                        <input 
+                            className="w-full focus:outline-none"
+                            type="text" 
+                            value={ isbnField }
+                            onChange={ (e:any) => {
+                                setIsbnField(e.target.value) 
+                            }} 
+                        />
+
+                        <button
+                            className="cursor-pointer opacity-40"
+                            onClick={ clearSearch }
+                        >
+                            ✖
+                        </button>
+                        <input type="submit" value='Search' 
+                            className="rounded cursor-pointer hover:bg-slate-400" />
                     </div>
-                }
+                </label>
 
-            </div>  {/* Dialog */}
-        </div> // Overlay
+            </form>
+        </div>
+    </>
+    )
+}
+
+
+
+
+function BookPreview({cover, title, author, isRead, setIsRead, handleAdd, clearSearch }) {
+
+    return(
+        <>
+            <div className="flex items-center gap-4 mt-4">
+                {cover !=='notfound.png' && <img src={cover} /> }
+
+                <div>
+                    <span className="block text-2xl">{title}</span>
+                    <span className="block">{author}</span>
+                </div>
+                    
+            </div>
+
+            <div>
+                <form onSubmit={ handleAdd }>
+                    <label className="block">
+                        I have read this book: &nbsp;
+                        <input type="checkbox" defaultChecked={false} onChange={() => setIsRead(!isRead)} />
+                    </label>
+
+                    <input type="submit" value="Add To Library" 
+                        className="rounded cursor-pointer font-bold
+                        my-4 mr-4 px-4 py-2 
+                        bg-sky-300 hover:bg-transparent border hover:border-sky-300" />
+
+                    <button onClick={clearSearch}
+                        className="rounded cursor-pointer font-bold
+                        my-4 mr-4 px-4 py-2 
+                        bg-rose-200 hover:bg-transparent border hover:border-rose-300">Clear Search</button>
+                </form>
+            </div>
+        </>
     )
 }
