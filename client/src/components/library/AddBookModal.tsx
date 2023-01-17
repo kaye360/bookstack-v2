@@ -73,8 +73,8 @@ export default function AddBookModal({setShowModal} : propType) {
         title = searchResult.items[0].volumeInfo.title
         author = searchResult.items[0].volumeInfo.authors[0]
         cover = searchResult.items[0].volumeInfo.imageLinks !== undefined
-                    ? searchResult?.items[0]?.volumeInfo.imageLinks.thumbnail 
-                    : false
+            ? searchResult?.items[0]?.volumeInfo.imageLinks.thumbnail 
+            : false
     }
 
     function clearSearch(e) {
@@ -88,7 +88,6 @@ export default function AddBookModal({setShowModal} : propType) {
     /**
      * Add logic
      */
-
     async function addBook() {
 
         const postData =  {
