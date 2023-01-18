@@ -5,7 +5,7 @@
  */
 
 // Dependencies
-import React from "react"
+import React, { createContext, useState } from "react"
 import { useQuery } from "react-query"
 import { Route, Routes } from "react-router-dom"
 import httpReq from "./utils/httpReq"
@@ -29,16 +29,23 @@ import ProtectedPage from "./pages/ProtectedPage"
 import Book from "./pages/Book"
 
 
+export const UserContext = createContext(null)
+
 
 function App() {
 
-	const isLoggedIn: boolean = true
+	const isLoggedIn: boolean = false
 
-	// Notifications
-	 const { data, isError, isLoading } = useQuery(
-		'notifications',
-		() => httpReq.get(API_BASE_URL + '/notifications/new/21')
-	)
+	// // Notifications
+	//  const { data, isError, isLoading } = useQuery(
+	// 	'notifications',
+	// 	() => httpReq.get(API_BASE_URL + '/notifications/new/21')
+	// )
+
+
+	// User Login Context
+	// const user, SetUser = useState()
+
 
 	return (
 		<div className="w-100 max-w-6xl border mx-auto border-slate-300 ">
@@ -50,7 +57,7 @@ function App() {
 			<Route path="/"			element={<Home />} />
 			<Route path="/explore" 	element={<Explore />} />
 			<Route path="/about" 	element={<About />} />
-			<Route path="/account"	element={<Account />} />
+			<Route path="/account"	element={ isLoggedIn ? <Dashboard /> : <Account />} />
 
 			{/* User Routes */}
 			<Route path="/dashboard"		element={ isLoggedIn ? <Dashboard />		: <ProtectedPage />} />
@@ -58,7 +65,7 @@ function App() {
 			<Route path="book/:id" 			element={ isLoggedIn ? <Book />				: <ProtectedPage />} />
 			<Route path="/feed" 			element={ isLoggedIn ? <Feed /> 			: <ProtectedPage />} />
 			<Route path="/notifications" 	element={ isLoggedIn ? <Notifications />	: <ProtectedPage />} />
-			<Route path="/user" 			element={ isLoggedIn ? <Profile /> 			: <ProtectedPage />} />
+			<Route path="/user"				element={ isLoggedIn ? <Profile /> 			: <ProtectedPage />} />
 			<Route path="/user/:username" 	element={ isLoggedIn ? <Profile /> 			: <ProtectedPage />} />
 		</Routes>
 		</main>

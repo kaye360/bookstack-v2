@@ -5,7 +5,7 @@ import Logo from "./Logo";
 
 export default function Header() {
 
-    const { amount: notificationsAmount } = useNotifications()
+    const { amount: notificationsAmount } = useNotifications(21)
 
     let userNavlink: string = 'text-slate-200'
 
@@ -20,7 +20,7 @@ export default function Header() {
                     <li><Link to="/">Home</Link></li>
                     <li><Link to="/explore">Explore</Link></li>
                     <li><Link to="/about">About</Link></li>
-                    <li><Link to="/account">Login/Sign Up</Link></li>
+                    <li><Link to="/account">Account</Link></li>
                 </ul>
 
             </nav>
@@ -34,7 +34,6 @@ export default function Header() {
                         <Link className={userNavlink} to="/notifications">
                             Notifications
                             {notificationsAmount.recent > 0 &&
-                            
                                 <span className="inline-flex items-center justify-center mx-1 bg-rose-500 rounded-full aspect-square w-6">
                                     {notificationsAmount.recent}
                                 </span>

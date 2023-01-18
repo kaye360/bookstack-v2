@@ -111,7 +111,7 @@ function Comments({isLoading, isError, book}) {
             book.comments.map( comment => {
                 return(
                     <li key={comment.id}>
-                        <h3><Link to={`user/${comment.username}`}>{comment.username}</Link></h3>
+                        <h3><Link to={`/user/${comment.username}`}>{comment.username}</Link></h3>
                         <p>{comment.comment}</p>
                     </li>
             )})

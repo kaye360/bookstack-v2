@@ -3,16 +3,16 @@ import { API_BASE_URL } from "../config"
 import { useQueries } from "react-query"
 
 
-export const useNotifications = (userID?: number) => {
+export const useNotifications = (userID: number) => {
 
     async function getNewNotifications() {
-        const res = await httpReq.get(API_BASE_URL + '/notifications/new/21')
+        const res = await httpReq.get(API_BASE_URL + '/notifications/new/' + userID)
         const data = await res.json()
         return data
     }
 
     async function getOldNotifications() {
-        const res = await httpReq.get(API_BASE_URL + '/notifications/old/21')
+        const res = await httpReq.get(API_BASE_URL + '/notifications/old/' + userID)
         const data = await res.json()
         return data
     }
