@@ -1,5 +1,5 @@
 import React from "react";
-import SignInUp from "./SignInUp"
+import AccountCard from "./AccountCard";
 
 export default function Hero() {
 
@@ -14,8 +14,8 @@ export default function Hero() {
                     Hero Content here
                 </div>
 
-                <div className="md:mx-12 md:translate-y-16">
-                    <SignInUp />
+                <div className="rounded-xl translate-y-8 -translate-x-8">
+                    <AccountCard defaultComponent='register' />
                 </div>
         </section>
     )

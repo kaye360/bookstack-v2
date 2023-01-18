@@ -1,4 +1,8 @@
-import React, { useState } from "react";
+import { useContext, useState } from "react";
+import { useQuery } from "react-query";
+import { UserContext } from "../../App";
+import { API_BASE_URL } from "../../config";
+import httpReq from "../../utils/httpReq";
 
 interface Iprops {
     defaultComponent : string
@@ -13,7 +17,7 @@ export default function AccountCard({defaultComponent} : Iprops) {
         <section className="p-4 w-full max-w-xl mx-auto rounded-xl border border-slate-300">
             {isShown === 'login' ? <Login /> : <Register /> }
 
-            <p>
+            <p className="mt-8">
             {isShown === 'login' &&
                 <>
                 Don't have an acount yet? 
@@ -39,18 +43,54 @@ export default function AccountCard({defaultComponent} : Iprops) {
 
 function Login() {
 
+    const {setUser, setIsLoggedIn } = useContext(UserContext)
+
+    /**
+     * Form state control
+     */
     const [username, setUserName] = useState('')
     const [password, setPassword] = useState('')
 
-    async function handleLogin(e: any) {
-        e.preventDefault()
-        console.log(username, password)
+    /**
+     * Query functions
+     */
+    async function loginUser() {
+        const postData = {
+            'username' : username,
+            'password' : password
+        }
+        const res = await httpReq.post(API_BASE_URL + '/user/login', postData )
+        const data = await res.json()
+        console.log(data)
+
+        if(data.success) {
+            const timeout = setTimeout( () => {}, 2000)
+            localStorage.setItem('token', data.uuid)
+            setIsLoggedIn(true)
+            setUser({
+                id: data.id,
+                username: data.username,
+                token: data.uuid
+            })
+        } else {
+            throw new Error(data.message)
+        }
+
+        return data
     }
 
+    const {isSuccess, refetch, isLoading, error, isError } = useQuery('login', loginUser, {enabled: false})
+
+    async function handleLogin(e: any) {
+        e.preventDefault()
+        refetch()
+    }
+
+    
     return(
         <>
             <h2 className="text-xl font-bold text-cyan-600">Sign In</h2>
-
+     
             <p>Please enter your information below</p>
 
             <form onSubmit={handleLogin}>
@@ -71,8 +111,14 @@ function Login() {
                     />
                 </FormRow>
 
-                <input type="submit" value="Sign In" 
-                    className="px-4 py-2 rounded-lg bg-cyan-700 text-cyan-100 cursor-pointer"/>
+                <div className="flex items-center gap-4">
+                    <input type="submit" value="Sign In" 
+                        className="px-4 py-2 rounded-lg bg-cyan-700 text-cyan-100 cursor-pointer"/>
+
+                    {isSuccess && <div>Sign in successful. Redirecting...</div> }
+                    {isLoading && <div className="animate-pulse">Logging in, please wait...</div> }
+                    {isError && <div className="text-red-400">{error.message}</div> }
+                </div>
 
             </form>
         </>
@@ -86,6 +132,7 @@ function Register() {
 
     const [username, setUserName] = useState('')
     const [password, setPassword] = useState('')
+
 
     async function handleRegister(e: any) {
         e.preventDefault()

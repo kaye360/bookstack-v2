@@ -41,7 +41,6 @@ function LibraryPreview({userID, username}) {
 
     const {library, amount, isError, isLoading} = useLibrary(userID)
     const libraryPreview = library.slice(0,6)
-    console.log(libraryPreview)
 
     if(isError) {
         return <div>Error loading user's library</div>
@@ -62,6 +61,7 @@ function LibraryPreview({userID, username}) {
                 id={book.id} 
                 title={book.title} 
                 cover={book.coverUrl}
+                key={book.id}
             />
         ))
         }

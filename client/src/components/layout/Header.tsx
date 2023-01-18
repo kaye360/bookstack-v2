@@ -1,11 +1,15 @@
-import React from "react";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
+import { UserContext } from "../../App";
 import { useNotifications } from "../../utils/useNotifications";
 import Logo from "./Logo";
 
 export default function Header() {
 
-    const { amount: notificationsAmount } = useNotifications(21)
+    const {user, isLoggedIn} = useContext(UserContext)
+    // console.log(user)
+
+    const { amount: notificationsAmount } = useNotifications(user.id)
 
     let userNavlink: string = 'text-slate-200'
 
@@ -25,6 +29,8 @@ export default function Header() {
 
             </nav>
 
+            {isLoggedIn &&
+
             <nav>
                 <ul className="flex items-center justify-end gap-4 bg-slate-700 text-slate-200 p-2">
                     <li><Link className={userNavlink} to="/dashboard">Dashboard</Link></li>
@@ -43,6 +49,7 @@ export default function Header() {
                     <li><Link className={userNavlink} to="/user/username">Profile</Link></li>
                 </ul>
             </nav>
+            }
 
         </header>
     )

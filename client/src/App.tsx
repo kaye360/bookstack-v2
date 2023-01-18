@@ -5,11 +5,9 @@
  */
 
 // Dependencies
-import React, { createContext, useState } from "react"
-import { useQuery } from "react-query"
+import { createContext } from "react"
 import { Route, Routes } from "react-router-dom"
-import httpReq from "./utils/httpReq"
-import { API_BASE_URL } from "./config"
+import useAuth from "./utils/useAuth"
 
 // Components
 import Header from "./components/layout/Header"
@@ -29,25 +27,50 @@ import ProtectedPage from "./pages/ProtectedPage"
 import Book from "./pages/Book"
 
 
-export const UserContext = createContext(null)
+/**
+ * User Context Types and default state
+ */
+interface IUserContext {
+	user : {
+		username:string,
+		id: number, 
+		token: string
+	},
+	isLoggedIn : boolean
+	setUser?: Function,
+	setIsLoggedIn?: Function
+
+}
+
+const UserContextDefault: IUserContext = {
+	user : {
+		username : '',
+		id : 0,
+		token : ''
+	},
+	isLoggedIn : false
+}
+
+export const UserContext = createContext( UserContextDefault )
+
+
 
 
 function App() {
 
-	const isLoggedIn: boolean = false
 
-	// // Notifications
-	//  const { data, isError, isLoading } = useQuery(
-	// 	'notifications',
-	// 	() => httpReq.get(API_BASE_URL + '/notifications/new/21')
-	// )
-
-
-	// User Login Context
-	// const user, SetUser = useState()
+	/**
+	 * User Authentication
+	 * 
+	 * @var Auth : type object { user, isLoggedIn }
+	 * gets passed into U
+	 * 
+	 */
+	const Auth = useAuth()
 
 
 	return (
+		<UserContext.Provider value={ Auth } >
 		<div className="w-100 max-w-6xl border mx-auto border-slate-300 ">
 		<Header /> 
 
@@ -57,21 +80,22 @@ function App() {
 			<Route path="/"			element={<Home />} />
 			<Route path="/explore" 	element={<Explore />} />
 			<Route path="/about" 	element={<About />} />
-			<Route path="/account"	element={ isLoggedIn ? <Dashboard /> : <Account />} />
+			<Route path="/account"	element={ Auth.isLoggedIn ? <Dashboard /> : <Account />} />
 
-			{/* User Routes */}
-			<Route path="/dashboard"		element={ isLoggedIn ? <Dashboard />		: <ProtectedPage />} />
-			<Route path="/library" 			element={ isLoggedIn ? <Library />			: <ProtectedPage />} />
-			<Route path="book/:id" 			element={ isLoggedIn ? <Book />				: <ProtectedPage />} />
-			<Route path="/feed" 			element={ isLoggedIn ? <Feed /> 			: <ProtectedPage />} />
-			<Route path="/notifications" 	element={ isLoggedIn ? <Notifications />	: <ProtectedPage />} />
-			<Route path="/user"				element={ isLoggedIn ? <Profile /> 			: <ProtectedPage />} />
-			<Route path="/user/:username" 	element={ isLoggedIn ? <Profile /> 			: <ProtectedPage />} />
+			{/* Protected User Routes */}
+			<Route path="/dashboard"		element={ Auth.isLoggedIn ? <Dashboard />		: <ProtectedPage />} />
+			<Route path="/library" 			element={ Auth.isLoggedIn ? <Library />			: <ProtectedPage />} />
+			<Route path="book/:id" 			element={ Auth.isLoggedIn ? <Book />			: <ProtectedPage />} />
+			<Route path="/feed" 			element={ Auth.isLoggedIn ? <Feed /> 			: <ProtectedPage />} />
+			<Route path="/notifications" 	element={ Auth.isLoggedIn ? <Notifications />	: <ProtectedPage />} />
+			<Route path="/user"				element={ Auth.isLoggedIn ? <Profile /> 		: <ProtectedPage />} />
+			<Route path="/user/:username" 	element={ Auth.isLoggedIn ? <Profile /> 		: <ProtectedPage />} />
 		</Routes>
 		</main>
 
 		<Footer />
 		</div>
+		</UserContext.Provider>
 )
 }
 
