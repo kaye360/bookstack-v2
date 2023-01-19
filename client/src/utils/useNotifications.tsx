@@ -1,18 +1,22 @@
 import httpReq from "./httpReq"
 import { API_BASE_URL } from "../config"
 import { useQueries } from "react-query"
-
+import { useContext } from "react"
+import { UserContext } from "../App"
 
 export const useNotifications = (userID: number) => {
     /**
      * Make sure we have a number. Can't do an
      * early return here, otherwise there will 
-     * be a conditional render
+     * be a conditional render due to useQuery
      */
     if(typeof userID !== 'number') userID = 0
+
+
+    const { isLoggedIn} = useContext(UserContext)
     
     const queries = useQueries([
-        { queryKey: ['newNotifications', 1], queryFn: getNewNotifications , refetchInterval : 15000 },
+        { queryKey: ['newNotifications', 1], queryFn: getNewNotifications , refetchInterval : 15000, enabled : !!isLoggedIn },
         { queryKey: ['oldNotifications', 2], queryFn: getOldNotifications },
         { queryKey: ['oldNotifications', 3], queryFn: clearNewNotifications, enabled : false },
     ])
@@ -83,7 +87,7 @@ export const useNotifications = (userID: number) => {
         old : 0,
     }
 
-    if( recent.success && old.success) {
+    if( recent?.success && old?.success ) {
         notifications = { 
             recent : JSON.parse( recent.new_notifications ),  
             old : JSON.parse( old.old_notifications )

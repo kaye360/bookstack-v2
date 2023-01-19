@@ -1,15 +1,17 @@
-import React from "react";
 import { useNotifications } from "../../utils/useNotifications";
 import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { UserContext } from "../../App";
 
 type propTypes = {
     user: number
 }
 
-export default function DashboardNotifications({user} : propTypes) {
+export default function DashboardNotifications() {
 
+    const { user } = useContext(UserContext)
 
-    const { notifications, amount } = useNotifications()
+    const { notifications, amount } = useNotifications(user.id)
 
     return(
         <div>

@@ -17,7 +17,7 @@ export default function Dashboard() {
                 </div>
 
                 <div className="h-56 rounded border border-slate-300">
-                    <DashboardNotifications user={21} />
+                    <DashboardNotifications />
                 </div>
             </section>
 

@@ -14,7 +14,7 @@ export default function AccountCard({defaultComponent} : Iprops) {
 
 
     return (
-        <section className="p-4 w-full max-w-xl mx-auto rounded-xl border border-slate-300">
+        <section className="p-4 w-full max-w-xl mx-auto rounded-xl border border-slate-300 bg-slate-50 bg-opacity-80">
             {isShown === 'login' ? <Login /> : <Register /> }
 
             <p className="mt-8">
@@ -61,7 +61,6 @@ function Login() {
         }
         const res = await httpReq.post(API_BASE_URL + '/user/login', postData )
         const data = await res.json()
-        console.log(data)
 
         if(data.success) {
             const timeout = setTimeout( () => {}, 2000)

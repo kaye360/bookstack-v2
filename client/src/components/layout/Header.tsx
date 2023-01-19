@@ -7,7 +7,6 @@ import Logo from "./Logo";
 export default function Header() {
 
     const {user, isLoggedIn} = useContext(UserContext)
-    // console.log(user)
 
     const { amount: notificationsAmount } = useNotifications(user.id)
 
