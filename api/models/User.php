@@ -7,6 +7,8 @@
  * PUBLIC
  * create
  * get_single
+ * get_single_by_session
+ * get_single_by_username
  * get_all
  * edit
  * destroy
@@ -128,6 +130,19 @@ class User extends Database
 		return $this->get_row_by_column_name(
 			column: 'session',
 			value: $session,
+			table: self::TABLE,
+			return: ['username', 'id']
+		);
+	}
+
+
+
+
+	public function get_single_by_username($username)
+	{
+		return $this->get_row_by_column_name(
+			column: 'username',
+			value: $username,
 			table: self::TABLE,
 			return: ['username', 'id']
 		);

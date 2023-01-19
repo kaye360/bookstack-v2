@@ -11,6 +11,7 @@ $route->baseURL = BASE_URL;
  */
 $route->get('/users', ['User', 'get_all']);
 $route->get('/user/:id', ['User', 'get_single', 'id']);
+$route->get('/username/:username', ['User', 'get_single_by_username', 'username']);
 $route->post('/user', ['User', 'create']);
 $route->post('/user/login', ['User', 'login']);
 $route->post('/user/logout', ['User', 'logout']);
