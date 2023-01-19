@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useBook } from "../utils/useBook";
 import Loader from "../components/layout/Loader";
@@ -6,14 +6,12 @@ import { Link } from "react-router-dom";
 import { useQuery, useQueryClient } from "react-query";
 import httpReq from "../utils/httpReq";
 import { API_BASE_URL } from "../config";
+import { UserContext } from "../App";
 
 
 export default function Book() {
 
-    const user = {
-        id : 21,
-        username : 'josh'
-    }
+    const { user } = useContext(UserContext)
 
 
     const { id } : any = useParams()

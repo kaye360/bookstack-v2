@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { UserContext } from "../App";
 import Loader from "../components/layout/Loader";
 import AddBookModal from "../components/library/AddBookModal";
 import Book from "../components/library/Book";
@@ -6,7 +7,9 @@ import { useLibrary } from "../utils/useLibrary";
 
 export default function Library() {
 
-    const {library, isError, isLoading} = useLibrary(21)
+    const { user } = useContext(UserContext)
+
+    const {library, isError, isLoading} = useLibrary(user.id)
 
     const [showModal, setShowModal] = useState(false)
 

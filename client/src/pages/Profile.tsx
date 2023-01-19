@@ -1,12 +1,23 @@
-import React from "react";
 import { useParams } from "react-router-dom";
 import { useLibrary  } from "../utils/useLibrary";
 import Loader from '../components/layout/Loader'
 import Book from  '../components/library/Book'
+import { useQuery } from "react-query";
+import httpReq from "../utils/httpReq";
+import { API_BASE_URL } from "../config";
 
 export default function Profile() {
 
     const { username } = useParams()
+
+    async function getUser() {
+        const res = await httpReq.get(API_BASE_URL + '/username/' + username)
+        const data = await res.json()
+        return data
+    }
+
+    const { data : user, isSuccess, isLoading } = useQuery('getUserId', getUser)
+    console.log(user)
 
     return(<>
         
@@ -17,9 +28,16 @@ export default function Profile() {
                 Currently reading: //TODO
             </div>
 
-            <LibraryPreview userID={21} username={username} />
-
-            <UsersPublicFeed userID={21} />
+            {
+                isLoading && <Loader />
+            }
+            {
+                isSuccess &&
+                <>
+                    <LibraryPreview userID={user.id} username={username} />
+                    <UsersPublicFeed userID={user.id} />
+                </>
+            }
 
         </section>
     

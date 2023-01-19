@@ -31,7 +31,7 @@ export const useNotifications = (userID: number) => {
         (typeof userID !== 'number') ||
         (userID === 0)
     ) return { 
-        amount :{ recent : 0, old : 0 }, 
+        amount : { recent : 0, old : 0 }, 
         notifications : { recent : [], old: [] }
     }
 
@@ -87,11 +87,13 @@ export const useNotifications = (userID: number) => {
         old : 0,
     }
 
+    console.log(old)
     if( recent?.success && old?.success ) {
         notifications = { 
             recent : JSON.parse( recent.new_notifications ),  
             old : JSON.parse( old.old_notifications )
         }
+        console.log(notifications)
     
         amount = {
             recent : notifications.recent.length,

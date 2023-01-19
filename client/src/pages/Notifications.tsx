@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
+import { UserContext } from "../App";
 import { useNotifications } from "../utils/useNotifications";
 
 export default function Notifications() {
 
-    const { notifications, amount, clearRecentNotifications } = useNotifications(21)
+    const { user } = useContext(UserContext)
+
+    const { notifications, amount, clearRecentNotifications } = useNotifications(user.id)
 
 
     return <>

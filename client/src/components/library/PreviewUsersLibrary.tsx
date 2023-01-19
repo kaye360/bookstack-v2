@@ -1,21 +1,15 @@
-import React from "react";
-import { useQuery } from "react-query";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
-import { API_BASE_URL } from "../../config";
-import httpReq from "../../utils/httpReq";
 import Book from "./Book";
 import Loader from "../layout/Loader";
 import { useLibrary } from "../../utils/useLibrary";
+import { UserContext } from "../../App";
 
 export default function PreviewUsersLibrary() {
 
-    // const { data, isLoading, isError} = useQuery(
-    //     'usersBooks',
-    //     () => httpReq.get(API_BASE_URL + '/books/21')
-    // )
-    // let previewUsersBooks = data?.data.slice(0, 6)
+    const { user } = useContext(UserContext)
     
-    const {library, isLoading } = useLibrary(21)
+    const {library, isLoading } = useLibrary( user.id )
     let previewUsersBooks = library.slice(0, 6)
 
     return(

@@ -1,9 +1,10 @@
-import React, { useState } from "react"
+import React, { useContext, useState } from "react"
 import { useQuery, useQueryClient } from "react-query"
 import { API_BASE_URL, GOOGLE_KEY } from "../../config"
 import httpReq from "../../utils/httpReq"
 import Modal from "../layout/Modal"
 import Loader from "../layout/Loader"
+import { UserContext } from "../../App"
 
 
 interface propType {
@@ -11,6 +12,8 @@ interface propType {
 }
 
 export default function AddBookModal({setShowModal} : propType) {
+
+    const { user } = useContext(UserContext)
 
     /**
      * Form States
@@ -96,7 +99,7 @@ export default function AddBookModal({setShowModal} : propType) {
             author : author,
             is_read : isRead ? "true" : "false",
             cover_url : cover,
-            user_id : 21
+            user_id : user.id
         }
 
         const res = await httpReq.post(API_BASE_URL + '/book', postData)
