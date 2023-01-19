@@ -36,10 +36,11 @@ interface IUserContext {
 		id: number, 
 		token: string
 	},
-	isLoggedIn : boolean
 	setUser?: Function,
-	setIsLoggedIn?: Function
-
+	isLoggedIn : boolean,
+	setIsLoggedIn? : Function,
+	logout? : Function,
+	verify? : Function
 }
 
 const UserContextDefault: IUserContext = {
@@ -48,7 +49,7 @@ const UserContextDefault: IUserContext = {
 		id : 0,
 		token : ''
 	},
-	isLoggedIn : false
+	isLoggedIn : false,
 }
 
 export const UserContext = createContext( UserContextDefault )
@@ -67,7 +68,6 @@ function App() {
 	 * 
 	 */
 	const Auth = useAuth()
-
 
 	return (
 		<UserContext.Provider value={ Auth } >

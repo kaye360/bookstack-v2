@@ -6,7 +6,7 @@ import Logo from "./Logo";
 
 export default function Header() {
 
-    const {user, isLoggedIn} = useContext(UserContext)
+    const {user, isLoggedIn, logout } = useContext(UserContext)
 
     const { amount: notificationsAmount } = useNotifications(user.id)
 
@@ -23,7 +23,11 @@ export default function Header() {
                     <li><Link to="/">Home</Link></li>
                     <li><Link to="/explore">Explore</Link></li>
                     <li><Link to="/about">About</Link></li>
-                    <li><Link to="/account">Account</Link></li>
+                    { isLoggedIn
+                        ? <li><Link to="/" onClick={ () => logout() }>Logout</Link></li>
+                        : <li><Link to="/account">Account</Link></li>
+                     }
+                    
                 </ul>
 
             </nav>
@@ -45,7 +49,7 @@ export default function Header() {
                             }
                         </Link>
                     </li>
-                    <li><Link className={userNavlink} to="/user/username">Profile</Link></li>
+                    <li><Link className={userNavlink} to={`/user/${user.username}`}>Profile</Link></li>
                 </ul>
             </nav>
             }

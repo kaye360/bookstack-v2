@@ -8,11 +8,6 @@ export default function Profile() {
 
     const { username } = useParams()
 
-    console.log(username)
-
-    
-
-
     return(<>
         
         <section className="min-h-screen">
