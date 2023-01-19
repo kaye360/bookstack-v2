@@ -18,6 +18,11 @@ $route->put('/user/:id', ['User', 'edit', 'id']);
 $route->delete('/user/:id', ['User', 'destroy', 'id']);
 
 /**
+ * Session Routes
+ */
+$route->get('/session/:session', ['User', 'get_single_by_session', 'session']);
+
+/**
  * User Notification Routes
  */
 $route->get('/notifications/new/:id', ['User', 'get_new_notifications', 'id']);

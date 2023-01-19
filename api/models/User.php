@@ -123,6 +123,19 @@ class User extends Database
 
 
 
+	public function get_single_by_session($session)
+	{
+		return $this->get_row_by_column_name(
+			column: 'session',
+			value: $session,
+			table: self::TABLE,
+			return: ['username', 'id']
+		);
+	}
+
+
+
+
 	public function get_all()
 	{
 		return $this->get_all_rows(
