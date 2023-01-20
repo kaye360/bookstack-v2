@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import PreviewUsersLibrary from "../components/library/PreviewUsersLibrary";
 import Explore from "../components/library/Explore";
 import DashboardNotifications from "../components/notifications/DashboardNotifications";
+import { UserContext } from "../App";
 
 export default function Dashboard() {
 
+    const { user } = useContext(UserContext)
     
     return(
         <>
@@ -12,13 +14,11 @@ export default function Dashboard() {
 
             <section className="grid gap-4 md:grid-cols-2">
 
-                <div className="h-56 rounded border border-slate-300">
-                    Welcome User
+                <div className="flex items-center text-xl">
+                    Welcome back, {user.username}
                 </div>
 
-                <div className="h-56 rounded border border-slate-300">
-                    <DashboardNotifications />
-                </div>
+                <DashboardNotifications />
             </section>
 
             <PreviewUsersLibrary />

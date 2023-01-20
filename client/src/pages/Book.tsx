@@ -18,6 +18,7 @@ export default function Book() {
     const bookID: number | undefined = parseInt(id)
 
     const { bookQuery, googleQuery } = useBook( bookID )
+    console.log(bookQuery)
 
     if(bookQuery.isError) {
         return <div>Error Getting Book</div>
@@ -54,14 +55,14 @@ export default function Book() {
             
             <h3 className="font-bold mt-4">Google Data</h3>
             {
-            googleQuery.data.items[0] &&
+            googleQuery.data &&
             <>
-                <p>Sub Title:   {googleQuery.data.items[0].volumeInfo.subtitle}</p>
-                <p>Rating:      {googleQuery.data.items[0].volumeInfo.averageRating}</p>
-                <p>Categories:  {googleQuery.data.items[0].volumeInfo.categories}</p>
-                <p>Pages:       {googleQuery.data.items[0].volumeInfo.pageCount}</p>
-                <p>Date Pubbed: {googleQuery.data.items[0].volumeInfo.publishedDate}</p>
-                <p className="text-left max-w-lg mx-auto">Description: {googleQuery.data.items[0].volumeInfo.description}</p>
+                <p>Sub Title:   {googleQuery.data.subtitle}</p>
+                <p>Rating:      {googleQuery.data.averageRating}</p>
+                <p>Categories:  {googleQuery.data.categories}</p>
+                <p>Pages:       {googleQuery.data.pageCount}</p>
+                <p>Date Pubbed: {googleQuery.data.publishedDate}</p>
+                <p className="text-left max-w-lg mx-auto">Description: {googleQuery.data.description}</p>
             </>
             } 
         </div>

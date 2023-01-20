@@ -33,7 +33,7 @@ export default function Notifications() {
             <h2 className="text-xl font-bold my-0">Old</h2>
 
             { notifications.old.length === 0 
-                ? <div>You have no new notifications.</div>
+                ? <div>You have no notifications.</div>
                 : <ul>
                     { notifications.old.map( (notification: { message:string, url:string }, index) => {
                         return <li key={index}>{notification.message}</li>

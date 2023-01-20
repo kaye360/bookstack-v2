@@ -52,6 +52,9 @@ const UserContextDefault: IUserContext = {
 	isLoggedIn : false,
 }
 
+/**
+ * Logged In User data
+ */
 export const UserContext = createContext( UserContextDefault )
 
 
@@ -63,37 +66,40 @@ function App() {
 	/**
 	 * User Authentication
 	 * 
-	 * @var Auth : type object { user, isLoggedIn }
-	 * gets passed into U
+	 * @var Auth : type object 
+	 * gets passed into UserContext to provide 
+	 * global user logic
 	 * 
 	 */
-	const Auth = useAuth()
+	const Auth: any = useAuth()
 
 	return (
 		<UserContext.Provider value={ Auth } >
 		<div className="w-100 max-w-6xl border mx-auto border-slate-300 ">
-		<Header /> 
 
-		<main className="flex flex-col gap-8 py-8 px-2">
-		<Routes>
-			{/* Public Routes */}
-			<Route path="/"			element={<Home />} />
-			<Route path="/explore" 	element={<Explore />} />
-			<Route path="/about" 	element={<About />} />
-			<Route path="/account"	element={ Auth.isLoggedIn ? <Dashboard /> : <Account />} />
+			<Header /> 
 
-			{/* Protected User Routes */}
-			<Route path="/dashboard"		element={ Auth.isLoggedIn ? <Dashboard />		: <ProtectedPage />} />
-			<Route path="/library" 			element={ Auth.isLoggedIn ? <Library />			: <ProtectedPage />} />
-			<Route path="book/:id" 			element={ Auth.isLoggedIn ? <Book />			: <ProtectedPage />} />
-			<Route path="/feed" 			element={ Auth.isLoggedIn ? <Feed /> 			: <ProtectedPage />} />
-			<Route path="/notifications" 	element={ Auth.isLoggedIn ? <Notifications />	: <ProtectedPage />} />
-			<Route path="/user"				element={ Auth.isLoggedIn ? <Profile /> 		: <ProtectedPage />} />
-			<Route path="/user/:username" 	element={ Auth.isLoggedIn ? <Profile /> 		: <ProtectedPage />} />
-		</Routes>
-		</main>
+			<main className="flex flex-col gap-8 py-8 px-2">
+			<Routes>
+				{/* Public Routes */}
+				<Route path="/"			element={<Home />} />
+				<Route path="/explore" 	element={<Explore />} />
+				<Route path="/about" 	element={<About />} />
+				<Route path="/account"	element={ Auth.isLoggedIn ? <Dashboard /> : <Account />} />
 
-		<Footer />
+				{/* Protected User Routes */}
+				<Route path="/dashboard"		element={ Auth.isLoggedIn ? <Dashboard />		: <ProtectedPage />} />
+				<Route path="/library" 			element={ Auth.isLoggedIn ? <Library />			: <ProtectedPage />} />
+				<Route path="book/:id" 			element={ Auth.isLoggedIn ? <Book />			: <ProtectedPage />} />
+				<Route path="/feed" 			element={ Auth.isLoggedIn ? <Feed /> 			: <ProtectedPage />} />
+				<Route path="/notifications" 	element={ Auth.isLoggedIn ? <Notifications />	: <ProtectedPage />} />
+				<Route path="/user"				element={ Auth.isLoggedIn ? <Profile /> 		: <ProtectedPage />} />
+				<Route path="/user/:username" 	element={ Auth.isLoggedIn ? <Profile /> 		: <ProtectedPage />} />
+			</Routes>
+			</main>
+
+			<Footer />
+
 		</div>
 		</UserContext.Provider>
 )

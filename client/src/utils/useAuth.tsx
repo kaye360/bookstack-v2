@@ -7,12 +7,18 @@ import httpReq from "./httpReq"
 
 export default function useAuth() {
 
-    const [user, setUser] = useState({})
-    const [isLoggedIn, setIsLoggedIn] = useState(false)
+    /**
+     * User Auth Data
+     */
 
+    const [user, setUser] = useState( {} )
+    const [isLoggedIn, setIsLoggedIn] = useState(false)
     const localToken = localStorage.getItem('token') || false
 
-    const { data } = useQuery('getUser', getUser)
+    /**
+     * User Auth Queries
+     */
+    const { isError } = useQuery('getUser', getUser)
 
     async function getUser() {
         if(!localToken) return

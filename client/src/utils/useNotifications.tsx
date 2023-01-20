@@ -20,6 +20,10 @@ export const useNotifications = (userID: number) => {
         { queryKey: ['oldNotifications', 2], queryFn: getOldNotifications },
         { queryKey: ['oldNotifications', 3], queryFn: clearNewNotifications, enabled : false },
     ])
+
+    const { data: recent, refetch: refetchNew  } = queries[0]
+    const { data: old, refetch: refetchOld } = queries[1]
+    const { refetch : clearRecentNotifications } = queries[2]
     
     /**
      * Early exit if userID is not a number or set to 0 earlier
@@ -59,11 +63,6 @@ export const useNotifications = (userID: number) => {
         return data
     }
 
-    const { data: recent, refetch: refetchNew  } = queries[0]
-    const { data: old, refetch: refetchOld } = queries[1]
-    const { refetch : clearRecentNotifications } = queries[2]
-
-
     /**
      * Return values
      */
@@ -87,13 +86,11 @@ export const useNotifications = (userID: number) => {
         old : 0,
     }
 
-    console.log(old)
     if( recent?.success && old?.success ) {
         notifications = { 
             recent : JSON.parse( recent.new_notifications ),  
             old : JSON.parse( old.old_notifications )
         }
-        console.log(notifications)
     
         amount = {
             recent : notifications.recent.length,

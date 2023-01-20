@@ -12,9 +12,7 @@ export const useLibrary = (userId: number) => {
         return data
     }
 
-    const { data, isError, isLoading } = useQuery(
-		'library', getLibrary
-	)
+    const { data, isError, isLoading } = useQuery('library', getLibrary)
 
     interface Library {
         author: string,
