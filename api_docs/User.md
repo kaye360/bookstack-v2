@@ -1,9 +1,16 @@
 # User Class
 
+On this page:
+- Routes
+- User methods
+
 ## Routes
 
-routes here
+### GET routes
 
-## methods
+- /users - calls get_all
+- /users/:id - calls get_single
+
+## Methods
 
 methods here
