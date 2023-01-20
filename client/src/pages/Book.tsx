@@ -7,6 +7,7 @@ import { useQuery, useQueryClient } from "react-query";
 import httpReq from "../utils/httpReq";
 import { API_BASE_URL } from "../config";
 import { UserContext } from "../App";
+import { HttpProxy } from "vite";
 
 
 export default function Book() {
@@ -15,9 +16,8 @@ export default function Book() {
     const { user } = useContext(UserContext)
     const { id } : any = useParams()
     const bookID: number | undefined = parseInt(id)
-
     const { bookQuery, googleQuery } = useBook( bookID )
-    console.log(bookQuery.data)
+    const isRead = bookQuery.data?.is_read === 'true' ? true : false
 
     if(bookQuery.isError) {
         return <div>Error Getting Book</div>
@@ -27,9 +27,7 @@ export default function Book() {
         return <Loader />
     }
 
-
     const likes = JSON.parse(bookQuery.data.likes) || []
-
     const isLikedByUser = likes.includes(user.id)
 
     return <>
@@ -51,8 +49,13 @@ export default function Book() {
         <div className="text-center">
             <h3 className="font-bold">App Data</h3>
             <p>Author: {bookQuery.data.author} </p>
-            <p>Is read? {bookQuery.data.is_read} </p>
-            <p>Comments: {bookQuery.data.comment_count }</p>
+            <p>
+                Is read? 
+                <ToggleIsReadBtn isRead={isRead} bookID={ bookID } bookQuery={bookQuery} /> 
+            </p>
+            <p>
+                <a href="#comments">Comments:</a> &nbsp; 
+                { bookQuery.data.comment_count }</p>
             <p>
                 Likes: {likes.length} | &nbsp;
                 <LikeBtn 
@@ -60,7 +63,6 @@ export default function Book() {
                     userID={user.id}
                     bookID={id}
                     bookQuery={bookQuery}
-                    googleQuery={googleQuery}
                 />
             </p>
             <p>User ID: {bookQuery.data.user_id}</p>
@@ -69,12 +71,12 @@ export default function Book() {
             {
             googleQuery.data &&
             <>
-                <p>Sub Title:   {googleQuery.data.subtitle}</p>
-                <p>Rating:      {googleQuery.data.averageRating}</p>
-                <p>Categories:  {googleQuery.data.categories}</p>
-                <p>Pages:       {googleQuery.data.pageCount}</p>
-                <p>Date Pubbed: {googleQuery.data.publishedDate}</p>
-                <p className="text-left max-w-lg mx-auto">Description: {googleQuery.data.description}</p>
+                <p>Sub Title:   {googleQuery.data.items[0].volumeInfo.subtitle}</p>
+                <p>Rating:      {googleQuery.data.items[0].volumeInfo.averageRating}</p>
+                <p>Categories:  {googleQuery.data.items[0].volumeInfo.categories}</p>
+                <p>Pages:       {googleQuery.data.items[0].volumeInfo.pageCount}</p>
+                <p>Date Pubbed: {googleQuery.data.items[0].volumeInfo.publishedDate}</p>
+                <p className="text-left max-w-lg mx-auto">Description: {googleQuery.data.items[0].volumeInfo.description}</p>
             </>
             } 
         </div>
@@ -103,12 +105,29 @@ export default function Book() {
 
 
 
-function LikeBtn({isLikedByUser, userID, bookID, bookQuery, googleQuery}) {
+function ToggleIsReadBtn({isRead, bookID, bookQuery}) {
 
-    const btnClass = 'p-0 bg-transparent outline-0 border-0 focus:outline-0 hover:border-0'
+    const putBody = { id: bookID }
 
-    async function likeBook() {
+    async function toggleIsRead() {
+        const res = await httpReq.put(API_BASE_URL + '/book/read', putBody)
+        const data = await res.json()
+        bookQuery.refetch()
+    }
 
+    const { refetch } = useQuery('toggleIsRead', toggleIsRead, {enabled: false})
+
+    return <button onClick={ () => refetch() } className='p-0 mx-2 bg-transparent outline-0 border-0 focus:outline-0 hover:border-0'>
+        {isRead ? '☑️' : '🔲' }
+    </button>
+}
+
+
+
+
+function LikeBtn({isLikedByUser, userID, bookID, bookQuery}) {
+
+    async function toggleLikeBook() {
         const body = {
             id: bookID,
             user_id: userID
@@ -116,14 +135,13 @@ function LikeBtn({isLikedByUser, userID, bookID, bookQuery, googleQuery}) {
         const res = await httpReq.put(API_BASE_URL + '/book/like', body)
         const data = await res.json()
         bookQuery.refetch()
-        googleQuery.refetch()
     }
 
-    const {refetch} = useQuery('likeBook', likeBook, {
+    const {refetch} = useQuery('toggleLikeBook', toggleLikeBook, {
         enabled : false
     })
 
-    return <button onClick={ () => {refetch()} } className={btnClass}>
+    return <button onClick={ () => {refetch()} } className='p-0 bg-transparent outline-0 border-0 focus:outline-0 hover:border-0'>
         { isLikedByUser ? '❤️' : '🤍' }
     </button>
 
@@ -148,7 +166,7 @@ function Comments({isLoading, isError, book}) {
     }
 
     return (
-        <ul className="flex flex-col gap-8 text-left">
+        <ul className="flex flex-col gap-8 text-left" id="comments">
             { 
             book.comments.map( comment => {
                 return(
