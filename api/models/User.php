@@ -226,6 +226,10 @@ class User extends Database
 			];
 		}
 
+		/**
+		 * @todo check if unique
+		 */
+
 		// Update User
 		return $this->update_row(
 			id: $id,
@@ -253,7 +257,8 @@ class User extends Database
 		$current_new_notifications = json_decode($user['new_notifications']);
 		$new_notification = [
 			'message' => $put_data['notification_message'],
-			'url' => $put_data['notification_url']
+			'url' => $put_data['notification_url'],
+			'type' => $put_data['notification_type']
 		];
 
 		array_unshift($current_new_notifications, $new_notification);
@@ -390,6 +395,9 @@ class User extends Database
 			return: ['username', 'password', 'id']
 		);
 
+		/**
+		 * @todo make this return a one liner
+		 */
 		if (
 			$user['success'] && 
 			password_verify($password, $user['password'])
