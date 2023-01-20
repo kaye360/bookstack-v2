@@ -80,7 +80,7 @@ class Comment extends Database
 		}
 
 		// Create Comment
-		return $this->create_row(
+		$new_comment = $this->create_row(
 		  columns: [
 			'username' => $post_data['username'],
 			'user_id' => $post_data['user_id'],
@@ -90,6 +90,18 @@ class Comment extends Database
 		  return: ['comment', 'username'],
 		  table: self::TABLE
 		);
+
+		// Get updated comment count of book after creating new comment
+		$updated_comment_count = count( $this->get_all($post_data['book_id']) );
+
+		// Update Comment count in table 'books'
+		$this->update_row(
+			id: $post_data['book_id'],
+			table: 'books',
+			columns: [ 'comment_count' => $updated_comment_count]
+		);
+
+		return $new_comment;
 	}
 
 

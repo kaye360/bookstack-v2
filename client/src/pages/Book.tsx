@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import { useContext, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useBook } from "../utils/useBook";
 import Loader from "../components/layout/Loader";
@@ -11,14 +11,13 @@ import { UserContext } from "../App";
 
 export default function Book() {
 
+    
     const { user } = useContext(UserContext)
-
-
     const { id } : any = useParams()
     const bookID: number | undefined = parseInt(id)
 
     const { bookQuery, googleQuery } = useBook( bookID )
-    console.log(bookQuery)
+    console.log(bookQuery.data)
 
     if(bookQuery.isError) {
         return <div>Error Getting Book</div>
@@ -30,6 +29,8 @@ export default function Book() {
 
 
     const likes = JSON.parse(bookQuery.data.likes) || []
+
+    const isLikedByUser = likes.includes(user.id)
 
     return <>
 
@@ -51,7 +52,18 @@ export default function Book() {
             <h3 className="font-bold">App Data</h3>
             <p>Author: {bookQuery.data.author} </p>
             <p>Is read? {bookQuery.data.is_read} </p>
-            <p>Likes: {likes.length}</p>
+            <p>Comments: {bookQuery.data.comment_count }</p>
+            <p>
+                Likes: {likes.length} | &nbsp;
+                <LikeBtn 
+                    isLikedByUser={isLikedByUser} 
+                    userID={user.id}
+                    bookID={id}
+                    bookQuery={bookQuery}
+                    googleQuery={googleQuery}
+                />
+            </p>
+            <p>User ID: {bookQuery.data.user_id}</p>
             
             <h3 className="font-bold mt-4">Google Data</h3>
             {
@@ -68,7 +80,7 @@ export default function Book() {
         </div>
 
         <section className="w-full max-w-lg mx-auto">
-            <h2 className="text-2xl font-bold text-center">Comments</h2>
+            <h2 className="my-4 py-4 text-2xl font-bold border-t border-slate-200">Comments</h2>
 
             <Comments 
                 isLoading={bookQuery.isLoading}
@@ -87,6 +99,37 @@ export default function Book() {
 
     </>
 }
+
+
+
+
+function LikeBtn({isLikedByUser, userID, bookID, bookQuery, googleQuery}) {
+
+    const btnClass = 'p-0 bg-transparent outline-0 border-0 focus:outline-0 hover:border-0'
+
+    async function likeBook() {
+
+        const body = {
+            id: bookID,
+            user_id: userID
+        }
+        const res = await httpReq.put(API_BASE_URL + '/book/like', body)
+        const data = await res.json()
+        bookQuery.refetch()
+        googleQuery.refetch()
+    }
+
+    const {refetch} = useQuery('likeBook', likeBook, {
+        enabled : false
+    })
+
+    return <button onClick={ () => {refetch()} } className={btnClass}>
+        { isLikedByUser ? '❤️' : '🤍' }
+    </button>
+
+}
+
+
 
 
 
@@ -161,7 +204,7 @@ function CommentForm({username, userID, bookID, updateComments}) {
 
     return(
         <form onSubmit={handleSubmit} >
-            <div className="flex flex-col gap-4 text-left max-w-lg mx-auto p-4 rounded-md border border-slate-400 bg-slate-200">
+            <div className="flex flex-col gap-4 text-left max-w-lg mx-auto mt-4 p-4 rounded-md border border-slate-400 bg-slate-200">
 
                 <h4 className="font-bold">
                     Commenting as {username} &nbsp;
