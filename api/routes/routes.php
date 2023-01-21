@@ -35,12 +35,14 @@ $route->put('/notifications/clear_new', ['User', 'clear_new_notifications']);
  * Book Routes
  */
 $route->post('/book', ['Book', 'create']);
+
 $route->get('/book/:id', ['Book', 'get_single', 'id']);
 $route->get('/books/:id', ['Book', 'get_all', 'id']);
+
 $route->put('/book/:id', ['Book', 'edit', 'id']);
 $route->put('/book/like', ['Book', 'like']);
 $route->put('/book/read', ['Book', 'toggle_read_status']);
-$route->put('/book/unlike', ['Book', 'unlike']);
+
 $route->delete('/book/:id', ['Book', 'destroy', 'id']);
 
 /**

@@ -158,7 +158,9 @@ class Book extends Database
 
 
 
-
+	/**
+	 * @todo rename this to toggle_like_status
+	 */
 	public function like()
 	{
 		$put_data = $this->request();
@@ -226,6 +228,9 @@ class Book extends Database
 
 
 
+	/**
+	 * @todo validate correct user ID
+	 */
 	public function toggle_read_status()
 	{
 		$put_data = $this->request();

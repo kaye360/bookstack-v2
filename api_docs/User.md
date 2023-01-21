@@ -7,9 +7,8 @@ On this page:
 - Dev User methods
 
 
-
-
 <br><br>
+
 
 ## Routes
 format: /route -> method
@@ -18,6 +17,9 @@ format: /route -> method
 - /users -> `get_all()`
 - /users/:id -> `get_single()`
 - /username/:username -> `get_single_by_username()`
+- /session/:session -> `get_single_by_session()`
+- /notifications/new/:id -> `get_new_notifications()`
+- /notifications/old/:id -> `get_old_notifications()`
 
 ### POST routes
 - /user -> `create()`
@@ -26,6 +28,8 @@ format: /route -> method
 
 ### PUT routes
 - /user/:id -> `edit()`
+- /notifications/add -> `add_new_notification`
+- /notifications/clear_new -> `clear_new_notifications`
 
 ### DELETE routes
 - /user/:id -> `destroy()`
@@ -186,7 +190,7 @@ Destroys a users UUID session
     - bool success
     - string message (if success === false)
 
-<br>
+<br><br>
 
 
 ## Private Methods
@@ -208,6 +212,7 @@ Creates new, random UUID
 - Request inputs: none
 - Returns: string (UUID)
 
+<br><br>
 
 
 ## Dev Methods
@@ -216,4 +221,4 @@ Creates new, random UUID
 Resets the users table with fake data
 - Arguments: none
 - Request inputs: none
-- Returns: N/A
+- Returns: 'Users table reset'
