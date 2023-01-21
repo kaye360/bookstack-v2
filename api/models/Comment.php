@@ -1,21 +1,5 @@
 <?php
 
-/**
- * 
- * Comment Methods at a glance
- * -------------------------
- * 
- * PUBLIC
- * create
- * get_single
- * get_all
- * edit
- * destroy
- * 
- * DEV
- * reset
- * 
- */
 
 require_once './lib/database.php';
 

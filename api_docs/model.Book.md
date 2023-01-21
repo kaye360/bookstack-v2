@@ -40,6 +40,7 @@ Creates a new book as a row.
 - Post request inputs: 
     - string isbn
     - number user_id
+    - string username
     - string title
     - string author
     - string is_read 

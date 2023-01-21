@@ -81,7 +81,7 @@ export default function Book() {
             } 
         </div>
 
-        <section className="w-full max-w-lg mx-auto">
+        <section className="w-full max-w-lg mx-auto" id="comments">
             <h2 className="my-4 py-4 text-2xl font-bold border-t border-slate-200">Comments</h2>
 
             <Comments 

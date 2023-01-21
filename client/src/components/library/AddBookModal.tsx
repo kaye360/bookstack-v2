@@ -99,7 +99,8 @@ export default function AddBookModal({setShowModal} : propType) {
             author : author,
             is_read : isRead ? "true" : "false",
             cover_url : cover,
-            user_id : user.id
+            user_id : user.id,
+            username: user.username
         }
 
         const res = await httpReq.post(API_BASE_URL + '/book', postData)

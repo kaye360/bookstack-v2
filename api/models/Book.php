@@ -1,25 +1,8 @@
 <?php
 
-/**
- * 
- * Books Methods at a glance
- * -------------------------
- * 
- * PUBLIC
- * create
- * get_single
- * get_all
- * edit
- * like
- * toggle_read_status
- * destroy
- * 
- * DEV
- * reset
- * 
- */
 
 require_once './lib/database.php';
+require_once './models/Community.php';
 
 
 
@@ -30,11 +13,13 @@ class Book extends Database
 
 
 	private const TABLE = 'books';
+	private $community_feed;
 
 
 	function __construct()
 	{
 		parent::__construct();
+		$this->community_feed = new Community();
 	}
 
 
@@ -57,7 +42,7 @@ class Book extends Database
 		}
 
 		// Create Book
-		return $this->create_row(
+		$new_book = $this->create_row(
 			columns: [
 				'isbn' => $post_data['isbn'],
 				'title' => $post_data['title'],
@@ -70,6 +55,16 @@ class Book extends Database
 			return: ['title', 'id'],
 			table: self::TABLE
 		);
+		
+		// Add entry to Community Feed
+		$this->community_feed->create(
+			type: 'upload',
+			message: "$post_data[username] added a book to their library: $post_data[title]",
+			link: '/book/' . $new_book['id'],
+			user_id: $post_data['user_id']
+		);
+
+		return $new_book;
 	}
 
 

@@ -1,28 +1,4 @@
 <?php
-/**
- * 
- * User Methods at a glance
- * ------------------------
- * 
- * PUBLIC
- * create
- * get_single
- * get_single_by_session
- * get_single_by_username
- * get_all
- * edit
- * destroy
- * login
- * logout
- * 
- * PRIVATE
- * validate_password
- * makeUUID
- * 
- * DEV
- * reset
- * 
- */
 
 
 
