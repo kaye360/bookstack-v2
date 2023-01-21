@@ -1,27 +1,5 @@
 <?php
 
-/**
- * 
- * BookStack Custom Router
- * 
- * To make a new Route in the app call it like this, in this order:
- * 1. $route = new Router();
- * 2. $route->baseURL = '/path/to/api'
- * 3. Set Routes
- * 4. $route->json();
- * 
- * To Set Routes
- * $route->{request method}('/path/:id', $func_array)
- * $func_array has 3 values:
- *  1. Required: Model class Name
- *  2. Required: Method to call
- *  3. Optional: Paramater name (ie: id)
- * 
- * Example Route:
- * $route->get( '/user/:id', [ 'User', getSingleById, ':id'] );
- * $route->delete( '/user/:id', [ 'User', deleteSingleById, ':id'] );
- * 
- */
 
 
 class Router

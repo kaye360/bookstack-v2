@@ -10,10 +10,10 @@ On this page:
 ## How to use
 
 ### To make a new Route in the app call it like this, in this order:
-1. `$route = new Router();`
-2. `$route->baseURL = '/path/to/api'`
-3. Set Routes
-4. `$route->json();`
+1. Create router instance: `$route = new Router();`
+2. Set app base url: `$route->baseURL = '/path/to/api'`
+3. Set Routes: see below
+4. Render JSON: `$route->json();`
 
 ### To Set Routes
 `$route->{request method}('/path/:id', $func_array)`
@@ -27,7 +27,7 @@ On this page:
 `$route->delete( '/user/:id', [ 'User', deleteSingleById, ':id'] );`
 
 
-## Public Router Methods
+## Public Methods
 
 ### `__contruct()`
 - Gets the request URI
@@ -53,6 +53,9 @@ On this page:
 
 ### `put()`
 - sets a put route
+
+
+## Private Methods
 
 ### `check_params()`
 - prepend `$this->baseURL` to current route

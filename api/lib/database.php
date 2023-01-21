@@ -1,43 +1,5 @@
 <?php
 
-/**
- * 
- * Database Class
- * 
- * ** User Input validation should not be done here. Do it in extended classes.
- * 
- * Database methods at a glance
- * -------------------
- * 
- * PUBLIC
- * request
- * create_row
- * get_row_by_id
- * get_row_by_column_name
- * get_all_rows
- * update_row
- * destroy_row_by_id
- * 
- * PROTECTED
- * is_taken
- * has_forbidden_chars
- * 
- * 
- * Common function arguments
- * -------------------------
- * 
- * @var $columns
- * 		assoc array of database column title/value pairs sent in req
- * 		ex: ['username' => 'bob', 'email' => 'bob@bob.com']
- * 
- * @var $table
- * 		the MYSQL table we are working with as a string
- * 
- * @var $return
- * 		the columns to return in a SELECT or PDO fetch statement 
- * 		ex: ['username', 'id', 'email']
- *
- */
 
 
 class Database
