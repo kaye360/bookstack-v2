@@ -268,6 +268,9 @@ class Book extends Database
 
 
 
+	/** 
+	 * @todo validate user ID
+	 */
 	public function destroy($id)
 	{
 		return $this->destroy_row_by_id(
