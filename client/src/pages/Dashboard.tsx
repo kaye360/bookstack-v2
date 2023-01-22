@@ -1,8 +1,15 @@
 import React, { useContext } from "react";
 import PreviewUsersLibrary from "../components/library/PreviewUsersLibrary";
 import Explore from "../components/library/Explore";
-import DashboardNotifications from "../components/notifications/DashboardNotifications";
 import { UserContext } from "../App";
+import { useNotifications } from "../utils/useNotifications";
+import { Link } from "react-router-dom";
+import httpReq from "../utils/httpReq";
+import { API_BASE_URL } from "../config";
+import { useQuery } from "react-query";
+import Loader from "../components/layout/Loader";
+
+
 
 export default function Dashboard() {
 
@@ -27,18 +34,90 @@ export default function Dashboard() {
 
             <section className="my-4">
                 <h2 className="text-4xl">Community Feed</h2>
-                <ul>
-                    <li>User123 added this book. Add this book to your library</li>
-                    <li>User123 Liked this book. Add this book to your library</li>
-                    <li>User123 commented book. Add this book to your library</li>
-                    <li>User123 added this book. Add this book to your library</li>
-                    <li>User123 added this book. Add this book to your library</li>
-                    <li>User123 Liked this book. Add this book to your library</li>
-                    <li>User123 commented book. Add this book to your library</li>
-                    <li>User123 added this book. Add this book to your library</li>
-                </ul>
+                
+                <DashboardCommunityFeed />
+                
             </section>
         </>
     )
 
+}
+
+
+
+
+
+function DashboardNotifications() {
+
+    const { user } = useContext(UserContext)
+
+    const { notifications, amount } = useNotifications(user.id)
+
+    return(
+        <div>
+            <h3 className="text-lg font-bold">Notifications</h3>
+
+
+            { amount.recent === 0 &&
+                <p>You have no new notifications.</p>
+            }
+
+            <ul>
+                {
+                    notifications.recent.map( 
+                        (notification : { message:string, url:string }, index) => {
+                            return <li key={index}>{notification.message}</li>
+                    } )
+                }
+            </ul>
+
+            <Link to="/notifications">View your recent notifications</Link>
+
+        </div>
+    )
+}
+
+
+
+
+function DashboardCommunityFeed() {
+
+    const { user } = useContext(UserContext)
+
+    async function getFeed() {
+        const res = await httpReq.get(API_BASE_URL + '/community')
+        const data = await res.json()
+        return data
+    }
+
+    const { data, isLoading, isError } = useQuery('getCommunityFeed', getFeed)
+
+    if(isError) { 
+        return <div>
+            Error community feed.
+        </div>
+    }
+
+    if(isLoading) {
+        return <Loader />
+    }
+    
+    return <ul className="flex flex-col">
+        { data.map( feedItem => (
+            <li key={feedItem.id} className="py-4 border-b border-slate-200">
+                
+                <span className="inline-block mx-4">
+                    {feedItem.type === 'upload' && '📖' }
+                    {feedItem.type === 'like' && '💟' }
+                    {feedItem.type === 'comment' && '💬' }
+                </span>
+                <span className="mx-4">
+                    {feedItem.message}
+                </span>
+                <Link to={feedItem.link}>View</Link>
+            </li>
+        ))
+
+        }
+    </ul>
 }
