@@ -12,8 +12,7 @@ export default function Profile() {
 
     async function getUser() {
         const res = await httpReq.get(API_BASE_URL + '/username/' + username)
-        const data = await res.json()
-        return data
+        return res
     }
 
     const { data : user, isSuccess, isLoading } = useQuery('getUserId', getUser)
@@ -22,10 +21,6 @@ export default function Profile() {
         
         <section className="min-h-screen">
             <h1>{username}</h1>
-
-            <div>
-                Currently reading: //TODO
-            </div>
 
             {
                 isLoading && <Loader />
@@ -92,8 +87,7 @@ function UsersPublicFeed({userID}) {
 
     async function getUsersFeed() {
         const res = await httpReq.get(API_BASE_URL + '/community/' + userID)
-        const data = await res.json()
-        return data
+        return res
     }
 
     const { data, isLoading, isError } = useQuery('getUsersFeed', getUsersFeed)

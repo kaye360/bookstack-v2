@@ -56,8 +56,7 @@ export default function AddBookModal({setShowModal} : propType) {
      */
     async function searchBooks() {
         const res: any = await httpReq.get(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbnField}&key=${GOOGLE_KEY}`)
-        const data = await res.json()
-        return data
+        return res
     }
 
     function handleSearch(e: any) {
@@ -104,7 +103,6 @@ export default function AddBookModal({setShowModal} : propType) {
         }
 
         const res = await httpReq.post(API_BASE_URL + '/book', postData)
-        const data = await res.json()
     }
 
     function handleAdd(e: any) {

@@ -88,8 +88,7 @@ function DashboardCommunityFeed() {
 
     async function getFeed() {
         const res = await httpReq.get(API_BASE_URL + '/community')
-        const data = await res.json()
-        return data
+        return res
     }
 
     const { data, isLoading, isError } = useQuery('getCommunityFeed', getFeed)

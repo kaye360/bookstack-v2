@@ -8,8 +8,7 @@ export const useLibrary = (userId: number) => {
 
     async function getLibrary() {
         const res = await httpReq.get(API_BASE_URL + '/books/' + userId)
-        const data = await res.json()
-        return data
+        return res
     }
 
     const { data, isError, isLoading } = useQuery('library', getLibrary)

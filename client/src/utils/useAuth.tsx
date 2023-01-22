@@ -24,19 +24,18 @@ export default function useAuth() {
         if(!localToken) return
 
         const res = await httpReq.get(API_BASE_URL + '/session/' + localToken)
-        const data = await res.json()
 
-        if(data.success) {
+        if(res.success) {
             setIsLoggedIn(true)
             setUser({
-                id: data.id,
-                username: data.username,
+                id: res.id,
+                username: res.username,
                 token: localToken
             })
         } else {
             logout()
         }
-        return data
+        return res
     }
 
     async function logout() {
@@ -48,7 +47,6 @@ export default function useAuth() {
             id: user.id
         }
         const res = await httpReq.post(API_BASE_URL + '/user/logout', postData)
-        const logoutData = await res.json()
     }
     
     return {user, setUser, isLoggedIn, setIsLoggedIn, logout }

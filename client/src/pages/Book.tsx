@@ -112,7 +112,6 @@ function ToggleIsReadBtn({isRead, bookID, bookQuery}) {
 
     async function toggleIsRead() {
         const res = await httpReq.put(API_BASE_URL + '/book/read', putBody)
-        const data = await res.json()
         bookQuery.refetch()
     }
 
@@ -135,7 +134,6 @@ function LikeBtn({isLikedByUser, user, bookID, bookQuery}) {
             username: user.username
         }
         const res = await httpReq.put(API_BASE_URL + '/book/like', body)
-        const data = await res.json()
         bookQuery.refetch()
     }
 
@@ -202,9 +200,8 @@ function CommentForm({username, userID, bookID, bookTitle, updateComments}) {
         }
 
         const res = await httpReq.post(API_BASE_URL + '/comment', comment)
-        const data = await res.json()
 
-        if (!data.success) throw new Error(data.message)
+        if (!res.success) throw new Error(res.message)
         
         updateComments()
 
@@ -212,7 +209,7 @@ function CommentForm({username, userID, bookID, bookTitle, updateComments}) {
             queryClient.resetQueries('submitComment', { exact : true } )
         }, 2000)
 
-        return data
+        return res
     }
 
     const {data, error, isError, isLoading, refetch, isSuccess} = useQuery('submitComment', postComment, { enabled:false })

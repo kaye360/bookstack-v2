@@ -60,22 +60,21 @@ function Login() {
             'password' : password
         }
         const res = await httpReq.post(API_BASE_URL + '/user/login', postData )
-        const data = await res.json()
 
-        if(data.success) {
+        if(res.success) {
             const timeout = setTimeout( () => {}, 2000)
-            localStorage.setItem('token', data.uuid)
+            localStorage.setItem('token', res.uuid)
             setIsLoggedIn(true)
             setUser({
-                id: data.id,
-                username: data.username,
-                token: data.uuid
+                id: res.id,
+                username: res.username,
+                token: res.uuid
             })
         } else {
-            throw new Error(data.message)
+            throw new Error(res.message)
         }
 
-        return data
+        return res
     }
 
     const {isSuccess, refetch, isLoading, error, isError } = useQuery('login', loginUser, {enabled: false})

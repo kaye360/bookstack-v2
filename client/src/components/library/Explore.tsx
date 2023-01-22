@@ -9,8 +9,7 @@ export default function Explore() {
     
     async function getBooks() {
         const res = await httpReq.get(API_BASE_URL + '/books/all')
-        const data = await res.json()
-        return data
+        return res
     }
 
     const { data, isLoading, isError, isFetched} = useQuery(
