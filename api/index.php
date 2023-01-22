@@ -34,6 +34,7 @@ require_once './lib/router.php';
 require_once './models/User.php';
 require_once './models/Book.php';
 require_once './models/Comment.php';
+require_once './models/Community.php';
 
 /**
  * Routes

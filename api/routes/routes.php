@@ -55,6 +55,12 @@ $route->put('/comment/:id', ['Comment', 'edit', 'id']);
 $route->delete('/comment/:id', ['Comment', 'destroy', 'id']);
 
 /**
+ * Community Feed Routes
+ */
+$route->get('/community/:id', ['Community', 'get_user_feed', 'id']);
+$route->get('/community', ['Community', 'get_community_feed']);
+
+/**
  * Dev Routes
  * For generating fake data for testing purposes.
  */

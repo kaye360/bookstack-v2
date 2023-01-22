@@ -21,7 +21,28 @@ class Community extends Database
 
 
 
-    public function create(
+    public function get_user_feed(
+        string $id
+    ) {
+        return $this->get_all_rows(
+            table: self::TABLE,
+            id: $id,
+            id_col: 'user_id'
+        );
+    }
+
+
+
+
+    public function get_community_feed()
+    {
+          return $this->get_all_rows(table: self::TABLE);
+    }
+
+
+
+
+    protected function create(
         string $type,
         string $message,
         string $link,
@@ -37,24 +58,6 @@ class Community extends Database
                 'user_id' => $user_id
             ]
         );
-    }
-
-
-
-
-    public function get_user_feed(
-
-    ) {
-
-    }
-
-
-
-
-    public function get_community_feed(
-
-    ) {
-          
     }
 
 }
