@@ -49,7 +49,6 @@ export default function useAuth() {
         }
         const res = await httpReq.post(API_BASE_URL + '/user/logout', postData)
         const logoutData = await res.json()
-        console.log(logoutData)
     }
     
     return {user, setUser, isLoggedIn, setIsLoggedIn, logout }

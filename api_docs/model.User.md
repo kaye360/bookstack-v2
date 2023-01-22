@@ -18,8 +18,6 @@ format: /route -> method
 - /users/:id -> `get_single()`
 - /username/:username -> `get_single_by_username()`
 - /session/:session -> `get_single_by_session()`
-- /notifications/new/:id -> `get_new_notifications()`
-- /notifications/old/:id -> `get_old_notifications()`
 
 ### POST routes
 - /user -> `create()`
@@ -28,8 +26,6 @@ format: /route -> method
 
 ### PUT routes
 - /user/:id -> `edit()`
-- /notifications/add -> `add_new_notification`
-- /notifications/clear_new -> `clear_new_notifications`
 
 ### DELETE routes
 - /user/:id -> `destroy()`
@@ -99,26 +95,6 @@ Gets all users
 
 <br>
 
-### `get_new_notifications()`
-Gets a users new notifications
-- Arguments:
-    - number id (user_id)
-- Request inputs: none
-- Returns: 
-    - JSON new_notifications
-
-<br>
-
-### `get_old_notifications()`
-Gets users old notifications
-- Arguments: 
-    - number id (user_id)
-- Request inputs: none
-- Returns: 
-    - JSON old_notifications
-
-<br>
-
 ### `edit()`
 Edits a user's username
 - Arguments: 
@@ -128,29 +104,6 @@ Edits a user's username
     - string password
 - Returns: 
     - string username (updated username)
-
-<br>
-
-### `add_new_notification()`
-Adds a notification to user's new_notifications table
-- Arguments: none
-- Put request inputs: 
-    - number user_id
-    - string notification_message
-    - string notification_url
-    - string notification_type
-- Returns: 
-    - JSON new_notifications
-
-<br>
-
-### `clear_new_notifications()`
-Moves users new notifications to old notifications
-- Arguments: none
-- Put Request inputs: 
-    - string user_id
-- Returns: 
-    - JSON old_notifications
 
 <br>
 

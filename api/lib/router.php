@@ -53,26 +53,35 @@ class Router
 				break;
 		}
 
-		$this->class = isset($route_methods[$this->url][0])
-			? new $route_methods[$this->url][0]
+		$class_name = $route_methods[$this->url][0];
+		$method_name = $route_methods[$this->url][1];
+		$param_name = $route_methods[$this->url][2];
+
+		$this->class = isset($class_name) && class_exists($class_name)
+			? new $class_name
 			: false;
-		$this->method = isset($route_methods[$this->url][1])
-			? $route_methods[$this->url][1]
+
+		$this->method = 
+			isset($method_name) && 
+			is_object($this->class) && 
+			method_exists($this->class, $method_name)
+			? $method_name
 			: false;
-		$this->params = isset($route_methods[$this->url][2])
-			? $route_methods[$this->url][2]
+
+		$this->params = isset($param_name)
+			? $param_name
 			: false;
 
 		
 
 		if (empty($this->class)) {
 			// http_response_code(400);
-			return ['error' => 'No class specified'];
+			return ['error' => 'No class found'];
 		}
 		
 		if (empty($this->method)) {
 			// http_response_code(400);
-			return ['error' => 'No method specified'];
+			return ['error' => 'No method found'];
 		}
 		
 		// http_response_code(200);

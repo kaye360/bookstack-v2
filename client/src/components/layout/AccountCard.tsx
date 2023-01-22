@@ -135,7 +135,6 @@ function Register() {
 
     async function handleRegister(e: any) {
         e.preventDefault()
-        console.log(username, password)
     }
 
 

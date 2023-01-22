@@ -97,7 +97,6 @@ function UsersPublicFeed({userID}) {
     }
 
     const { data, isLoading, isError } = useQuery('getUsersFeed', getUsersFeed)
-    console.log(data)
 
     if(isError) { 
         return <div>

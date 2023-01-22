@@ -220,7 +220,6 @@ function CommentForm({username, userID, bookID, bookTitle, updateComments}) {
     async function handleSubmit(e: any) {
         e.preventDefault()
         refetch()
-        console.log(data)
     }
 
     return(

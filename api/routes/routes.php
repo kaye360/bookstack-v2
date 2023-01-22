@@ -26,10 +26,10 @@ $route->get('/session/:session', ['User', 'get_single_by_session', 'session']);
 /**
  * User Notification Routes
  */
-$route->get('/notifications/new/:id', ['User', 'get_new_notifications', 'id']);
-$route->get('/notifications/old/:id', ['User', 'get_old_notifications', 'id']);
-$route->put('/notifications/add', ['User', 'add_new_notification']);
-$route->put('/notifications/clear_new', ['User', 'clear_new_notifications']);
+$route->get('/notifications/new/:id', ['Notification', 'get_new', 'id']);
+$route->get('/notifications/old/:id', ['Notification', 'get_old', 'id']);
+$route->put('/notifications/add', ['Notification', 'create']);
+$route->put('/notifications/clear_new', ['Notification', 'clear_new']);
 
 /**
  * Book Routes
