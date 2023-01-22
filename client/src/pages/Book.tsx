@@ -33,7 +33,7 @@ export default function Book() {
     return <>
 
         <div>
-            <Link to="/library">Back to Library</Link>
+            <Link to="/library">Back to your Library</Link>
         </div>
     
         <h1 className="relative flex flex-col gap-16 py-20">

@@ -103,7 +103,7 @@ function UsersPublicFeed({userID}) {
     }
     
     return <ul className="flex flex-col">
-        { data.map( feedItem => (
+        { data.slice(0,10).map( feedItem => (
             <li key={feedItem.id} className="py-4 border-b border-slate-200 last:border-0">
                 
                 <span className="inline-block mx-4">

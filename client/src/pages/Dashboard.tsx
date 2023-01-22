@@ -105,7 +105,7 @@ function DashboardCommunityFeed() {
     
     return <>
     <ul className="flex flex-col">
-        { data.map( feedItem => (
+        { data.slice(0,15).map( feedItem => (
             <Notification key={feedItem.id} type={feedItem.type} url={feedItem.link} >
                 {feedItem.message}
             </Notification>
