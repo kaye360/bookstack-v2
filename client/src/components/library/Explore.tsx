@@ -1,4 +1,3 @@
-import React from "react";
 import { useQuery } from "react-query";
 import { API_BASE_URL } from "../../config";
 import httpReq from "../../utils/httpReq";

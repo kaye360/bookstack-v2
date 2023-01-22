@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import PreviewUsersLibrary from "../components/library/PreviewUsersLibrary";
 import Explore from "../components/library/Explore";
 import { UserContext } from "../App";
@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import httpReq from "../utils/httpReq";
 import { API_BASE_URL } from "../config";
 import { useQuery } from "react-query";
+import Notification from "../components/layout/Notification";
 import Loader from "../components/layout/Loader";
 
 
@@ -65,9 +66,12 @@ function DashboardNotifications() {
             <ul>
                 {
                     notifications.recent.map( 
-                        (notification : { message:string, url:string }, index) => {
-                            return <li key={index}>{notification.message}</li>
-                    } )
+                        (notification : { message:string, url:string, type:string }, index) => (
+                            <Notification key={index} type={notification.type} url={notification.url} >
+                                {notification.message}
+                            </Notification>
+                        )
+                    )
                 }
             </ul>
 
@@ -82,8 +86,6 @@ function DashboardNotifications() {
 
 function DashboardCommunityFeed() {
 
-    const { user } = useContext(UserContext)
-
     async function getFeed() {
         const res = await httpReq.get(API_BASE_URL + '/community')
         const data = await res.json()
@@ -94,7 +96,7 @@ function DashboardCommunityFeed() {
 
     if(isError) { 
         return <div>
-            Error community feed.
+            Error loading community feed.
         </div>
     }
 
@@ -105,18 +107,9 @@ function DashboardCommunityFeed() {
     return <>
     <ul className="flex flex-col">
         { data.map( feedItem => (
-            <li key={feedItem.id} className="py-4 border-b border-slate-200 last:border-0">
-                
-                <span className="inline-block mx-4">
-                    {feedItem.type === 'upload' && '📖' }
-                    {feedItem.type === 'like' && '💟' }
-                    {feedItem.type === 'comment' && '💬' }
-                </span>
-                <span className="mx-4">
-                    {feedItem.message}
-                </span>
-                <Link to={feedItem.link}>View</Link>
-            </li>
+            <Notification key={feedItem.id} type={feedItem.type} url={feedItem.link} >
+                {feedItem.message}
+            </Notification>
         ))
 
         }

@@ -61,7 +61,7 @@ Adds a notification to user's new_notifications table
     - string notification_message
     - string notification_url
     - string notification_type
-- Put request inputs: none
+- Request inputs: none
 - Returns: 
     - JSON new_notifications
 
