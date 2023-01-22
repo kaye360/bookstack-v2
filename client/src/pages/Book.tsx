@@ -7,6 +7,7 @@ import { useQuery, useQueryClient } from "react-query";
 import httpReq from "../utils/httpReq";
 import { API_BASE_URL } from "../config";
 import { UserContext } from "../App";
+import Modal from "../components/layout/Modal";
 
 
 export default function Book() {
@@ -47,7 +48,10 @@ export default function Book() {
 
         <div className="text-center">
             <h3 className="font-bold">App Data</h3>
-            <p>Author: {bookQuery.data.author} </p>
+            <p>
+                Author: 
+                {bookQuery.data.author} 
+            </p>
             <p>
                 Is read? 
                 <ToggleIsReadBtn isRead={isRead} bookID={ bookID } bookQuery={bookQuery} /> 
@@ -64,7 +68,14 @@ export default function Book() {
                     bookQuery={bookQuery}
                 />
             </p>
-            <p>User ID: {bookQuery.data.user_id}</p>
+            <p>
+                User ID: 
+                {bookQuery.data.user_id}
+            </p>
+
+            {user.id === bookQuery.data.user_id &&
+                <DeleteBtn bookID={bookID} />
+            }
             
             <h3 className="font-bold mt-4">Google Data</h3>
             {
@@ -145,6 +156,53 @@ function LikeBtn({isLikedByUser, user, bookID, bookQuery}) {
         { isLikedByUser ? '❤️' : '🤍' }
     </button>
 
+}
+
+
+
+
+function DeleteBtn({bookID}) {
+
+    const [showModal, setShowModal] = useState(false)
+
+    return ( <>
+        <button onClick={() => setShowModal(true)}>Delete</button>
+        { showModal && <DeleteModal bookID={bookID} setShowModal={setShowModal} /> }
+    </>)
+}
+
+
+
+
+function DeleteModal({bookID, setShowModal}) {
+
+    const [message, setMessage] = useState(false)
+
+    async function handleDelete() {
+        const res = await httpReq.delete(API_BASE_URL + '/book/' + bookID)
+        if(res.success) {
+            setMessage('Deleted succesfully')
+        }
+    }
+
+
+    return(
+        <Modal>
+            {!message && <p>
+                Are you sure you want to delete this book?
+            </p>}
+
+            {message && <p>
+                {message} &nbsp;
+                <Link to="/library">Back to your library</Link>
+            </p>}
+
+            {!message && <>
+                <button onClick={handleDelete}>Yes, I'm sure.</button>
+                <button onClick={ () => setShowModal(false)} >No, close this.</button>
+            </>}
+        </Modal>
+    )
 }
 
 

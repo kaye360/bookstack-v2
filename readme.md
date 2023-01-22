@@ -7,7 +7,6 @@ The front end will be made with React.
 
 TODO
 
-- delete book
 - limit recent activity on profile
 - fix login/logout issues
 - dashboard limit community feed
@@ -19,6 +18,7 @@ TODO
 - about page
 - try/catch all httpReq methods
 - refresh library on add book
+- book page 404 error handling
 
 
 Future Feature Ideas
