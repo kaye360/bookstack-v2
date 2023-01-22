@@ -40,6 +40,7 @@ format: /route -> method
     - string comment
     - number user_id
     - number book_id
+    - string book_title
     - string username
 - Returns: 
     - string comment

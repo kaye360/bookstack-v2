@@ -102,9 +102,10 @@ function DashboardCommunityFeed() {
         return <Loader />
     }
     
-    return <ul className="flex flex-col">
+    return <>
+    <ul className="flex flex-col">
         { data.map( feedItem => (
-            <li key={feedItem.id} className="py-4 border-b border-slate-200">
+            <li key={feedItem.id} className="py-4 border-b border-slate-200 last:border-0">
                 
                 <span className="inline-block mx-4">
                     {feedItem.type === 'upload' && '📖' }
@@ -120,4 +121,8 @@ function DashboardCommunityFeed() {
 
         }
     </ul>
+
+    <Link to="/feed">View more activity</Link>
+
+    </>
 }

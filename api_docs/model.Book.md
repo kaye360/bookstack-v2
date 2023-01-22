@@ -95,6 +95,7 @@ Toggle whether a book is liked or not by user
 - Put Request inputs:
     - number id (book_id)
     - string user_id
+    - string username
 - Returns: 
     - JSON array likes 
 

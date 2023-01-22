@@ -176,7 +176,7 @@ class Book extends Database
 		$current_book = $this->get_row_by_id(
 			id: $put_data['id'],
 			table: self::TABLE,
-			return: ['likes']
+			return: ['likes', 'title']
 		);
 
 		if (!array_key_exists('likes', $current_book)) {
@@ -208,6 +208,13 @@ class Book extends Database
 
 			// Like
 			array_push($current_book['likes'], $put_data['user_id']);
+
+			$this->community_feed->create(
+				type: 'like',
+				message: $put_data['username'] . ' liked the book: ' . $current_book['title'],
+				link: '/book/' . $put_data['id'],
+				user_id : $put_data['user_id']
+			);
 
 			return $this->update_row(
 				id: $put_data['id'],

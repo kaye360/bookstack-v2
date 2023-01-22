@@ -7,7 +7,6 @@ import { useQuery, useQueryClient } from "react-query";
 import httpReq from "../utils/httpReq";
 import { API_BASE_URL } from "../config";
 import { UserContext } from "../App";
-import { HttpProxy } from "vite";
 
 
 export default function Book() {
@@ -60,7 +59,7 @@ export default function Book() {
                 Likes: {likes.length} | &nbsp;
                 <LikeBtn 
                     isLikedByUser={isLikedByUser} 
-                    userID={user.id}
+                    user={user}
                     bookID={id}
                     bookQuery={bookQuery}
                 />
@@ -69,15 +68,16 @@ export default function Book() {
             
             <h3 className="font-bold mt-4">Google Data</h3>
             {
-            googleQuery.data &&
-            <>
-                <p>Sub Title:   {googleQuery.data.items[0].volumeInfo.subtitle}</p>
-                <p>Rating:      {googleQuery.data.items[0].volumeInfo.averageRating}</p>
-                <p>Categories:  {googleQuery.data.items[0].volumeInfo.categories}</p>
-                <p>Pages:       {googleQuery.data.items[0].volumeInfo.pageCount}</p>
-                <p>Date Pubbed: {googleQuery.data.items[0].volumeInfo.publishedDate}</p>
-                <p className="text-left max-w-lg mx-auto">Description: {googleQuery.data.items[0].volumeInfo.description}</p>
-            </>
+            googleQuery.data && googleQuery.data.items 
+                ? <>
+                    <p>Sub Title:   {googleQuery.data.items[0].volumeInfo.subtitle}</p>
+                    <p>Rating:      {googleQuery.data.items[0].volumeInfo.averageRating}</p>
+                    <p>Categories:  {googleQuery.data.items[0].volumeInfo.categories}</p>
+                    <p>Pages:       {googleQuery.data.items[0].volumeInfo.pageCount}</p>
+                    <p>Date Pubbed: {googleQuery.data.items[0].volumeInfo.publishedDate}</p>
+                    <p className="text-left max-w-lg mx-auto">Description: {googleQuery.data.items[0].volumeInfo.description}</p>
+                </>
+                : <p className="my-8 py-4 rounded border border-slate-300">Error: Google book data not found.</p>
             } 
         </div>
 
@@ -94,6 +94,7 @@ export default function Book() {
                 username={user.username}
                 userID={user.id}
                 bookID={bookID}
+                bookTitle={bookQuery.data.title}
                 updateComments={bookQuery.refetch}
             />
 
@@ -125,12 +126,13 @@ function ToggleIsReadBtn({isRead, bookID, bookQuery}) {
 
 
 
-function LikeBtn({isLikedByUser, userID, bookID, bookQuery}) {
+function LikeBtn({isLikedByUser, user, bookID, bookQuery}) {
 
     async function toggleLikeBook() {
         const body = {
             id: bookID,
-            user_id: userID
+            user_id: user.id,
+            username: user.username
         }
         const res = await httpReq.put(API_BASE_URL + '/book/like', body)
         const data = await res.json()
@@ -183,7 +185,7 @@ function Comments({isLoading, isError, book}) {
 
 
 
-function CommentForm({username, userID, bookID, updateComments}) {
+function CommentForm({username, userID, bookID, bookTitle, updateComments}) {
 
     const [userComment, setUserComment] = useState('')
     const queryClient = useQueryClient()
@@ -195,6 +197,7 @@ function CommentForm({username, userID, bookID, updateComments}) {
             username : username,
             user_id : userID,   
             book_id : bookID,
+            book_title : bookTitle,
             comment : userComment
         }
 

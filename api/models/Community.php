@@ -42,7 +42,7 @@ class Community extends Database
 
 
 
-    protected function create(
+    public function create(
         string $type,
         string $message,
         string $link,

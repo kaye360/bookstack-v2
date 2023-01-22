@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useLibrary  } from "../utils/useLibrary";
 import Loader from '../components/layout/Loader'
 import Book from  '../components/library/Book'
@@ -17,7 +17,6 @@ export default function Profile() {
     }
 
     const { data : user, isSuccess, isLoading } = useQuery('getUserId', getUser)
-    console.log(user)
 
     return(<>
         
@@ -35,6 +34,8 @@ export default function Profile() {
                 isSuccess &&
                 <>
                     <LibraryPreview userID={user.id} username={username} />
+
+                    <h2 className="my-8 text-xl font-bold">{user.username}'s recent activity</h2>
                     <UsersPublicFeed userID={user.id} />
                 </>
             }
@@ -89,9 +90,41 @@ function LibraryPreview({userID, username}) {
 
 function UsersPublicFeed({userID}) {
 
-    return(
-        <div>
-            TODO User's comments, likes, and new books from community Feed. {userID}
+    async function getUsersFeed() {
+        const res = await httpReq.get(API_BASE_URL + '/community/' + userID)
+        const data = await res.json()
+        return data
+    }
+
+    const { data, isLoading, isError } = useQuery('getUsersFeed', getUsersFeed)
+    console.log(data)
+
+    if(isError) { 
+        return <div>
+            Error community feed.
         </div>
-    )
+    }
+
+    if(isLoading) {
+        return <Loader />
+    }
+    
+    return <ul className="flex flex-col">
+        { data.map( feedItem => (
+            <li key={feedItem.id} className="py-4 border-b border-slate-200 last:border-0">
+                
+                <span className="inline-block mx-4">
+                    {feedItem.type === 'upload' && '📖' }
+                    {feedItem.type === 'like' && '💟' }
+                    {feedItem.type === 'comment' && '💬' }
+                </span>
+                <span className="mx-4">
+                    {feedItem.message}
+                </span>
+                <Link to={feedItem.link}>View</Link>
+            </li>
+        ))
+
+        }
+    </ul>
 }

@@ -2,7 +2,7 @@
 
 
 require_once './lib/database.php';
-
+require_once './models/Community.php';
 
 
 
@@ -10,13 +10,14 @@ class Comment extends Database
 {
 
 
-
 	private const TABLE = 'comments';
+	private $community_feed;
 
 
 	function __construct()
 	{
 		parent::__construct();
+		$this->community_feed = new Community();
 	}
 
 
@@ -83,6 +84,14 @@ class Comment extends Database
 			id: $post_data['book_id'],
 			table: 'books',
 			columns: [ 'comment_count' => $updated_comment_count]
+		);
+
+		// Add entry to Community Feed
+		$this->community_feed->create(
+			type: 'comment',
+			message: "$post_data[username] commented on a book: $post_data[book_title]",
+			link: '/book/' . $post_data['book_id'],
+			user_id: $post_data['user_id']
 		);
 
 		return $new_comment;
