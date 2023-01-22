@@ -12,12 +12,14 @@ class Comment extends Database
 
 	private const TABLE = 'comments';
 	private $community_feed;
+	private $notifications;
 
 
 	function __construct()
 	{
 		parent::__construct();
 		$this->community_feed = new Community();
+		$this->notifications = new Notification();
 	}
 
 
@@ -34,7 +36,7 @@ class Comment extends Database
 			empty($post_data['book_id']) ||
 			empty($post_data['username'])
 		) {
-			http_response_code(400);
+			// http_response_code(400);
 			return [
 				'success' => false,
 				'message' => 'Missing fields. Comment is required.'
@@ -80,7 +82,7 @@ class Comment extends Database
 		$updated_comment_count = count( $this->get_all($post_data['book_id']) );
 
 		// Update Comment count in table 'books'
-		$this->update_row(
+		$updated_book = $this->update_row(
 			id: $post_data['book_id'],
 			table: 'books',
 			columns: [ 'comment_count' => $updated_comment_count]
@@ -92,6 +94,14 @@ class Comment extends Database
 			message: "$post_data[username] commented on a book: $post_data[book_title]",
 			link: '/book/' . $post_data['book_id'],
 			user_id: $post_data['user_id']
+		);
+
+		// Add notificaiton
+		$this->notifications->create(
+			recieving_user_id: $updated_book['user_id'],
+			message : "$post_data[username] commented on your book: $post_data[book_title]",
+			url: '/book/' . $post_data['book_id'],
+			type: 'comment'
 		);
 
 		return $new_comment;

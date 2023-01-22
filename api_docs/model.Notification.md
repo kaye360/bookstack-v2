@@ -1,4 +1,4 @@
-# User Class
+# Notification Class
 
 On this page:
 - Routes
@@ -56,12 +56,12 @@ Gets users old notifications
 
 ### `create()`
 Adds a notification to user's new_notifications table
-- Arguments: none
-- Put request inputs: 
-    - number user_id
+- Arguments: 
+    - number recieving_user_id
     - string notification_message
     - string notification_url
     - string notification_type
+- Put request inputs: none
 - Returns: 
     - JSON new_notifications
 

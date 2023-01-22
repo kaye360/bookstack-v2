@@ -26,6 +26,8 @@ class Notification extends Database
 	
 	public function get_new($id) 
 	{
+		if(empty($id)) return ['error' => 'No ID given']; 
+
 		return $this->get_row_by_id(
 			id: $id,
 			table: self::TABLE,
@@ -38,6 +40,8 @@ class Notification extends Database
 
 	public function get_old($id) 
 	{
+		if (empty($id)) return ['error' => 'No ID given'];
+
 		return $this->get_row_by_id(
 			id: $id,
 			table: self::TABLE,
@@ -48,31 +52,30 @@ class Notification extends Database
 
 
 
-
-
-
-
-	public function create() 
-	{
-		$put_data = $this->request();
+	public function create(
+		string $recieving_user_id,
+		string $message,
+		string $url,
+		string $type
+	)	{
 
 		$user = $this->get_row_by_id(
-			id: $put_data['user_id'],
+			id: $recieving_user_id,
 			table: self::TABLE,
 			return: ['new_notifications']
 		);
 
 		$current_new_notifications = json_decode($user['new_notifications']);
 		$new_notification = [
-			'message' => $put_data['notification_message'],
-			'url' => $put_data['notification_url'],
-			'type' => $put_data['notification_type']
+			'message' => $message,
+			'url' => $url,
+			'type' => $type
 		];
 
 		array_unshift($current_new_notifications, $new_notification);
 
 		return $this->update_row(
-			id: $put_data['user_id'],
+			id: $recieving_user_id,
 			table: self::TABLE,
 			columns: [
 				'new_notifications' => json_encode($current_new_notifications)

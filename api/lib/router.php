@@ -55,7 +55,7 @@ class Router
 
 		$class_name = $route_methods[$this->url][0];
 		$method_name = $route_methods[$this->url][1];
-		$param_name = $route_methods[$this->url][2];
+		$param_name = isset ($route_methods[$this->url][2]) ? $route_methods[$this->url][2] : false;
 
 		$this->class = isset($class_name) && class_exists($class_name)
 			? new $class_name

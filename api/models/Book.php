@@ -14,12 +14,14 @@ class Book extends Database
 
 	private const TABLE = 'books';
 	private $community_feed;
+	private $notifications;
 
 
 	function __construct()
 	{
 		parent::__construct();
 		$this->community_feed = new Community();
+		$this->notifications = new Notification();
 	}
 
 
@@ -162,13 +164,14 @@ class Book extends Database
 
 		// Validate request
 		if (
-			empty($put_data['id']) ||
-			empty($put_data['user_id'])
+			empty($put_data['id']) || // book ID
+			empty($put_data['user_id']) || // Liking user ID
+			empty($put_data['username']) // Liking username
 		) {
 			// http_response_code(400);
 			return [
 				'success' => false,
-				'message' => 'Book ID and user ID are required.'
+				'message' => 'Book ID, user ID, and username are required.'
 			];
 		}
 
@@ -176,7 +179,7 @@ class Book extends Database
 		$current_book = $this->get_row_by_id(
 			id: $put_data['id'],
 			table: self::TABLE,
-			return: ['likes', 'title']
+			return: ['likes', 'title', 'user_id', 'id']
 		);
 
 		if (!array_key_exists('likes', $current_book)) {
@@ -214,6 +217,13 @@ class Book extends Database
 				message: $put_data['username'] . ' liked the book: ' . $current_book['title'],
 				link: '/book/' . $put_data['id'],
 				user_id : $put_data['user_id']
+			);
+
+			$this->notifications->create(
+				type: 'like',
+				message: $put_data['username'] . ' liked your book: ' . $current_book['title'],
+				url: '/book/' . $current_book['id'],
+				recieving_user_id: $current_book['user_id'],
 			);
 
 			return $this->update_row(
