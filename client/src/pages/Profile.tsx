@@ -60,9 +60,9 @@ function LibraryPreview({userID, username}) {
     }
 
     return <div>
-        <h2 className="text-xl font-semibold">{username} has {amount} books in their library.</h2>
-        <p>Here's just a few:</p>
-        
+        <h2 className="my-4 text-xl font-semibold">{username} has {amount} books in their library.</h2>
+
+        { amount !== 0 && <p>Here's just a few:</p> }        
 
         <div className="grid grid-cols-3 md:grid-cols-6 gap-4 auto-rows-[350px]">
         { libraryPreview.map( book => (
@@ -90,7 +90,9 @@ function UsersPublicFeed({userID}) {
         return res
     }
 
-    const { data, isLoading, isError } = useQuery('getUsersFeed', getUsersFeed)
+    const { data, isLoading, isError } = useQuery('getUsersFeed', getUsersFeed, {
+        initialData : []
+    })
 
     if(isError) { 
         return <div>
@@ -103,21 +105,23 @@ function UsersPublicFeed({userID}) {
     }
     
     return <ul className="flex flex-col">
-        { data.slice(0,10).map( feedItem => (
-            <li key={feedItem.id} className="py-4 border-b border-slate-200 last:border-0">
-                
-                <span className="inline-block mx-4">
-                    {feedItem.type === 'upload' && '📖' }
-                    {feedItem.type === 'like' && '💟' }
-                    {feedItem.type === 'comment' && '💬' }
-                </span>
-                <span className="mx-4">
-                    {feedItem.message}
-                </span>
-                <Link to={feedItem.link}>View</Link>
-            </li>
-        ))
-
+        { data.success
+            ? data.slice(0,10).map( feedItem => (
+                <li key={feedItem.id} className="py-4 border-b border-slate-200 last:border-0">
+                    <span className="inline-block mx-4">
+                        {feedItem.type === 'upload' && '📖' }
+                        {feedItem.type === 'like' && '💟' }
+                        {feedItem.type === 'comment' && '💬' }
+                    </span>
+                    <span className="mx-4">
+                        {feedItem.message}
+                    </span>
+                    <Link to={feedItem.link}>View</Link>
+                </li>
+            ))
+            : <div className="p-4 rounded bg-slate-100">
+                This user has no recent activity.
+            </div>
         }
     </ul>
 }

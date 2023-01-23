@@ -19,7 +19,7 @@ BookStack is a social media web app for avid book readers! I have created this a
 PHP and MYSQL were used to create fully custom restfull API that renders JSON data from the database layer. The Database consists of 4 tables: books, comments, community, and users. All model classes extend the same database class to re-use code to query the DB.
 
 ### Custom API Router
-The custom router allows the user to define flexible endpoints with parameters in a RESTfull paradigm.
+The custom router allows the developer to define flexible endpoints with parameters in a RESTfull paradigm.
 
 
 
@@ -41,17 +41,19 @@ Can be found in the /api_docs folder. Crucial information for each class and met
 
 
 ## TODO
-- fix login/logout issues
 - home page
+- create user
 - about page
 - try/catch all httpReq methods
 - refresh library on add book
+- Make a kickass UI
 
 
 
 ## Bugs
 - notification bubble doesnt show up right after login
 - make sure users cant give themselves notifications
+- make it so isread cant be toggled by other users
 - book page 404 error handling
 
 

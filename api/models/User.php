@@ -33,7 +33,7 @@ class User extends Database
 			empty($post_data['password']) ||
 			empty($post_data['confirm_password']) 
 		) {
-			http_response_code(400);
+			// http_response_code(400);
 			return [
 				'success' => false,
 				'message' => 'Username, password and password confirmation are required.'
@@ -42,7 +42,7 @@ class User extends Database
 
 		// Validate confirmed password
 		if($post_data['password'] !== $post_data['confirm_password'] ) {
-			http_response_code(400);
+			// http_response_code(400);
 			return [
 				'success' => false,
 				'message' => 'Password and confirmed do not match'
@@ -57,7 +57,7 @@ class User extends Database
 				table: self::TABLE
 			)
 		 ) {
-			http_response_code(400);
+			// http_response_code(400);
 			return [
 				'success' => false,
 				'message' => 'Username is Taken'
@@ -66,7 +66,7 @@ class User extends Database
 
 		// Validate Characters
 		if( $this->has_forbidden_chars($post_data) ) {
-			http_response_code(400);
+			// http_response_code(400);
 			return [
 				'success' => false,
 				'message' => 'Username or password have forbidden characters.'

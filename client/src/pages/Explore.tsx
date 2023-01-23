@@ -16,7 +16,6 @@ export default function Explore() {
         'usersBooks', getBooks
     )
     let exploreBooks = data
-    console.log(data)
 
     return(
         <section className="flex flex-col gap-4 bg-slate-50 py-8">
