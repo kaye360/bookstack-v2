@@ -41,8 +41,6 @@ Can be found in the /api_docs folder. Crucial information for each class and met
 
 
 ## TODO
-- home page
-- create user
 - about page
 - try/catch all httpReq methods
 - refresh library on add book
@@ -59,6 +57,7 @@ Can be found in the /api_docs folder. Crucial information for each class and met
 
 
 ## Future Feature Ideas
+- pagination or infinite scroll
 - currently reading
 - list view for library
 - library pagination

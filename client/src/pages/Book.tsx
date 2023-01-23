@@ -52,10 +52,12 @@ export default function Book() {
                 Author: 
                 {bookQuery.data.author} 
             </p>
-            <p>
-                Is read? 
-                <ToggleIsReadBtn isRead={isRead} bookID={ bookID } bookQuery={bookQuery} /> 
-            </p>
+            { user.id === bookQuery.data.user_id &&
+                <p>
+                    Is read? 
+                    <ToggleIsReadBtn isRead={isRead} bookID={ bookID } bookQuery={bookQuery} /> 
+                </p>
+            }
             <p>
                 <a href="#comments">Comments:</a> &nbsp; 
                 { bookQuery.data.comment_count }</p>
@@ -245,6 +247,7 @@ function CommentForm({username, userID, bookID, bookTitle, updateComments}) {
 
     const [userComment, setUserComment] = useState('')
     const queryClient = useQueryClient()
+    const { isLoggedIn } = useContext(UserContext)
 
     async function postComment() {
         
@@ -282,26 +285,31 @@ function CommentForm({username, userID, bookID, bookTitle, updateComments}) {
             <div className="flex flex-col gap-4 text-left max-w-lg mx-auto mt-4 p-4 rounded-md border border-slate-400 bg-slate-200">
 
                 <h4 className="font-bold">
-                    Commenting as {username} &nbsp;
-                    <span className="text-sm font-normal">(Max 200 characters)</span>
+                    { isLoggedIn 
+                        ? <>
+                            Commenting as: { username } &nbsp;
+                            <span className="text-sm font-normal">(Max 200 characters)</span>
+                        </>
+                        : <span className="inline-block ml-2 font-normal">Please sign in to post a comment</span>
+                    }
                 </h4>
 
+                { isLoggedIn && <>
+                    <textarea 
+                        className="resize-none rounded p-2 w-full h-32 border border-slate-300 bg-white"
+                        onChange={ (e) => setUserComment(e.target.value) }
+                        value={userComment}
+                    ></textarea>
 
-                <textarea 
-                    className="resize-none rounded p-2 w-full h-32 border border-slate-300 bg-white"
-                    onChange={ (e) => setUserComment(e.target.value) }
-                    value={userComment}
-                ></textarea>
-
-                <div className="flex items-center gap-4">
-                    <input type="submit" value="Post Comment" className="rounded-md px-4 py-2 bg-slate-500 text-slate-200 w-fit cursor-pointer" />
-                    { isSuccess && 'Comment Posted!'}
-                    { isLoading && 'Please wait...'}
-                    { isError && error.message }
-                </div>
-
-
-
+                    <div className="flex items-center gap-4">
+                        <input type="submit" value="Post Comment" className="rounded-md px-4 py-2 bg-slate-500 text-slate-200 w-fit cursor-pointer" />
+                        { isSuccess && 'Comment Posted!'}
+                        { isLoading && 'Please wait...'}
+                        { isError && error.message }
+                    </div>
+                </>
+                }
+                
             </div>
         </form>
     )

@@ -86,11 +86,11 @@ function App() {
 				<Route path="/explore" 	element={<Explore />} />
 				<Route path="/about" 	element={<About />} />
 				<Route path="/account"	element={ Auth.isLoggedIn ? <Dashboard /> : <Account />} />
+				<Route path="book/:id" 	element={ <Book /> } />
 
 				{/* Protected User Routes */}
 				<Route path="/dashboard"		element={ Auth.isLoggedIn ? <Dashboard />		: <ProtectedPage />} />
 				<Route path="/library" 			element={ Auth.isLoggedIn ? <Library />			: <ProtectedPage />} />
-				<Route path="book/:id" 			element={ Auth.isLoggedIn ? <Book />			: <ProtectedPage />} />
 				<Route path="/feed" 			element={ Auth.isLoggedIn ? <Feed /> 			: <ProtectedPage />} />
 				<Route path="/notifications" 	element={ Auth.isLoggedIn ? <Notifications />	: <ProtectedPage />} />
 				<Route path="/user"				element={ Auth.isLoggedIn ? <Profile /> 		: <ProtectedPage />} />
