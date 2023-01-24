@@ -9,7 +9,7 @@ export default function Library() {
 
     const { user } = useContext(UserContext)
 
-    const {library, isError, isLoading} = useLibrary(user.id)
+    const {library, isLoading, refetchLibrary} = useLibrary(user.id)
 
     const [showModal, setShowModal] = useState(false)
 
@@ -45,7 +45,7 @@ export default function Library() {
                 </section>
             }
 
-        { showModal && <AddBookModal setShowModal={setShowModal} /> }
+        { showModal && <AddBookModal setShowModal={setShowModal} refetchLibrary={refetchLibrary} /> }
     </>)
 
 }

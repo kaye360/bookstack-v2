@@ -11,7 +11,7 @@ export const useLibrary = (userId: number) => {
         return res
     }
 
-    const { data, isError, isLoading } = useQuery('library', getLibrary)
+    const { data, isError, isLoading, refetch: refetchLibrary } = useQuery('library', getLibrary)
 
     interface Library {
         author: string,
@@ -57,7 +57,7 @@ export const useLibrary = (userId: number) => {
         
     let amount: number = library.length
 
-    return {library, amount, isError, isLoading}
+    return {library, amount, isError, isLoading, refetchLibrary}
 
 
 }

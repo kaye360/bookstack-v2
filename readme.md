@@ -45,11 +45,10 @@ Can be found in the /api_docs folder. Crucial information for each class and met
 - try/catch all httpReq methods
 - refresh library on add book
 - Make a kickass UI
-
+- refresh library when book added/deleted
 
 
 ## Bugs
-- notification bubble doesnt show up right after login
 - make sure users cant give themselves notifications
 - book page 404 error handling
 - from library page, logging out still shows user navbar. LS and DM tokens are gone

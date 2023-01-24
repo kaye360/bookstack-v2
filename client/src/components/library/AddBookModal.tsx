@@ -8,10 +8,11 @@ import { UserContext } from "../../App"
 
 
 interface propType {
-    setShowModal: Function
+    setShowModal: Function,
+    refetchLibrary: Function
 }
 
-export default function AddBookModal({setShowModal} : propType) {
+export default function AddBookModal({setShowModal, refetchLibrary} : propType) {
 
     const { user } = useContext(UserContext)
 
@@ -103,6 +104,7 @@ export default function AddBookModal({setShowModal} : propType) {
         }
 
         const res = await httpReq.post(API_BASE_URL + '/book', postData)
+        refetchLibrary()
     }
 
     function handleAdd(e: any) {

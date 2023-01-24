@@ -124,7 +124,6 @@ function BackBtn() {
 
     const location = useLocation()
     const refferer = location.state?.from
-    console.log({refferer})
 
     let linkTitle: string
     switch(refferer) {
