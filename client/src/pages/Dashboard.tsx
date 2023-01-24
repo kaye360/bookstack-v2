@@ -51,7 +51,6 @@ export default function Dashboard() {
 function DashboardNotifications() {
 
     const { user } = useContext(UserContext)
-    const location = useLocation()
 
     const { notifications, amount } = useNotifications(user.id)
 

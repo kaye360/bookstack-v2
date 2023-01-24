@@ -5,12 +5,14 @@
  * 
  */
 
+type Data = []
+
 class httpReq {
 
     static async get(url:string) {
 
         const res = await fetch(url)
-        let data
+        let data: Data
 
         if(res.ok) {
             data = await res.json()
@@ -28,7 +30,7 @@ class httpReq {
             }
         })
 
-        let data
+        let data: Data
 
         if(res.ok) {
             data = await res.json()
@@ -47,7 +49,7 @@ class httpReq {
             }
         })
 
-        let data
+        let data: Data
 
         if(res.ok) {
             data = await res.json()
@@ -65,7 +67,7 @@ class httpReq {
             method : 'DELETE',
         })
 
-        let data
+        let data: Data
 
         if(res.ok) {
             data = await res.json()

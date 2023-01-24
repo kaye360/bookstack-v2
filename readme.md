@@ -41,15 +41,11 @@ Can be found in the /api_docs folder. Crucial information for each class and met
 
 
 ## TODO
-- about page
-- try/catch all httpReq methods
 - Make a kickass UI
 
 
 ## Bugs
-- make sure users cant give themselves notifications
 - book page 404 error handling
-- from library page, logging out still shows user navbar. LS and DM tokens are gone
 
 
 
