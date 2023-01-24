@@ -212,6 +212,7 @@ class Book extends Database
 			// Like
 			array_push($current_book['likes'], $put_data['user_id']);
 
+			// Add to community feed
 			$this->community_feed->create(
 				type: 'like',
 				message: $put_data['username'] . ' liked the book: ' . $current_book['title'],
@@ -219,11 +220,13 @@ class Book extends Database
 				user_id : $put_data['user_id']
 			);
 
+			// Create notification
 			$this->notifications->create(
+				sending_user_id: $put_data['user_id'],
+				recieving_user_id: $current_book['user_id'],
 				type: 'like',
 				message: $put_data['username'] . ' liked your book: ' . $current_book['title'],
 				url: '/book/' . $current_book['id'],
-				recieving_user_id: $current_book['user_id'],
 			);
 
 			return $this->update_row(

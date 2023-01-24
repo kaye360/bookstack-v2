@@ -43,9 +43,7 @@ Can be found in the /api_docs folder. Crucial information for each class and met
 ## TODO
 - about page
 - try/catch all httpReq methods
-- refresh library on add book
 - Make a kickass UI
-- refresh library when book added/deleted
 
 
 ## Bugs

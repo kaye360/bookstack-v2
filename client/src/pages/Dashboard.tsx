@@ -52,7 +52,6 @@ function DashboardNotifications() {
 
     const { user } = useContext(UserContext)
     const location = useLocation()
-    console.log(location.pathname)
 
     const { notifications, amount } = useNotifications(user.id)
 

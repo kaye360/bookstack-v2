@@ -98,6 +98,7 @@ class Comment extends Database
 
 		// Add notificaiton
 		$this->notifications->create(
+			sending_user_id: $post_data['user_id'],
 			recieving_user_id: $updated_book['user_id'],
 			message : "$post_data[username] commented on your book: $post_data[book_title]",
 			url: '/book/' . $post_data['book_id'],

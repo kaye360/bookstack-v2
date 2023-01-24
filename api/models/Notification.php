@@ -53,11 +53,14 @@ class Notification extends Database
 
 
 	public function create(
-		string $recieving_user_id,
+		int $sending_user_id,
+		int $recieving_user_id,
 		string $message,
 		string $url,
 		string $type
 	)	{
+
+		if($sending_user_id === $recieving_user_id) return;
 
 		$user = $this->get_row_by_id(
 			id: $recieving_user_id,
