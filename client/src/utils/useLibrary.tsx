@@ -27,8 +27,7 @@ export const useLibrary = (userId: number) => {
 
     let library: Library[] = []
 
-    console.log(data)
-    if(data?.success) {
+    if(data) {
 
         library = data.map( 
             (book: { 

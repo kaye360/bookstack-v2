@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { useBook } from "../utils/useBook";
 import Loader from "../components/layout/Loader";
 import { Link } from "react-router-dom";
@@ -13,11 +13,12 @@ import Modal from "../components/layout/Modal";
 export default function Book() {
 
     
-    const { user } = useContext(UserContext)
+    const { user, isLoggedIn } = useContext(UserContext)
     const { id } : any = useParams()
     const bookID: number | undefined = parseInt(id)
     const { bookQuery, googleQuery } = useBook( bookID )
     const isRead = bookQuery.data?.is_read === 'true' ? true : false
+
 
     if(bookQuery.isError) {
         return <div>Error Getting Book</div>
@@ -27,14 +28,13 @@ export default function Book() {
         return <Loader />
     }
 
+
     const likes = JSON.parse(bookQuery.data.likes) || []
     const isLikedByUser = likes.includes(user.id)
 
     return <>
 
-        <div>
-            <Link to="/library">Back to your Library</Link>
-        </div>
+        <BackBtn />
     
         <h1 className="relative flex flex-col gap-16 py-20">
             <img 
@@ -62,13 +62,14 @@ export default function Book() {
                 <a href="#comments">Comments:</a> &nbsp; 
                 { bookQuery.data.comment_count }</p>
             <p>
-                Likes: {likes.length} | &nbsp;
-                <LikeBtn 
+                Likes: {likes.length} &nbsp;
+                { isLoggedIn && <LikeBtn 
                     isLikedByUser={isLikedByUser} 
                     user={user}
                     bookID={id}
                     bookQuery={bookQuery}
                 />
+                }
             </p>
             <p>
                 User ID: 
@@ -114,6 +115,38 @@ export default function Book() {
         </section>
 
     </>
+}
+
+
+
+
+function BackBtn() {
+
+    const location = useLocation()
+    const refferer = location.state?.from
+    console.log({refferer})
+
+    let linkTitle: string
+    switch(refferer) {
+        case '/library':
+            linkTitle = 'Back to your Library'
+            break
+        case '/explore':
+            linkTitle = 'Back to explore page'
+            break
+        case '/dashboard':
+            linkTitle = 'Back to your dashboard'
+            break
+        case '/notifications':
+            linkTitle = 'Back to your notifications'
+            break
+        default:
+            linkTitle = 'Back'
+    }
+
+    return  <div>
+        <Link to={refferer}>⬅️ {linkTitle}</Link>
+    </div>
 }
 
 
@@ -309,7 +342,7 @@ function CommentForm({username, userID, bookID, bookTitle, updateComments}) {
                     </div>
                 </>
                 }
-                
+
             </div>
         </form>
     )

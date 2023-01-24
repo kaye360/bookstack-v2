@@ -3,7 +3,7 @@ import PreviewUsersLibrary from "../components/library/PreviewUsersLibrary";
 import Explore from "../components/library/Explore";
 import { UserContext } from "../App";
 import { useNotifications } from "../utils/useNotifications";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import httpReq from "../utils/httpReq";
 import { API_BASE_URL } from "../config";
 import { useQuery } from "react-query";
@@ -51,8 +51,11 @@ export default function Dashboard() {
 function DashboardNotifications() {
 
     const { user } = useContext(UserContext)
+    const location = useLocation()
+    console.log(location.pathname)
 
     const { notifications, amount } = useNotifications(user.id)
+
 
     return(
         <div>
@@ -75,7 +78,9 @@ function DashboardNotifications() {
                 }
             </ul>
 
-            <Link to="/notifications">View your recent notifications</Link>
+            <Link to="/notifications">
+                View your recent notifications
+            </Link>
 
         </div>
     )

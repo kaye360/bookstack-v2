@@ -241,18 +241,10 @@ class Database
 
 			// http_response_code(400);
 
-			return [
-				'success' => false,
-				'message' => 'Error with query'
-			];
+			return [];
 		}
 
-		return !empty($all)
-			? $all
-			: [
-				'success' => false,
-				'message' => 'No entries found'
-			];
+		return !empty($all) ? $all : [];
 	}
 
 	/**

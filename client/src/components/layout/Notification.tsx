@@ -1,7 +1,9 @@
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 
 
 export default function Notification({type, url, children}) {
+
+    const location = useLocation()
 
     const icons = {
         'upload' : '📖',
@@ -14,6 +16,6 @@ export default function Notification({type, url, children}) {
             { icons[type] }
         </span>
         { children }
-        <Link to={ url } className="ml-4">View</Link>
+        <Link to={ url } state={ {from : location.pathname } } className="ml-4">View</Link>
     </li>
 }

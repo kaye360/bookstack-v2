@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 
 type propTypes = {
     id: number
@@ -22,8 +22,10 @@ export default function Book({
     showInfo = false
 } : propTypes) {
 
+    const location = useLocation()
+
     return (
-        <Link to={`/book/${id}`}>
+        <Link to={`/book/${id}`} state={ {from : location.pathname } }>
         <div className="flex flex-col justify-end relative text-sm bg-slate-200 h-full rounded-xl overflow-hidden">
                 {cover?.startsWith('http') 
                     ? <img src={cover} className="absolute inset-0 z-10 object-cover h-full" />
