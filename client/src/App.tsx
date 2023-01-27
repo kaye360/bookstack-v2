@@ -25,6 +25,7 @@ import Notifications from "./pages/Notifications"
 import Profile from "./pages/Profile"
 import ProtectedPage from "./pages/ProtectedPage"
 import Book from "./pages/Book"
+import SideBar from "./components/layout/Sidebar"
 
 
 /**
@@ -79,24 +80,31 @@ function App() {
 
 			<Header /> 
 
-			<main className="flex flex-col gap-8 py-8 px-2">
-			<Routes>
-				{/* Public Routes */}
-				<Route path="/"			element={<Home />} />
-				<Route path="/explore" 	element={<Explore />} />
-				<Route path="/about" 	element={<About />} />
-				<Route path="/account"	element={ Auth.isLoggedIn ? <Dashboard /> : <Account />} />
-				<Route path="book/:id" 	element={ <Book /> } />
+			<div className="grid grid-cols-content">
 
-				{/* Protected User Routes */}
-				<Route path="/dashboard"		element={ Auth.isLoggedIn ? <Dashboard />		: <ProtectedPage />} />
-				<Route path="/library" 			element={ Auth.isLoggedIn ? <Library />			: <ProtectedPage />} />
-				<Route path="/feed" 			element={ Auth.isLoggedIn ? <Feed /> 			: <ProtectedPage />} />
-				<Route path="/notifications" 	element={ Auth.isLoggedIn ? <Notifications />	: <ProtectedPage />} />
-				<Route path="/user"				element={ Auth.isLoggedIn ? <Profile /> 		: <ProtectedPage />} />
-				<Route path="/user/:username" 	element={ Auth.isLoggedIn ? <Profile /> 		: <ProtectedPage />} />
-			</Routes>
-			</main>
+
+				<SideBar />
+
+				<main id="#content" className="flex flex-col gap-8 py-8 px-2">
+				<Routes>
+					{/* Public Routes */}
+					<Route path="/"			element={<Home />} />
+					<Route path="/explore" 	element={<Explore />} />
+					<Route path="/about" 	element={<About />} />
+					<Route path="/account"	element={ Auth.isLoggedIn ? <Dashboard /> : <Account />} />
+					<Route path="book/:id" 	element={ <Book /> } />
+
+					{/* Protected User Routes */}
+					<Route path="/dashboard"		element={ Auth.isLoggedIn ? <Dashboard />		: <ProtectedPage />} />
+					<Route path="/library" 			element={ Auth.isLoggedIn ? <Library />			: <ProtectedPage />} />
+					<Route path="/feed" 			element={ Auth.isLoggedIn ? <Feed /> 			: <ProtectedPage />} />
+					<Route path="/notifications" 	element={ Auth.isLoggedIn ? <Notifications />	: <ProtectedPage />} />
+					<Route path="/user"				element={ Auth.isLoggedIn ? <Profile /> 		: <ProtectedPage />} />
+					<Route path="/user/:username" 	element={ Auth.isLoggedIn ? <Profile /> 		: <ProtectedPage />} />
+				</Routes>
+				</main>
+
+			</div>
 
 			<Footer />
 

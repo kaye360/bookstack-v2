@@ -1,16 +1,11 @@
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { UserContext } from "../../App";
-import { useNotifications } from "../../utils/useNotifications";
 import Logo from "./Logo";
 
 export default function Header() {
 
-    const {user, isLoggedIn, logout } = useContext(UserContext)
-
-    const { amount: notificationsAmount } = useNotifications(user.id)
-
-    let userNavlink: string = 'text-slate-200'
+    const { isLoggedIn, logout } = useContext(UserContext)
 
     return(
         <header className="fixed bottom-0 left-0 right-0 z-40 sm:relative bg-white">
@@ -31,28 +26,6 @@ export default function Header() {
                 </ul>
 
             </nav>
-
-            {isLoggedIn &&
-
-            <nav>
-                <ul className="flex items-center justify-end gap-4 bg-slate-700 text-slate-200 p-2">
-                    <li><Link className={userNavlink} to="/dashboard">Dashboard</Link></li>
-                    <li><Link className={userNavlink} to="/library">Library</Link></li>
-                    <li><Link className={userNavlink} to="/feed">Feed</Link></li>
-                    <li>
-                        <Link className={userNavlink} to="/notifications">
-                            Notifications
-                            {notificationsAmount.recent > 0 &&
-                                <span className="inline-flex items-center justify-center mx-1 bg-rose-500 rounded-full aspect-square w-6">
-                                    {notificationsAmount.recent}
-                                </span>
-                            }
-                        </Link>
-                    </li>
-                    <li><Link className={userNavlink} to={`/user/${user.username}`}>Profile</Link></li>
-                </ul>
-            </nav>
-            }
 
         </header>
     )

@@ -1,22 +1,27 @@
-import React from "react";
-import AccountCard from "./AccountCard";
+import hero from '../../assets/img/hero.png'
+
 
 export default function Hero() {
 
-    let userNavlink: string = 'text-slate-200'
-
     return(
-        <section className="
-            md:h-96 bg-slate-200 
-            md:grid md:grid-cols-2 md:grid-rows-1 items-stretch justify-items-stretch">
+        <section className="relative grid items-center gap-2 min-h-[50vh]">
 
-                <div className="text-2xl p-4 self-center">
-                    Hero Content here
-                </div>
+            <div className="relative max-w-xl z-40 text-2xl px-4 flex flex-col gap-12">
+                <h1 className="text-3xl font-bold leading-normal tracking-wide">A Better Way to Manage Your Personal Book Collection</h1>
 
-                <div className="rounded-xl translate-y-8 -translate-x-8">
-                    <AccountCard defaultComponent='register' />
+                <p className='leading-normal tracking-wide'>
+                    Organize and Track Your Personal Book Collection with Ease. Simply enter a book ISBN and go...
+                </p>
+
+                <div>
+                    <button className="bg-secondary-400 text-primary-800 font-bold text-lg">Sign Up</button>
+                    <button className="bg-transparent text-secondary-400  text-lg">Login</button>
                 </div>
+            </div>
+
+            <div className="absolute inset-0 z-20 pl-56 overflow-hidden">
+                <img src={ hero } className="w-full h-full object-cover" />
+            </div>
         </section>
     )
 }

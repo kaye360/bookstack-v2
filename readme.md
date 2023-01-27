@@ -41,6 +41,8 @@ Can be found in the /api_docs folder. Crucial information for each class and met
 
 
 ## TODO
+- remove unnessary db connections
+- make a description sentence splitting util function
 - Make a kickass UI
 
 
