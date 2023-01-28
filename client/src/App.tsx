@@ -6,7 +6,7 @@
 
 // Dependencies
 import { createContext } from "react"
-import { Route, Routes } from "react-router-dom"
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom"
 import useAuth from "./utils/useAuth"
 
 // Components
@@ -66,32 +66,32 @@ function App() {
 
 	/**
 	 * User Authentication
-	 * 
-	 * @var Auth : type object 
-	 * gets passed into UserContext to provide 
-	 * global user logic
-	 * 
 	 */
 	const Auth: any = useAuth()
 
+	const location = useLocation()
+
+	const showSideBar = Auth.isLoggedIn && location.pathname !== '/'
+
 	return (
 		<UserContext.Provider value={ Auth } >
-		<div className="w-100 max-w-6xl border mx-auto border-slate-300 ">
+		<div className={`w-100 max-w-6xl mx-auto px-[2vw] ${ showSideBar ? 'pt-8' : ''}`}>
 
-			<Header /> 
+			{location.pathname !== '/' && <Header /> }
 
-			<div className="grid grid-cols-content">
+			<div className={`grid ${ showSideBar ? 'grid-cols-content gap-8' : ''}`}>
 
 
-				<SideBar />
+				{ showSideBar && <SideBar /> }
 
-				<main id="#content" className="flex flex-col gap-8 py-8 px-2">
+				<main id="#content" className="flex flex-col gap-8 px-2">
 				<Routes>
 					{/* Public Routes */}
 					<Route path="/"			element={<Home />} />
 					<Route path="/explore" 	element={<Explore />} />
 					<Route path="/about" 	element={<About />} />
 					<Route path="/account"	element={ Auth.isLoggedIn ? <Dashboard /> : <Account />} />
+					<Route path="/account/:action"	element={ Auth.isLoggedIn ? <Dashboard /> : <Account />} />
 					<Route path="book/:id" 	element={ <Book /> } />
 
 					{/* Protected User Routes */}

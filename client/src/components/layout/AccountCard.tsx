@@ -17,9 +17,7 @@ export default function AccountCard({defaultComponent} : Iprops) {
 
 
     return (
-        <section className="p-4 w-full max-w-xl mx-auto rounded-xl border border-slate-300 bg-slate-50 bg-opacity-80">
-
-            {isLoggedIn && <Welcome user={user.username} /> }
+        <section className="p-4 w-full max-w-xl mx-auto">
 
             {!isLoggedIn && isShown === 'login' && <Login /> }
             
@@ -27,16 +25,26 @@ export default function AccountCard({defaultComponent} : Iprops) {
 
 
             {!isLoggedIn && isShown === 'login' &&
-                <p>
+                <p className="mt-16">
                 Don't have an acount yet? 
-                <button onClick={ () => setIsShown('register')}>Register</button>
+                <button 
+                    onClick={ () => setIsShown('register')}
+                    className="ml-4 bg-primary-900"
+                >
+                    Register
+                </button>
                 </p>
             }
             
             {!isLoggedIn && isShown === 'register' &&
-                <p>
+                <p className="mt-16">
                 Already have an account?
-                <button onClick={ () => setIsShown('login')}>Sign In</button>
+                <button 
+                    onClick={ () => setIsShown('login')}
+                    className="ml-4 bg-primary-900"
+                >
+                    Sign In
+                </button>
                 </p>
             }
 
@@ -48,18 +56,14 @@ export default function AccountCard({defaultComponent} : Iprops) {
 
 
 
-function Welcome({user}) {
 
-    return <>
-        <p>
-            Welcome back, {user.username}
-        </p>
-
-        <Link to="/dashboard">View your dashboard</Link>
-    </>
+interface ILogin {
+    success : boolean,
+    id: number,
+    username: string,
+    uuid: string,
+    message: string
 }
-
-
 
 
 function Login() {
@@ -90,7 +94,8 @@ function Login() {
             'username' : username,
             'password' : password
         }
-        const res = await httpReq.post(API_BASE_URL + '/user/login', postData )
+        const res : ILogin = await httpReq.post(API_BASE_URL + '/user/login', postData )
+        console.log(res)
 
         if(res.success) {
             setTimeout( () => {
@@ -121,7 +126,7 @@ function Login() {
     
     return(
         <>
-            <h2 className="text-xl font-bold text-cyan-600">Sign In</h2>
+            <h2 className="text-xl font-bold text-primary-100">Sign In</h2>
      
             <p>Please enter your information below</p>
 
@@ -145,7 +150,7 @@ function Login() {
 
                 <div className="flex items-center gap-4">
                     <input type="submit" value="Sign In" 
-                        className="px-4 py-2 rounded-lg bg-cyan-700 text-cyan-100 cursor-pointer"/>
+                        className="px-4 py-2 rounded-lg bg-secondary-400 text-primary-800 cursor-pointer font-bold"/>
 
                     {isSuccess && <div>Sign in successful. Redirecting...</div> }
                     {isLoading && <div className="animate-pulse">Logging in, please wait...</div> }
@@ -186,7 +191,7 @@ function Register() {
 
         // Attempt Register
         const postData = { username, password, confirm_password }
-        const res = await httpReq.post(API_BASE_URL + '/user', postData)
+        const res : ILogin = await httpReq.post(API_BASE_URL + '/user', postData)
         if(res.success) {
             setMessage('')
 
@@ -231,7 +236,7 @@ function Register() {
 
     return(
         <>
-            <h2 className="text-xl font-bold text-cyan-600">Register</h2>
+            <h2 className="text-xl font-bold">Register</h2>
 
             <p>Please enter your information below</p>
 
@@ -262,7 +267,7 @@ function Register() {
                 </FormRow>
 
                 <div className="flex items-center gap-4">
-                    <input type="submit" value="Sign In" className="px-4 py-2 rounded-lg bg-cyan-700 text-cyan-100 cursor-pointer"/>
+                    <input type="submit" value="Sign In" className="px-4 py-2 rounded-lg bg-secondary-400 text-primary-800 cursor-pointer font-bold"/>
                     <span>
                         {isLoading && 'Creating your account...' }
                         {isError && 'There was an error' }
@@ -281,7 +286,7 @@ function Register() {
 function FormRow({children}) {
 
     return(
-        <label className="grid grid-cols-[1fr_2fr] p-4 my-4 rounded-lg bg-slate-100">
+        <label className="grid grid-cols-[1fr_2fr] p-4 my-4 rounded-lg bg-primary-700 text-primary-100 font-semibold">
             {children}
         </label>
     )

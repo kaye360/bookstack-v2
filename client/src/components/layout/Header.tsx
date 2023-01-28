@@ -8,19 +8,19 @@ export default function Header() {
     const { isLoggedIn, logout } = useContext(UserContext)
 
     return(
-        <header className="fixed bottom-0 left-0 right-0 z-40 sm:relative bg-white">
+        <header className="fixed bottom-0 left-0 right-0 z-40 sm:relative sm:mb-8 bg-primary-900 bg-opacity-90 rounded-xl px-1 py-4">
 
-            <nav className="flex items-center justify-between p-2 border border-slate-400">
+            <nav className="flex items-center justify-between p-2">
 
                 <Logo/>
 
-                <ul className="flex items-center gap-4">
-                    <li><Link to="/">Home</Link></li>
-                    <li><Link to="/explore">Explore</Link></li>
-                    <li><Link to="/about">About</Link></li>
+                <ul className="flex items-center gap-8">
+                    <NavLink to="/">Home</NavLink>
+                    <NavLink to="/explore">Explore</NavLink>
+                    <NavLink to="/about">About</NavLink>
                     { isLoggedIn
-                        ? <li><Link to="/" onClick={ () => logout() }>Logout</Link></li>
-                        : <li><Link to="/account">Account</Link></li>
+                        ? <NavLink to="/" event={ () => logout() }>Logout</NavLink>
+                        : <NavLink to="/account">Account</NavLink>
                      }
                     
                 </ul>
@@ -29,4 +29,18 @@ export default function Header() {
 
         </header>
     )
+}
+
+
+interface INavLink {
+    to : string,
+    children : any,
+    event? : any
+}
+
+function NavLink({to, children, event} : INavLink) {
+
+    return <li>
+        <Link to={to} onClick={event} className="text-primary-100 font-semibold">{children}</Link>
+    </li>
 }

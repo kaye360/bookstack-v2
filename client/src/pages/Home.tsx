@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 
 import Hero from "../components/layout/Hero";
 import Explore from "../components/library/Explore";

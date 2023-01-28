@@ -1,12 +1,12 @@
-import React from "react";
+import { Link } from "react-router-dom";
 
 
 export default function Logo() {
 
 
     return(
-        <div className="text-2xl">
+        <Link to="/" className="text-2xl font-bold text-primary-100">
             BookStack
-        </div>
+        </Link>
     )
 }
