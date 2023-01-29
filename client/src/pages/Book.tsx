@@ -15,6 +15,8 @@ import iconLike from "../assets/img/icon-like.png"
 import iconLiked from "../assets/img/icon-liked.png"
 import iconChat from "../assets/img/icon-chat.png"
 import iconDelete from "../assets/img/icon-delete.png"
+import { textToParagraphs } from "../utils/formatText";
+import { useEffect } from "react";
 
 
 export default function Book() {
@@ -27,6 +29,7 @@ export default function Book() {
     const isRead = bookQuery.data?.is_read === 'true' ? true : false
 
 
+
     if(bookQuery.isError) {
         return <div>Error Getting Book</div>
     }
@@ -35,7 +38,9 @@ export default function Book() {
         return <Loader />
     }
 
-
+    const description = textToParagraphs(
+        googleQuery.data.items[0].volumeInfo.description
+    )
     const likes = JSON.parse(bookQuery.data.likes) || []
     const isLikedByUser = likes.includes(user.id)
 
@@ -48,7 +53,7 @@ export default function Book() {
             {/* Header blur Background */}
             <img 
                 src={bookQuery.data.cover_url} alt="Book Cover" 
-                className="absolute inset-0 z-10 object-cover object-center w-full h-full blur-lg opacity-20"
+                className="absolute top-0 left-0 right-0 z-10 object-cover object-center w-full h-[50vh] blur-lg opacity-20"
             />
 
             {/* Book Info Column */}
@@ -79,9 +84,9 @@ export default function Book() {
                     </p>
                 </div>
 
-                <p>
-                    {googleQuery.data.items[0].volumeInfo.description}
-                </p>
+                { description.map( (paragraph, index) => (
+                    <p className="text-lg" key={index}>{paragraph}</p>
+                ))}
 
 
             </div>
@@ -297,15 +302,20 @@ function Comments({isLoading, isError, book}) {
             book.comments.map( comment => {
                 return(
                     <li key={comment.id}>
-                        <h3><Link to={`/user/${comment.username}`}>{comment.username}</Link></h3>
-                        <p>{comment.comment}</p>
+                        <h3 className="w-fit px-4 py-2 rounded-2xl font-bold text-xl bg-primary-900">
+                            <Link to={`/user/${comment.username}`}>
+                                {comment.username}
+                            </Link>
+                        </h3>
+                        <p className="m-[1rem_0_1rem_1rem] px-4 border-l-4 border-primary-600">
+                            {comment.comment}
+                        </p>
                     </li>
             )})
             }
         </ul>
     )
 }
-
 
 
 
@@ -354,7 +364,9 @@ function CommentForm({username, userID, bookID, bookTitle, updateComments}) {
                     { isLoggedIn 
                         ? <>
                             Commenting as: { username } &nbsp;
-                            <span className="text-sm font-normal">(Max 200 characters)</span>
+                            <span className="text-sm font-normal">
+                                ({userComment.length}/200 characters)
+                            </span>
                         </>
                         : <span className="inline-block ml-2 font-normal">Please sign in to post a comment</span>
                     }

@@ -40,7 +40,7 @@ export default function Book({
                     </div>
                 }
 
-                <div className="relative z-20 bg-primary-900 text-primary-200 h-12 overflow-hidden">
+                <div className="relative z-20 px-2 py-1 text-center bg-primary-900 text-primary-200 h-12 overflow-hidden">
                     {title}
                 </div>
             { username && <div>{username}</div>}
