@@ -18,7 +18,7 @@ export default function Explore() {
     let exploreBooks = data?.slice(-6).reverse()
 
     return(
-        <section className="flex flex-col gap-4 bg-slate-50 py-8">
+        <section className="flex flex-col gap-4 py-8">
             <h2 className="text-4xl">Explore</h2>
             { isLoading && <Loader />}
 

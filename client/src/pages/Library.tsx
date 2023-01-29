@@ -29,7 +29,7 @@ export default function Library() {
                 ? <div className="p-4 rounded bg-orange-100">
                     There are no books in your library. Click the +Add Book icon to get started!
                 </div>
-                : <section className="grid gap-4 grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 auto-rows-[250px]">
+                : <section className="grid gap-4 grid-cols-3 sm:grid-cols-4 md:grid-cols-6 auto-rows-[200px]">
                     { library.map( book => {
                         return <Book 
                             id={book.id}

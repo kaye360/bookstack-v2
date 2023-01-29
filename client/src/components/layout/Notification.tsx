@@ -11,11 +11,16 @@ export default function Notification({type, url, children}) {
         'like' : '💟'
     }
 
-    return <li className="border-b border-slate-200 last:border-0">
+    return <li className="border-b border-primary-600 last:border-0 py-4">
         <span className="inline-block mr-4 py-2">
             { icons[type] }
         </span>
         { children }
-        <Link to={ url } state={ {from : location.pathname } } className="ml-4">View</Link>
+        <Link 
+            to={ url } state={ {from : location.pathname } } 
+            className="ml-4 text-primary-300 underline"
+        >
+            View
+        </Link>
     </li>
 }

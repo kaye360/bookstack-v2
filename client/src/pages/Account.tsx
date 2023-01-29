@@ -4,7 +4,6 @@ import AccountCard from "../components/layout/AccountCard";
 export default function Account() {
 
     const { action } = useParams()
-    console.log(action)
     
     const defaultComponent = action === 'register' ? 'register' : 'login'
 

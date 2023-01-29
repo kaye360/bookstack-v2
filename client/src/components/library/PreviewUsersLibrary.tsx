@@ -13,10 +13,10 @@ export default function PreviewUsersLibrary() {
     let previewUsersBooks = library.slice(0, 6)
 
     return(
-        <section className="flex flex-col gap-4 bg-slate-50 py-8">
+        <section className="flex flex-col gap-4 p-8 bg-primary-900 rounded-xl">
             <h2 className="text-4xl">Your Library</h2>
             { isLoading && <Loader />}
-            <div className="grid grid-cols-3 md:grid-cols-6 gap-4 auto-rows-[350px]">
+            <div className="grid grid-cols-3 md:grid-cols-6 gap-4 auto-rows-[250px]">
                 { previewUsersBooks && previewUsersBooks.map( book => {
                     return <Book 
                         id={book.id}
@@ -31,7 +31,7 @@ export default function PreviewUsersLibrary() {
                 })}
             </div>
 
-            <Link to="/library">View your library</Link>
+            <Link to="/library" className="text-primary-100">View your library</Link>
 
         </section>
     )

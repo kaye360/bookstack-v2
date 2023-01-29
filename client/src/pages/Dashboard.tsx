@@ -56,7 +56,7 @@ function DashboardNotifications() {
 
 
     return(
-        <div>
+        <div className="rounded-xl bg-primary-700 p-4">
             <h3 className="text-lg font-bold">Notifications</h3>
 
 

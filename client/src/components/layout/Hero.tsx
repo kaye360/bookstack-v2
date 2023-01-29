@@ -10,7 +10,7 @@ export default function Hero() {
     const { isLoggedIn } = useContext(UserContext)
 
     return(
-        <section className="relative grid items-center gap-2 min-h-[50vh] pt-8">
+        <section className="relative grid items-center gap-2 min-h-[50vh] py-8">
 
             <Header />
 
