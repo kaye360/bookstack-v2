@@ -4,6 +4,7 @@ import Loader from "../components/layout/Loader";
 import AddBookModal from "../components/library/AddBookModal";
 import Book from "../components/library/Book";
 import { useLibrary } from "../utils/useLibrary";
+import iconAddBook from "../assets/img/icon-add-book.png"
 
 export default function Library() {
 
@@ -19,7 +20,13 @@ export default function Library() {
             <h1 className="text-4xl">Library</h1>
 
             <div>
-                <button onClick={ () => setShowModal(true) }>➕ Add Book</button>
+                <button 
+                    onClick={ () => setShowModal(true) }
+                    className="flex items-center gap-2 border-2 border-primary-100 bg-transparent text-primary-100"
+                >
+                    <img src={iconAddBook} />
+                    Add Book
+                </button>
             </div>
         </div>
 
@@ -29,7 +36,7 @@ export default function Library() {
                 ? <div className="p-4 rounded bg-orange-100">
                     There are no books in your library. Click the +Add Book icon to get started!
                 </div>
-                : <section className="grid gap-4 grid-cols-3 sm:grid-cols-4 md:grid-cols-6 auto-rows-[200px]">
+                : <section className="grid gap-x-4 gap-y-6 grid-cols-3 sm:grid-cols-4 md:grid-cols-6 auto-rows-[250px]">
                     { library.map( book => {
                         return <Book 
                             id={book.id}

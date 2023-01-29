@@ -6,6 +6,8 @@ import Modal from "../layout/Modal"
 import Loader from "../layout/Loader"
 import { UserContext } from "../../App"
 
+import IconCloseDark from "../../assets/img/icon-close-dark.svg"
+
 
 interface propType {
     setShowModal: Function,
@@ -127,11 +129,15 @@ export default function AddBookModal({setShowModal, refetchLibrary} : propType) 
             { searchIsLoading && <Loader /> }
 
             {/* SEARCH ERROR */}
-            { searchIsError && <div className="pt-4 pb-8 px-2">Something went wrong with your search</div> }
+            { searchIsError && 
+                <div className="pt-4 pb-8 px-2 text-primary-800">
+                    Something went wrong with your search
+                </div>
+            }
 
             {/* NO BOOKS FOUND IN SEARCH*/}
             { searchIsSuccess && searchResult.totalItems === 0 &&
-                <div className="pt-4 pb-8 px-2">
+                <div className="pt-4 pb-8 px-2 text-primary-800">
                     No books were found with that ISBN. Please try another one.
                 </div>
             }
@@ -150,13 +156,25 @@ export default function AddBookModal({setShowModal, refetchLibrary} : propType) 
             }
                   
             {/* BOOK IS ADDING */}
-            { addIsLoading && <div className="pt-4 pb-8 px-2">Adding Book...</div> }
+            { addIsLoading && 
+                <div className="pt-4 pb-8 px-2 text-primary-800">
+                    Adding Book...
+                </div>
+            }
 
             {/* ERROR ADDING BOOK */}
-            { addIsError && <div className="pt-4 pb-8 px-2">There was an error, please try again.</div> }
+            { addIsError && 
+                <div className="pt-4 pb-8 px-2 text-primary-800">
+                    There was an error, please try again.
+                </div>
+            }
 
             {/* BOOK IS ADDED */}
-            { addIsSuccess && <div className="pt-0 pb-8 px-2"> {title} was added successfully!</div> }
+            { addIsSuccess && 
+                <div className="pt-0 pb-8 px-2 text-primary-800">
+                    {title} was added successfully!
+                </div>
+            }
 
         </Modal>
     )
@@ -168,17 +186,18 @@ export default function AddBookModal({setShowModal, refetchLibrary} : propType) 
 function Header({setShowModal, handleSearch, isbnField, setIsbnField, clearSearch}) {
 
     return (<>
-        <h2 className="text-md font-bold">
+        <h2 className="text-md font-bold text-primary-800">
             Add Book
         </h2>
 
         <button 
-            className="absolute right-4 top-2"
-            onClick={ () => setShowModal(false) }>
-            ✖
+            className="absolute right-4 top-2 bg-transparent"
+            onClick={ () => setShowModal(false) }
+        >
+            <img src={IconCloseDark} />    
         </button>
 
-        <div>
+        <div className="text-primary-800">
             <form onSubmit={ handleSearch }>
 
                 <label> 
@@ -219,7 +238,7 @@ function BookPreview({cover, title, author, isRead, setIsRead, handleAdd, clearS
 
     return(
         <>
-            <div className="flex items-center gap-4 mt-4">
+            <div className="flex items-center gap-4 mt-4 text-primary-800">
                 {cover !=='notfound.png' && <img src={cover} /> }
 
                 <div>
@@ -229,7 +248,7 @@ function BookPreview({cover, title, author, isRead, setIsRead, handleAdd, clearS
                     
             </div>
 
-            <div>
+            <div className="text-primary-800">
                 <form onSubmit={ handleAdd }>
                     <label className="block">
                         I have read this book: &nbsp;
@@ -239,12 +258,15 @@ function BookPreview({cover, title, author, isRead, setIsRead, handleAdd, clearS
                     <input type="submit" value="Add To Library" 
                         className="rounded cursor-pointer font-bold
                         my-4 mr-4 px-4 py-2 
-                        bg-sky-300 hover:bg-transparent border hover:border-sky-300" />
+                        bg-primary-300 hover:bg-transparent border hover:border-primary-300" />
 
                     <button onClick={clearSearch}
                         className="rounded cursor-pointer font-bold
                         my-4 mr-4 px-4 py-2 
-                        bg-rose-200 hover:bg-transparent border hover:border-rose-300">Clear Search</button>
+                        bg-secondary-200 hover:bg-transparent border hover:border-secondary-300"
+                    >
+                        Clear Search
+                    </button>
                 </form>
             </div>
         </>

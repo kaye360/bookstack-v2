@@ -7,6 +7,7 @@ import { API_BASE_URL } from "../config";
 import { UserContext } from "../App";
 import { useBook } from "../utils/useBook";
 import httpReq from "../utils/httpReq";
+import { textToParagraphs } from "../utils/formatText";
 
 import Loader from "../components/layout/Loader";
 import Modal from "../components/layout/Modal";
@@ -15,8 +16,6 @@ import iconLike from "../assets/img/icon-like.png"
 import iconLiked from "../assets/img/icon-liked.png"
 import iconChat from "../assets/img/icon-chat.png"
 import iconDelete from "../assets/img/icon-delete.png"
-import { textToParagraphs } from "../utils/formatText";
-import { useEffect } from "react";
 
 
 export default function Book() {
