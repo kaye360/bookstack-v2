@@ -87,20 +87,42 @@ function App() {
 				<main id="#content" className="flex flex-col gap-8 px-2">
 				<Routes>
 					{/* Public Routes */}
-					<Route path="/"			element={<Home />} />
-					<Route path="/explore" 	element={<Explore />} />
-					<Route path="/about" 	element={<About />} />
-					<Route path="/account"	element={ Auth.isLoggedIn ? <Dashboard /> : <Account />} />
-					<Route path="/account/:action"	element={ Auth.isLoggedIn ? <Dashboard /> : <Account />} />
-					<Route path="book/:id" 	element={ <Book /> } />
+					<Route path="/"	element={<Home />} />
+					<Route path="/explore" element={<Explore />} />
+					<Route path="/about" element={<About />} />
+					<Route path="book/:id" element={ <Book /> } />
+
+
+					{/* Account Public/Protected Routes */}
+					<Route path="/account"
+						element={ Auth.isLoggedIn ? <Dashboard /> : <Account />} />
+
+					<Route path="/account/:action"
+						element={ Auth.isLoggedIn ? <Dashboard /> : <Account />} />
+
 
 					{/* Protected User Routes */}
-					<Route path="/dashboard"		element={ Auth.isLoggedIn ? <Dashboard />		: <ProtectedPage />} />
-					<Route path="/library" 			element={ Auth.isLoggedIn ? <Library />			: <ProtectedPage />} />
-					<Route path="/feed" 			element={ Auth.isLoggedIn ? <Feed /> 			: <ProtectedPage />} />
-					<Route path="/notifications" 	element={ Auth.isLoggedIn ? <Notifications />	: <ProtectedPage />} />
-					<Route path="/user"				element={ Auth.isLoggedIn ? <Profile /> 		: <ProtectedPage />} />
-					<Route path="/user/:username" 	element={ Auth.isLoggedIn ? <Profile /> 		: <ProtectedPage />} />
+					<Route path="/dashboard"
+						element={ Auth.isLoggedIn ? <Dashboard /> : <ProtectedPage />} />
+
+					<Route path="/library"
+						element={ Auth.isLoggedIn ? <Library />	: <ProtectedPage />} />
+
+					<Route path="/library/add"		
+						element={ Auth.isLoggedIn ? <Library isUserAddingBook={true} />	: <ProtectedPage />} />
+
+					<Route path="/feed"
+						element={ Auth.isLoggedIn ? <Feed /> : <ProtectedPage />} />
+
+					<Route path="/notifications" 	
+						element={ Auth.isLoggedIn ? <Notifications />	: <ProtectedPage />} />
+
+					<Route path="/user"
+						element={ Auth.isLoggedIn ? <Profile /> : <ProtectedPage />} />
+
+					<Route path="/user/:username"
+					 	element={ Auth.isLoggedIn ? <Profile /> : <ProtectedPage />} />
+
 				</Routes>
 				</main>
 

@@ -29,7 +29,7 @@ export default function SideBar() {
                 }
             </NavLink>
             <NavLink to={`/user/${user.username}`} icon={iconProfile}>Profile</NavLink>
-            <NavLink to="/add" icon={iconAdd}>Add</NavLink>
+            <NavLink to="/library/add" icon={iconAdd}>Add</NavLink>
         </ul>
 </nav>
 }

@@ -6,13 +6,13 @@ import Book from "../components/library/Book";
 import { useLibrary } from "../utils/useLibrary";
 import iconAddBook from "../assets/img/icon-add-book.png"
 
-export default function Library() {
-
+export default function Library({isUserAddingBook = false}) {
+    console.log(isUserAddingBook)
     const { user } = useContext(UserContext)
 
     const {library, isLoading, refetchLibrary} = useLibrary(user.id)
 
-    const [showModal, setShowModal] = useState(false)
+    const [showModal, setShowModal] = useState(isUserAddingBook)
 
     return(<>
     
