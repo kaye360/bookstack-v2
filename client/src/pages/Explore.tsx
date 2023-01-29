@@ -17,11 +17,11 @@ export default function Explore() {
     let exploreBooks = data
 
     return(
-        <section className="flex flex-col gap-4 bg-slate-50 py-8">
+        <section className="flex flex-col gap-4 py-8">
             <h2 className="text-4xl">Explore</h2>
             { isLoading && <Loader />}
 
-            { isError && <div className="py-4 rounded border border-slate-200">Error loading books</div> }
+            { isError && <div className="py-4">Error loading books</div> }
 
             { isFetched && 
                 <div className="grid grid-cols-3 md:grid-cols-6 gap-4 auto-rows-[350px]">

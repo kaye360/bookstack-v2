@@ -30,7 +30,7 @@ export default function Profile() {
                 <>
                     <LibraryPreview userID={user.id} username={username} />
 
-                    <h2 className="my-8 text-xl font-bold">{user.username}'s recent activity</h2>
+                    <h2 className="mt-8 text-xl font-bold">{user.username}'s recent activity</h2>
                     <UsersPublicFeed userID={user.id} />
                 </>
             }
@@ -64,7 +64,7 @@ function LibraryPreview({userID, username}) {
 
         { amount !== 0 && <p>Here's just a few:</p> }        
 
-        <div className="grid grid-cols-3 md:grid-cols-6 gap-4 auto-rows-[350px]">
+        <div className="grid grid-cols-3 md:grid-cols-6 gap-4 auto-rows-[250px]">
         { libraryPreview.map( book => (
             <Book 
                 id={book.id} 
@@ -104,22 +104,28 @@ function UsersPublicFeed({userID}) {
         return <Loader />
     }
     
+    console.log(data)
     return <ul className="flex flex-col">
-        { data.success
+        { data.length !== 0
             ? data.slice(0,10).map( feedItem => (
-                <li key={feedItem.id} className="py-4 border-b border-slate-200 last:border-0">
+                <li key={feedItem.id} className="py-8 border-b border-primary-500 last:border-0">
+
                     <span className="inline-block mx-4">
                         {feedItem.type === 'upload' && '📖' }
                         {feedItem.type === 'like' && '💟' }
                         {feedItem.type === 'comment' && '💬' }
                     </span>
+
                     <span className="mx-4">
                         {feedItem.message}
                     </span>
-                    <Link to={feedItem.link}>View</Link>
+
+                    <Link to={feedItem.link} className="text-primary-400">
+                        View
+                    </Link>
                 </li>
             ))
-            : <div className="p-4 rounded bg-slate-100">
+            : <div className="p-4 rounded bg-primary-700">
                 This user has no recent activity.
             </div>
         }
