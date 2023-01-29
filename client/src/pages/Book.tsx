@@ -1,13 +1,20 @@
 import { useContext, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
-import { useBook } from "../utils/useBook";
-import Loader from "../components/layout/Loader";
 import { Link } from "react-router-dom";
 import { useQuery, useQueryClient } from "react-query";
-import httpReq from "../utils/httpReq";
+
 import { API_BASE_URL } from "../config";
 import { UserContext } from "../App";
+import { useBook } from "../utils/useBook";
+import httpReq from "../utils/httpReq";
+
+import Loader from "../components/layout/Loader";
 import Modal from "../components/layout/Modal";
+import iconBack from "../assets/img/icon-back.png"
+import iconLike from "../assets/img/icon-like.png"
+import iconLiked from "../assets/img/icon-liked.png"
+import iconChat from "../assets/img/icon-chat.png"
+import iconDelete from "../assets/img/icon-delete.png"
 
 
 export default function Book() {
@@ -35,67 +42,96 @@ export default function Book() {
     return <>
 
         <BackBtn />
-    
-        <h1 className="relative flex flex-col gap-16 py-20">
+
+        <div className="relative grid grid-cols-[3fr_1.5fr] gap-8">
+
+            {/* Header blur Background */}
             <img 
                 src={bookQuery.data.cover_url} alt="Book Cover" 
                 className="absolute inset-0 z-10 object-cover object-center w-full h-full blur-lg opacity-20"
             />
-            <span className="relative z-20 text-center">{bookQuery.data.title}</span>
-            <img src={bookQuery.data.cover_url} alt="Book Cover" className="mx-auto" />
-        </h1>
 
+            {/* Book Info Column */}
+            <div className="relative z-20 flex flex-col gap-8">
 
-        <div className="text-center">
-            <h3 className="font-bold">App Data</h3>
-            <p>
-                Author: 
-                {bookQuery.data.author} 
-            </p>
-            { user.id === bookQuery.data.user_id &&
-                <p>
-                    Is read? 
-                    <ToggleIsReadBtn isRead={isRead} bookID={ bookID } bookQuery={bookQuery} /> 
+                <h1 className="text-3xl">
+                    {bookQuery.data.title}
+                </h1>
+
+                <div className="border border-primary-400"></div>
+
+                <p className="font-semibold">
+                    {googleQuery.data.items[0].volumeInfo.subtitle}
                 </p>
-            }
-            <p>
-                <a href="#comments">Comments:</a> &nbsp; 
-                { bookQuery.data.comment_count }</p>
-            <p>
-                Likes: {likes.length} &nbsp;
-                { isLoggedIn && <LikeBtn 
-                    isLikedByUser={isLikedByUser} 
-                    user={user}
-                    bookID={id}
-                    bookQuery={bookQuery}
+
+                <div>
+                    <p>
+                        By: {bookQuery.data.author}
+                    </p>
+                    <p>
+                        Category: {googleQuery.data.items[0].volumeInfo.categories}
+                    </p>
+                    <p>
+                        Pages: {googleQuery.data.items[0].volumeInfo.pageCount}
+                    </p>
+                    <p>
+                        Google Rating: {googleQuery.data.items[0].volumeInfo.averageRating}/5
+                    </p>
+                </div>
+
+                <p>
+                    {googleQuery.data.items[0].volumeInfo.description}
+                </p>
+
+
+            </div>
+
+            {/* Book Cover Column */}
+            <div className="relative z-20">
+                <img 
+                    src={bookQuery.data.cover_url} 
+                    alt="Book Cover" 
+                    className="mx-auto w-full rounded-lg" 
                 />
+
+                { user.id === bookQuery.data.user_id &&
+                    <p className="text-center ">
+                        <ToggleIsReadBtn 
+                            isRead={isRead} 
+                            bookID={ bookID } 
+                            bookQuery={bookQuery} 
+                        /> 
+                        {isRead ? 'I have read this book' : 'I haven\'t read this book'}
+                    </p>
                 }
-            </p>
-            <p>
-                User ID: 
-                {bookQuery.data.user_id}
-            </p>
 
-            {user.id === bookQuery.data.user_id &&
-                <DeleteBtn bookID={bookID} />
-            }
-            
-            <h3 className="font-bold mt-4">Google Data</h3>
-            {
-            googleQuery.data && googleQuery.data.items 
-                ? <>
-                    <p>Sub Title:   {googleQuery.data.items[0].volumeInfo.subtitle}</p>
-                    <p>Rating:      {googleQuery.data.items[0].volumeInfo.averageRating}</p>
-                    <p>Categories:  {googleQuery.data.items[0].volumeInfo.categories}</p>
-                    <p>Pages:       {googleQuery.data.items[0].volumeInfo.pageCount}</p>
-                    <p>Date Pubbed: {googleQuery.data.items[0].volumeInfo.publishedDate}</p>
-                    <p className="text-left max-w-lg mx-auto">Description: {googleQuery.data.items[0].volumeInfo.description}</p>
-                </>
-                : <p className="my-8 py-4 rounded border border-slate-300">Error: Google book data not found.</p>
-            } 
+                <div className="w-full flex items-center justify-between font-bold">
+                        <p className="flex items-center gap-2">
+                            <a href="#comments">
+                                <img src={iconChat} />
+                            </a>
+                            { bookQuery.data.comment_count }
+                        </p>
+                        <p className="flex items-center gap-2">
+                            { isLoggedIn && <LikeBtn 
+                                isLikedByUser={isLikedByUser} 
+                                user={user}
+                                bookID={id}
+                                bookQuery={bookQuery}
+                                />
+                            }
+                            {likes.length}
+                        </p>
+
+                        {user.id === bookQuery.data.user_id &&
+                           <DeleteBtn bookID={bookID} />
+                        }
+                </div>
+
+            </div>
         </div>
-
-        <section className="w-full max-w-lg mx-auto" id="comments">
+    
+        <section className="" id="comments">
             <h2 className="my-4 py-4 text-2xl font-bold border-t border-slate-200">Comments</h2>
 
             <Comments 
@@ -123,28 +159,21 @@ export default function Book() {
 function BackBtn() {
 
     const location = useLocation()
-    const refferer = location.state?.from
+    const refferer = location.state?.from || '/'
+    const titlesKey = refferer.slice(1)
 
-    let linkTitle: string
-    switch(refferer) {
-        case '/library':
-            linkTitle = 'Back to your Library'
-            break
-        case '/explore':
-            linkTitle = 'Back to explore page'
-            break
-        case '/dashboard':
-            linkTitle = 'Back to your dashboard'
-            break
-        case '/notifications':
-            linkTitle = 'Back to your notifications'
-            break
-        default:
-            linkTitle = 'Back'
+    const titles = {
+        library : 'Back to your Library',
+        explore : 'Back to explore page',
+        dashboard : 'Back to your dashboard',
+        notifications : 'Back to your notifications'
     }
 
     return  <div>
-        <Link to={refferer}>⬅️ {linkTitle}</Link>
+        <Link to={refferer} className="flex items-center gap-2">
+            <img src={iconBack} />
+            {titles.hasOwnProperty(titlesKey) ? titles[titlesKey] : 'Back'}
+        </Link>
     </div>
 }
 
@@ -162,7 +191,7 @@ function ToggleIsReadBtn({isRead, bookID, bookQuery}) {
 
     const { refetch } = useQuery('toggleIsRead', toggleIsRead, {enabled: false})
 
-    return <button onClick={ () => refetch() } className='p-0 mx-2 bg-transparent outline-0 border-0 focus:outline-0 hover:border-0'>
+    return <button onClick={ () => refetch() } className='p-0 mx-2 cursor-pointer bg-transparent outline-0 border-0 focus:outline-0 hover:border-0'>
         {isRead ? '☑️' : '🔲' }
     </button>
 }
@@ -187,7 +216,10 @@ function LikeBtn({isLikedByUser, user, bookID, bookQuery}) {
     })
 
     return <button onClick={ () => {refetch()} } className='p-0 bg-transparent outline-0 border-0 focus:outline-0 hover:border-0'>
-        { isLikedByUser ? '❤️' : '🤍' }
+        { isLikedByUser 
+            ? <img src={iconLiked} /> 
+            : <img src={iconLike} />
+        }
     </button>
 
 }
@@ -200,7 +232,9 @@ function DeleteBtn({bookID}) {
     const [showModal, setShowModal] = useState(false)
 
     return ( <>
-        <button onClick={() => setShowModal(true)}>Delete</button>
+        <button onClick={() => setShowModal(true)} className="bg-transparent">
+            <img src={iconDelete} />
+        </button>
         { showModal && <DeleteModal bookID={bookID} setShowModal={setShowModal} /> }
     </>)
 }
@@ -314,7 +348,7 @@ function CommentForm({username, userID, bookID, bookTitle, updateComments}) {
 
     return(
         <form onSubmit={handleSubmit} >
-            <div className="flex flex-col gap-4 text-left max-w-lg mx-auto mt-4 p-4 rounded-md border border-slate-400 bg-slate-200">
+            <div className="flex flex-col gap-4 text-left max-w-lg my-4 p-4 rounded-md bg-primary-600">
 
                 <h4 className="font-bold">
                     { isLoggedIn 
@@ -328,13 +362,13 @@ function CommentForm({username, userID, bookID, bookTitle, updateComments}) {
 
                 { isLoggedIn && <>
                     <textarea 
-                        className="resize-none rounded p-2 w-full h-32 border border-slate-300 bg-white"
+                        className="resize-none rounded p-2 w-full h-32 bg-primary-300 text-primary-800"
                         onChange={ (e) => setUserComment(e.target.value) }
                         value={userComment}
                     ></textarea>
 
                     <div className="flex items-center gap-4">
-                        <input type="submit" value="Post Comment" className="rounded-md px-4 py-2 bg-slate-500 text-slate-200 w-fit cursor-pointer" />
+                        <input type="submit" value="Post Comment" className="rounded-md px-4 py-2 bg-primary-200 text-primary-900 font-bold w-fit cursor-pointer" />
                         { isSuccess && 'Comment Posted!'}
                         { isLoading && 'Please wait...'}
                         { isError && error.message }
