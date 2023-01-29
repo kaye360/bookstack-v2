@@ -12,10 +12,13 @@ $route->baseURL = BASE_URL;
 $route->get('/users', ['User', 'get_all']);
 $route->get('/user/:id', ['User', 'get_single', 'id']);
 $route->get('/username/:username', ['User', 'get_single_by_username', 'username']);
+
 $route->post('/user', ['User', 'create']);
 $route->post('/user/login', ['User', 'login']);
 $route->post('/user/logout', ['User', 'logout']);
+
 $route->put('/user/:id', ['User', 'edit', 'id']);
+
 $route->delete('/user/:id', ['User', 'destroy', 'id']);
 
 /**
@@ -28,6 +31,7 @@ $route->get('/session/:session', ['User', 'get_single_by_session', 'session']);
  */
 $route->get('/notifications/new/:id', ['Notification', 'get_new', 'id']);
 $route->get('/notifications/old/:id', ['Notification', 'get_old', 'id']);
+
 $route->put('/notifications/add', ['Notification', 'create']);
 $route->put('/notifications/clear_new', ['Notification', 'clear_new']);
 
@@ -38,6 +42,7 @@ $route->post('/book', ['Book', 'create']);
 
 $route->get('/book/:id', ['Book', 'get_single', 'id']);
 $route->get('/books/:id', ['Book', 'get_all', 'id']);
+$route->get('/books/explore', ['Book', 'get_explore']);
 
 $route->put('/book/:id', ['Book', 'edit', 'id']);
 $route->put('/book/like', ['Book', 'like']);
@@ -49,9 +54,12 @@ $route->delete('/book/:id', ['Book', 'destroy', 'id']);
  * Comment Routes
  */
 $route->post('/comment', ['Comment', 'create']);
+
 $route->get('/comment/:id', ['Comment', 'get_single', 'id']);
 $route->get('/comments/:id', ['Comment', 'get_all', 'id']);
+
 $route->put('/comment/:id', ['Comment', 'edit', 'id']);
+
 $route->delete('/comment/:id', ['Comment', 'destroy', 'id']);
 
 /**

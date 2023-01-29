@@ -108,6 +108,21 @@ class Book extends Database
 
 
 
+	public function get_explore() 
+	{
+		try {
+			$sql = 'SELECT * FROM books ORDER BY RAND() LIMIT 20';
+			$this->stmt = $this->dbh->prepare($sql);
+			$this->stmt->execute();
+		} catch(Exception $error) {
+			return [];
+		}
+		return $this->stmt->fetchAll(PDO::FETCH_ASSOC);
+	}
+
+
+
+
 	public function edit($id)
 	{
 		$put_data = $this->request();

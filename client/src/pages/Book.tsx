@@ -37,9 +37,16 @@ export default function Book() {
         return <Loader />
     }
 
-    const description = textToParagraphs(
+    if(googleQuery.data.totalItems === 0) {
+        return <div>No book Found</div>
+    }
+    
+    let description: object[] | string[] = []
+
+    description = textToParagraphs(
         googleQuery.data.items[0].volumeInfo.description
     )
+
     const likes = JSON.parse(bookQuery.data.likes) || []
     const isLikedByUser = likes.includes(user.id)
 

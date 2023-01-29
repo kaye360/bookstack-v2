@@ -36,7 +36,8 @@ export const useBook = (bookID: number | string | undefined) => {
                         publishedDate : 'Loading',
                     }
                 }
-            ]
+            ],
+            totalItems : 0
         }
     })
 

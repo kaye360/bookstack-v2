@@ -7,36 +7,54 @@ import httpReq from "../utils/httpReq";
 export default function Explore() {
     
     async function getBooks() {
-        const res = await httpReq.get(API_BASE_URL + '/books/all')
+        const res = await httpReq.get(API_BASE_URL + '/books/explore')
         return res
     }
 
     const { data, isLoading, isError, isFetched} = useQuery(
         'usersBooks', getBooks
     )
-    let exploreBooks = data
 
     return(
         <section className="flex flex-col gap-4 py-8">
             <h2 className="text-4xl">Explore</h2>
+
+            <p className="p-4 rounded-xl bg-primary-900 my-8">
+                Check out some books of the books in the community
+            </p>
+
             { isLoading && <Loader />}
 
             { isError && <div className="py-4">Error loading books</div> }
 
             { isFetched && 
-                <div className="grid grid-cols-3 md:grid-cols-6 gap-4 auto-rows-[350px]">
-                    { exploreBooks && exploreBooks.map( 
-                        (book: { title:string, id:number, cover_url:string }) => {
+                <div className="grid grid-cols-3 md:grid-cols-6 gap-4 auto-rows-[250px]">
+                    { data && data.map( (book: Ibook ) => {
+
+                        const likes = JSON.parse(book.likes)
+
                         return <Book 
                             id={book.id}
                             title={book.title} 
                             showInfo={true} 
                             key={book.id} 
                             cover={book.cover_url}
+                            likes={likes.length}
+                            commentCount={book.comment_count}
                         />
                     })}
                 </div>
             }
         </section>
     )
+}
+
+
+
+interface Ibook {
+    title: string,
+    id: number,
+    cover_url: string, 
+    likes : string,
+    comment_count: number
 }
