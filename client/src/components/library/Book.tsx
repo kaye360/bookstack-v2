@@ -26,7 +26,7 @@ export default function Book({
 
     return (
         <Link to={`/book/${id}`} state={ {from : location.pathname } }>
-        <div className="flex flex-col justify-end relative bg-primary-700 text-sm h-full rounded-xl overflow-hidden">
+        <div className="flex flex-col justify-end relative bg-primary-200 text-sm h-full rounded-xl overflow-hidden">
                 {cover?.startsWith('http') 
                     ? <img src={cover} className="absolute inset-0 z-10 object-cover h-full" />
                     : <span className="absolute block inset-0 text-2xl text-slate-400 text-center">Cover not available</span>

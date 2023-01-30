@@ -18,7 +18,13 @@ export default function SideBar() {
     const { amount: notificationsAmount } = useNotifications(user.id)
 
     return <nav>
-        <ul className="flex flex-col gap-12 bg-primary-700 text-primary-200 px-4 py-12 rounded-xl">
+        <ul className="
+            fixed bottom-0 left-0 right-0 w-full z-50
+            flex justify-between
+            md:relative md:flex-col md:gap-12 md:justify-start
+            px-4 py-12 rounded-xl
+            bg-primary-700 text-primary-200 
+        ">
             <NavLink to="/dashboard" icon={iconDashboard}>Dashboard</NavLink>
             <NavLink to="/library" icon={iconLibrary}>Library</NavLink>
             <NavLink to="/feed" icon={iconCommunity}>Feed</NavLink>
@@ -38,12 +44,17 @@ export default function SideBar() {
 function NavLink({to, icon, children}) {
 
     return <li>
-        <Link to={to} className='grid grid-cols-[40px_1fr] items-center font-bold text-primary-100'>
-            <img src={icon} />
-            {children}
+        <Link to={to} className='
+            grid justify-center gap-4
+            md:grid-cols-[40px_1fr] items-center 
+            font-bold text-primary-100 text-center
+        '>
+            <img src={icon} className="mx-auto"/>
+            <div className="hidden sm:block">{children}</div>
         </Link>
     </li>
 }
+
 
 
 function NotificationBubble({children}) {
