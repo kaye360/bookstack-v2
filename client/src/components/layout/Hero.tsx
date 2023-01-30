@@ -48,9 +48,10 @@ export default function Hero() {
                 }
             </div>
 
-            <div className="absolute inset-0 z-20 pl-56 overflow-hidden">
+            <div className="absolute inset-0 z-20 pl-[25vw] md:pl-56 overflow-hidden">
                 <img src={ hero } className="w-full h-full object-cover" />
             </div>
+
         </section>
     )
 }
