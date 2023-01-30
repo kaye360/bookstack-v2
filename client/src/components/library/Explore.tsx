@@ -4,6 +4,7 @@ import httpReq from "../../utils/httpReq";
 import Book from "./Book";
 import Loader from "../layout/Loader"
 import { Link } from "react-router-dom";
+import LibraryGrid from "../layout/LibraryGrid";
 
 export default function Explore() {
     
@@ -23,7 +24,7 @@ export default function Explore() {
             { isLoading && <Loader />}
 
             { isFetched && 
-                <div className="grid grid-cols-3 md:grid-cols-6 gap-4 auto-rows-[350px]">
+                <LibraryGrid>
                     { exploreBooks && exploreBooks.map( (book: { title:string, id:number }) => {
                         return <Book 
                             id={book.id}
@@ -32,7 +33,7 @@ export default function Explore() {
                             key={book.id} 
                         />
                     })}
-                </div>
+                </LibraryGrid>
             }
 
             <Link to="/explore">Explore the community</Link>

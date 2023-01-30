@@ -5,6 +5,7 @@ import AddBookModal from "../components/library/AddBookModal";
 import Book from "../components/library/Book";
 import { useLibrary } from "../utils/useLibrary";
 import iconAddBook from "../assets/img/icon-add-book.png"
+import LibraryGrid from "../components/layout/LibraryGrid";
 
 export default function Library({isUserAddingBook = false}) {
     console.log(isUserAddingBook)
@@ -36,7 +37,7 @@ export default function Library({isUserAddingBook = false}) {
                 ? <div className="p-4 rounded bg-orange-100">
                     There are no books in your library. Click the +Add Book icon to get started!
                 </div>
-                : <section className="grid gap-x-4 gap-y-6 grid-cols-3 sm:grid-cols-4 md:grid-cols-6 auto-rows-[250px]">
+                : <LibraryGrid>
                     { library.map( book => {
                         return <Book 
                             id={book.id}
@@ -49,7 +50,7 @@ export default function Library({isUserAddingBook = false}) {
                             key={book.id}
                     />
                     })}
-                </section>
+                </LibraryGrid>
             }
 
         { showModal && <AddBookModal setShowModal={setShowModal} refetchLibrary={refetchLibrary} /> }

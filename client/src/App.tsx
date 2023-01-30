@@ -71,18 +71,21 @@ function App() {
 
 	const location = useLocation()
 
-	const showSideBar = Auth.isLoggedIn && location.pathname !== '/'
+	const isSidebarShown = Auth.isLoggedIn && location.pathname !== '/'
 
 	return (
 		<UserContext.Provider value={ Auth } >
-		<div className={`w-100 max-w-6xl mx-auto px-[2vw] ${ showSideBar ? 'md:pt-8' : ''}`}>
+		<div className={`w-100 max-w-6xl mx-auto px-[2vw] ${ isSidebarShown ? 'md:pt-8' : ''}`}>
 
 			{location.pathname !== '/' && <Header /> }
 
-			<div className={`grid ${ showSideBar ? 'md:grid-cols-content md:gap-8' : ''}`}>
+			<div className={`
+				grid
+				${ isSidebarShown ? 'md:grid-cols-content md:gap-8 py-8' : ''} 
+			`}>
 
 
-				{ showSideBar && <SideBar /> }
+				{ isSidebarShown && <SideBar /> }
 
 				<main id="#content" className="flex flex-col gap-8 px-2">
 				<Routes>

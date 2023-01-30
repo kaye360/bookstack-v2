@@ -45,11 +45,11 @@ function NavLink({to, icon, children}) {
 
     return <li>
         <Link to={to} className='
-            grid justify-center gap-4
-            md:grid-cols-[40px_1fr] items-center 
-            font-bold text-primary-100 text-center
+            grid gap-4 items-center
+            md:grid-cols-[40px_1fr] md:justify-start
+            font-bold text-primary-100 text-center md:text-left
         '>
-            <img src={icon} className="mx-auto"/>
+            <img src={icon} className="mx-auto md:mx-0"/>
             <div className="hidden sm:block">{children}</div>
         </Link>
     </li>

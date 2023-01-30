@@ -4,6 +4,7 @@ import Book from "./Book";
 import Loader from "../layout/Loader";
 import { useLibrary } from "../../utils/useLibrary";
 import { UserContext } from "../../App";
+import LibraryGrid from "../layout/LibraryGrid";
 
 export default function PreviewUsersLibrary() {
 
@@ -16,7 +17,7 @@ export default function PreviewUsersLibrary() {
         <section className="flex flex-col gap-4 p-8 bg-primary-900 rounded-xl">
             <h2 className="text-4xl">Your Library</h2>
             { isLoading && <Loader />}
-            <div className="grid grid-cols-3 md:grid-cols-6 gap-4 auto-rows-[250px]">
+            <LibraryGrid>
                 { previewUsersBooks && previewUsersBooks.map( book => {
                     return <Book 
                         id={book.id}
@@ -29,7 +30,7 @@ export default function PreviewUsersLibrary() {
                         key={book.id} 
                     />
                 })}
-            </div>
+            </LibraryGrid>
 
             <Link to="/library" className="text-primary-100">View your library</Link>
 

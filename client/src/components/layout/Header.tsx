@@ -10,24 +10,22 @@ export default function Header() {
     const { isLoggedIn, logout } = useContext(UserContext)
 
 
-    const baseMenuCss = 'md:relative md:flex md:flex-row items-center md:gap-8 md:px-4 md:max-h-[1000px] md:py-0 transition-all duration-300 ease-in-out'
+    const baseMenuCss = `
+        absolute right-0 top-full 
+        flex flex-col gap-4 
+        md:relative md:px-4 md:max-h-[1000px] md:py-0 
+        md:flex md:flex-row items-center md:gap-8 
+        transition-all duration-300 ease-in-out
+        bg-primary-900 bg-opacity-90 rounded`
 
-    const menuHiddenCss = `max-h-[0px] overflow-hidden absolute right-0 top-full flex flex-col gap-4 bg-primary-900 bg-opacity-90 rounded px-16 py-0 ${baseMenuCss}`
 
-    const menuShownCss = `max-h-[600px] absolute right-0 top-full flex flex-col gap-4 bg-primary-900 bg-opacity-90 rounded px-16 py-4 ${baseMenuCss}`
+    const menuHiddenCss = `max-h-[0px] overflow-hidden px-16 py-0`
+    const menuShownCss = `max-h-[600px] px-16 py-4`
+    const [isMenuOpen, setIsMenuOpen] = useState(false)
 
-    const [currentMenuCss, setCurrentMenuCss] = useState(menuHiddenCss)
 
-    function toggleMenuCss() {
-         if(currentMenuCss === menuShownCss) {
-            setCurrentMenuCss(menuHiddenCss)
-            return
-         }
-         if(currentMenuCss === menuHiddenCss) {
-            setCurrentMenuCss(menuShownCss)
-            return
-         }
-         setCurrentMenuCss(menuHiddenCss)
+    function toggleMenu() {
+        setIsMenuOpen(!isMenuOpen)
     }
 
     return(
@@ -37,19 +35,22 @@ export default function Header() {
 
                 <Logo/>
 
-                <ul className={currentMenuCss} >
-                    <NavLink to="/">Home</NavLink>
-                    <NavLink to="/explore">Explore</NavLink>
-                    <NavLink to="/about">About</NavLink>
+                <ul className={`${baseMenuCss} ${isMenuOpen ? menuShownCss : menuHiddenCss}`} >
+                    <NavLink to="/" event={toggleMenu}>Home</NavLink>
+                    <NavLink to="/explore" event={toggleMenu}>Explore</NavLink>
+                    <NavLink to="/about" event={toggleMenu}>About</NavLink>
                     { isLoggedIn
-                        ? <NavLink to="/" event={ () => logout() }>Logout</NavLink>
-                        : <NavLink to="/account">Account</NavLink>
+                        ? <NavLink to="/" event={ () => {
+                            logout() 
+                            toggleMenu()
+                        }}>Logout</NavLink>
+                        : <NavLink to="/account" event={toggleMenu}>Account</NavLink>
                      }
                 </ul>
 
                 <button 
                     className="bg-transparent outline-0 border-0 focus:border-0 focus:outline-0 md:hidden"
-                    onClick={toggleMenuCss}
+                    onClick={toggleMenu}
                 >
                     <img src={IconMenu} />
                 </button>

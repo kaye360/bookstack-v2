@@ -5,6 +5,7 @@ import Book from  '../components/library/Book'
 import { useQuery } from "react-query";
 import httpReq from "../utils/httpReq";
 import { API_BASE_URL } from "../config";
+import LibraryGrid from "../components/layout/LibraryGrid";
 
 export default function Profile() {
 
@@ -64,7 +65,7 @@ function LibraryPreview({userID, username}) {
 
         { amount !== 0 && <p>Here's just a few:</p> }        
 
-        <div className="grid grid-cols-3 md:grid-cols-6 gap-4 auto-rows-[250px]">
+        <LibraryGrid>
         { libraryPreview.map( book => (
             <Book 
                 id={book.id} 
@@ -74,7 +75,7 @@ function LibraryPreview({userID, username}) {
             />
         ))
         }
-        </div>
+        </LibraryGrid>
     
     </div>
 

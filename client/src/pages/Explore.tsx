@@ -3,6 +3,7 @@ import Book from "../components/library/Book";
 import Loader from "../components/layout/Loader";
 import { API_BASE_URL } from "../config";
 import httpReq from "../utils/httpReq";
+import LibraryGrid from "../components/layout/LibraryGrid";
 
 export default function Explore() {
     
@@ -28,7 +29,7 @@ export default function Explore() {
             { isError && <div className="py-4">Error loading books</div> }
 
             { isFetched && 
-                <div className="grid grid-cols-3 md:grid-cols-6 gap-4 auto-rows-[250px]">
+                <LibraryGrid>
                     { data && data.map( (book: Ibook ) => {
 
                         const likes = JSON.parse(book.likes)
@@ -43,7 +44,7 @@ export default function Explore() {
                             commentCount={book.comment_count}
                         />
                     })}
-                </div>
+                </LibraryGrid>
             }
         </section>
     )
