@@ -33,7 +33,7 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background-color: #27313F;
+  background-color: hsl(219, 22%, 15%);
   color : #EFF2F5;
 }
 

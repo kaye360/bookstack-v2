@@ -50,7 +50,7 @@ export default function Profile() {
 function LibraryPreview({userID, username}) {
 
     const {library, amount, isError, isLoading} = useLibrary(userID)
-    const libraryPreview = library.slice(0,6)
+    const libraryPreview = library.slice(0,12)
 
     if(isError) {
         return <div>Error loading user's library</div>
@@ -61,9 +61,9 @@ function LibraryPreview({userID, username}) {
     }
 
     return <div>
-        <h2 className="my-4 text-xl font-semibold">{username} has {amount} books in their library.</h2>
+        <h2 className="mt-8 mb-12 text-xl font-semibold">{username} has {amount} books in their library.</h2>
 
-        { amount !== 0 && <p>Here's just a few:</p> }        
+        { amount !== 0 && <p className="mb-4">Here's just a few:</p> }        
 
         <LibraryGrid>
         { libraryPreview.map( book => (
