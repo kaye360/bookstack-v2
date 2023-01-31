@@ -35,7 +35,7 @@ module.exports = {
       },
 
       gridTemplateColumns : {
-        content : '200px 1fr'
+        content : 'auto 1fr'
       },
 
       animation : {

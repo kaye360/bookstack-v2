@@ -75,7 +75,7 @@ function App() {
 
 	return (
 		<UserContext.Provider value={ Auth } >
-		<div className={`w-100 max-w-6xl mx-auto px-[2vw] ${ isSidebarShown ? 'md:pt-8' : ''}`}>
+		<div id="top" className={`w-100 max-w-6xl mx-auto pb-20 px-[2vw] ${ isSidebarShown ? 'md:pt-8' : ''}`}>
 
 			{location.pathname !== '/' && <Header /> }
 

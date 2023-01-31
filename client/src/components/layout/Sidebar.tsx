@@ -22,12 +22,12 @@ export default function SideBar() {
             fixed bottom-0 left-0 right-0 w-full z-50
             flex justify-between
             md:relative md:flex-col md:gap-12 md:justify-start
-            px-4 py-12 rounded-xl
+            p-4 md:px-8 md:py-12 rounded-xl
             bg-primary-700 text-primary-200 
         ">
             <NavLink to="/dashboard" icon={iconDashboard}>Dashboard</NavLink>
             <NavLink to="/library" icon={iconLibrary}>Library</NavLink>
-            <NavLink to="/feed" icon={iconCommunity}>Feed</NavLink>
+            <NavLink to="/feed" icon={iconCommunity}>Community</NavLink>
             <NavLink to="/notifications" icon={iconNotifications}>
                 Notifications
                 {notificationsAmount.recent > 0 &&
@@ -45,7 +45,7 @@ function NavLink({to, icon, children}) {
 
     return <li>
         <Link to={to} className='
-            grid gap-4 items-center
+            grid gap-2 items-center
             md:grid-cols-[40px_1fr] md:justify-start
             font-bold text-primary-100 text-center md:text-left
         '>
