@@ -29,7 +29,7 @@ export default function AccountCard({defaultComponent} : Iprops) {
                 Don't have an acount yet? 
                 <button 
                     onClick={ () => setIsShown('register')}
-                    className="ml-4 bg-primary-900"
+                    className="bg-transparent underline hover:border-primary-500 px-2 py-1 mx-2"
                 >
                     Register
                 </button>
@@ -41,7 +41,7 @@ export default function AccountCard({defaultComponent} : Iprops) {
                 Already have an account?
                 <button 
                     onClick={ () => setIsShown('login')}
-                    className="ml-4 bg-primary-900"
+                    className="bg-transparent underline hover:border-primary-500 px-2 py-1 mx-2"
                 >
                     Sign In
                 </button>
@@ -128,7 +128,9 @@ function Login() {
         <>
             <h2 className="text-xl font-bold text-primary-100">Sign In</h2>
      
-            <p>Please enter your information below</p>
+            <p className="my-4">
+                Please enter your information below
+            </p>
 
             <form onSubmit={handleLogin}>
 
@@ -137,6 +139,7 @@ function Login() {
                     <input type="text"
                         value={username}
                         onChange={(e) => setUserName(e.target.value)}
+                        className="p-2 bg-primary-200 text-primary-800 rounded"
                     />
                 </FormRow>
 
@@ -145,6 +148,7 @@ function Login() {
                     <input type="password" 
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
+                        className="p-2 bg-primary-200 text-primary-800 rounded"
                     />
                 </FormRow>
 
@@ -238,7 +242,9 @@ function Register() {
         <>
             <h2 className="text-xl font-bold">Register</h2>
 
-            <p>Please enter your information below</p>
+            <p className="my-4">
+                Please enter your information below
+            </p>
 
             <form onSubmit={handleRegister}>
 
@@ -247,6 +253,7 @@ function Register() {
                     <input type="text"
                         value={username}
                         onChange={(e) => setUserName(e.target.value)}
+                        className="p-2 bg-primary-200 text-primary-800 rounded"
                     />
                 </FormRow>
 
@@ -255,6 +262,7 @@ function Register() {
                     <input type="password" 
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
+                        className="p-2 bg-primary-200 text-primary-800 rounded"
                     />
                 </FormRow>
 
@@ -263,6 +271,7 @@ function Register() {
                     <input type="password" 
                         value={confirm_password}
                         onChange={(e) => setConfirmPassword(e.target.value)}
+                        className="p-2 bg-primary-200 text-primary-800 rounded"
                     />
                 </FormRow>
 
@@ -286,7 +295,10 @@ function Register() {
 function FormRow({children}) {
 
     return(
-        <label className="grid grid-cols-[1fr_2fr] p-4 my-4 rounded-lg bg-primary-700 text-primary-100 font-semibold">
+        <label className="
+            grid grid-cols-[1fr_350px] items-center gap-4
+            p-4 my-4 rounded-lg 
+            bg-primary-700 text-primary-100 font-semibold">
             {children}
         </label>
     )
