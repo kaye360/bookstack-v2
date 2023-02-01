@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { UserContext } from "../../App";
 import Logo from "./Logo";
 import IconMenu from "../../assets/img/icon-menu.svg"
@@ -69,7 +69,18 @@ interface INavLink {
 
 function NavLink({to, children, event} : INavLink) {
 
+    const location = useLocation()
+
+
     return <li>
-        <Link to={to} onClick={event} className="text-primary-100 font-semibold">{children}</Link>
+        <Link 
+            to={to} 
+            onClick={event} 
+            className={`
+                inline-block text-primary-100 font-semibold rounded px-4 py-2
+                ${to === location.pathname && 'bg-primary-700'}
+            `}>
+                {children}
+        </Link>
     </li>
 }

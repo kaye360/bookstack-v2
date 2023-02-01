@@ -105,7 +105,6 @@ function UsersPublicFeed({userID}) {
         return <Loader />
     }
     
-    console.log(data)
     return <ul className="flex flex-col">
         { data.length !== 0
             ? data.slice(0,10).map( feedItem => (

@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { UserContext } from "../../App";
 import { useNotifications } from "../../utils/useNotifications";
 
@@ -21,8 +21,8 @@ export default function SideBar() {
         <ul className="
             fixed bottom-0 left-0 right-0 w-full z-50
             flex justify-between
-            md:relative md:flex-col md:gap-12 md:justify-start
-            p-4 md:px-8 md:py-12 rounded-xl
+            md:relative md:flex-col md:gap-10 md:justify-start
+            p-4 md:px-6 md:py-12 rounded-xl
             bg-primary-700 text-primary-200 
         ">
             <NavLink to="/dashboard" icon={iconDashboard}>Dashboard</NavLink>
@@ -43,12 +43,20 @@ export default function SideBar() {
 
 function NavLink({to, icon, children}) {
 
+    // If on active page, to === location.pathname
+
+    const location = useLocation()
+
     return <li>
-        <Link to={to} className='
+        <Link to={to} className={`
             grid gap-2 items-center
             md:grid-cols-[40px_1fr] md:justify-start
+            px-4 py-2
             font-bold text-primary-100 text-center md:text-left
-        '>
+            ${to === location.pathname && 
+                'rounded outline outline-primary-600 bg-primary-600'
+            }
+            `}>
             <img src={icon} className="mx-auto md:mx-0"/>
             <div className="hidden sm:block">{children}</div>
         </Link>
