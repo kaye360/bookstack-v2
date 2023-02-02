@@ -8,7 +8,7 @@ import iconAddBook from "../assets/img/icon-add-book.png"
 import LibraryGrid from "../components/layout/LibraryGrid";
 
 export default function Library({isUserAddingBook = false}) {
-    console.log(isUserAddingBook)
+    
     const { user } = useContext(UserContext)
 
     const {library, isLoading, refetchLibrary} = useLibrary(user.id)

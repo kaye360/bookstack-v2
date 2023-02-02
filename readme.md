@@ -41,10 +41,15 @@ Can be found in the /api_docs folder. Crucial information for each class and met
 
 
 ## TODO
-
+- update empty library message UI
+- update add book isbn input
+- make book page responsive
 
 ## Bugs
-
+- explore the community not working on live
+- sign in page broken
+- error with commenting
+- login not case sensitive
 
 
 ## Future Feature Ideas

@@ -75,8 +75,11 @@ export default function AddBookModal({setShowModal, refetchLibrary} : propType) 
     let cover:string = ''
     
     if (searchResult && searchResult.totalItems > 0) {
-        title = searchResult.items[0].volumeInfo.title
-        author = searchResult.items[0].volumeInfo.authors[0]
+        console.log()
+        title = searchResult.items[0].volumeInfo.title || ''
+        author = Array.isArray(searchResult.items[0].volumeInfo.authors)
+            ? searchResult.items[0].volumeInfo.authors[0]
+            :  ''
         cover = searchResult.items[0].volumeInfo.imageLinks !== undefined
             ? searchResult?.items[0]?.volumeInfo.imageLinks.thumbnail 
             : false
@@ -239,7 +242,10 @@ function BookPreview({cover, title, author, isRead, setIsRead, handleAdd, clearS
     return(
         <>
             <div className="flex items-center gap-4 mt-4 text-primary-800">
-                {cover !=='notfound.png' && <img src={cover} /> }
+                {cover 
+                    ? <img src={cover} /> 
+                    : 'Book cover not available'
+                }
 
                 <div>
                     <span className="block text-2xl">{title}</span>
