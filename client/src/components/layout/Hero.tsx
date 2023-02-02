@@ -14,7 +14,7 @@ export default function Hero() {
 
             <Header />
 
-            <div className="relative max-w-xl z-40 pl-12 py-12 flex flex-col gap-6">
+            <div className="relative max-w-xl z-40 md:pl-12 py-12 flex flex-col gap-6">
                 <h1 className="text-3xl font-bold leading-normal tracking-wide">
                     A Better Way to Manage Your Personal Book Collection
                 </h1>
@@ -53,7 +53,7 @@ export default function Hero() {
 
             {/* Hero BG */}
             <div className="absolute inset-0 z-20 pl-[25vw] md:pl-56 overflow-hidden">
-                <img src={ hero } className="w-full h-full object-cover" />
+                <img src={ hero } className="w-full h-full object-cover opacity-40 sm:opacity-60 md:opacity-100" />
             </div>
 
         </section>

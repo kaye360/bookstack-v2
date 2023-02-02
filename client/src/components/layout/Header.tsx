@@ -40,7 +40,7 @@ export default function Header() {
                     <NavLink to="/explore" event={toggleMenu}>Explore</NavLink>
                     <NavLink to="/about" event={toggleMenu}>About</NavLink>
                     { isLoggedIn
-                        ? <NavLink to="/" event={ () => {
+                        ? <NavLink to="/logout" event={ () => {
                             logout() 
                             toggleMenu()
                         }}>Logout</NavLink>
@@ -79,7 +79,7 @@ function NavLink({to, children, event} : INavLink) {
             className={`
                 inline-block text-primary-100 font-semibold rounded px-4 py-2
                 ${to === location.pathname && 'bg-primary-700'}
-            `}>
+                `}>
                 {children}
         </Link>
     </li>

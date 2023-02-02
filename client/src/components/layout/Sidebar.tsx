@@ -54,7 +54,7 @@ function NavLink({to, icon, children}) {
             px-4 py-2
             font-bold text-primary-100 text-center md:text-left
             ${to === location.pathname && 
-                'rounded outline outline-primary-600 bg-primary-600'
+                'rounded bg-primary-600 '
             }
             `}>
             <img src={icon} className="mx-auto md:mx-0"/>

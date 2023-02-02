@@ -6,11 +6,12 @@
 
 // Dependencies
 import { createContext } from "react"
-import { Route, Routes, useLocation, useNavigate } from "react-router-dom"
+import { Route, Routes, useLocation } from "react-router-dom"
 import useAuth from "./utils/useAuth"
 
 // Components
 import Header from "./components/layout/Header"
+import SideBar from "./components/layout/Sidebar"
 import Footer from "./components/layout/Footer"
 
 // Pages
@@ -25,7 +26,7 @@ import Notifications from "./pages/Notifications"
 import Profile from "./pages/Profile"
 import ProtectedPage from "./pages/ProtectedPage"
 import Book from "./pages/Book"
-import SideBar from "./components/layout/Sidebar"
+import Logout from "./pages/Logout"
 
 
 /**
@@ -75,7 +76,11 @@ function App() {
 
 	return (
 		<UserContext.Provider value={ Auth } >
-		<div id="top" className={`w-100 max-w-6xl mx-auto pb-20 px-[2vw] ${ isSidebarShown ? 'md:pt-8' : ''}`}>
+		<div id="top" className={`
+			flex flex-col
+			w-100 max-w-6xl min-h-screen mx-auto pb-20 md:pb-0 px-[2vw]
+			${ isSidebarShown ? 'md:pt-8' : ''}
+		`}>
 
 			{location.pathname !== '/' && <Header /> }
 
@@ -102,6 +107,8 @@ function App() {
 
 					<Route path="/account/:action"
 						element={ Auth.isLoggedIn ? <Dashboard /> : <Account />} />
+
+					<Route path="/logout" element={<Logout />} />
 
 
 					{/* Protected User Routes */}

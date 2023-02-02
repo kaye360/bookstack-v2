@@ -52,7 +52,7 @@ export default function useAuth() {
 
         setTimeout( () => {
             navigate('/')
-        }, 2000)
+        }, 5000)
     }
     
     return {user, setUser, isLoggedIn, setIsLoggedIn, logout }
