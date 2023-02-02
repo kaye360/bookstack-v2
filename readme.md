@@ -41,20 +41,17 @@ Can be found in the /api_docs folder. Crucial information for each class and met
 
 
 ## TODO
-- indicate active nav link
-- remove unnessary db connections
-- add username to book DB. Show user affiliated with this book and link to profile
-- when refreshed, 404 error. htaccess?
 
 
 ## Bugs
-- book page 404 error handling
 
 
 
 ## Future Feature Ideas
+- add username to book DB. Show user affiliated with this book and link to profile
 - pagination or infinite scroll
 - currently reading
+- book page 404 error handling
 - list view for library
 - library pagination
 - live search library with debouncing

@@ -20,7 +20,7 @@ export default function Explore() {
 
     return(
         <section className="flex flex-col gap-4 py-8">
-            <h2 className="text-4xl">Explore</h2>
+            <h2 className="text-4xl mb-8">Explore</h2>
             { isLoading && <Loader />}
 
             { isFetched && 
@@ -36,7 +36,7 @@ export default function Explore() {
                 </LibraryGrid>
             }
 
-            <Link to="/explore">Explore the community</Link>
+            <Link to="/explore" className="my-8">Explore the community</Link>
         </section>
     )
 }

@@ -30,9 +30,7 @@ export default function SideBar() {
             <NavLink to="/feed" icon={iconCommunity}>Community</NavLink>
             <NavLink to="/notifications" icon={iconNotifications}>
                 Notifications
-                {notificationsAmount.recent > 0 &&
-                    <NotificationBubble>{notificationsAmount.recent}</NotificationBubble>
-                }
+                <NotificationBubble amount={notificationsAmount.recent}>{notificationsAmount.recent}</NotificationBubble>
             </NavLink>
             <NavLink to={`/user/${user.username}`} icon={iconProfile}>Profile</NavLink>
             <NavLink to="/library/add" icon={iconAdd}>Add</NavLink>
@@ -44,6 +42,9 @@ export default function SideBar() {
 function NavLink({to, icon, children}) {
 
     // If on active page, to === location.pathname
+    
+    let linkText: string = Array.isArray(children) ? children[0] : children
+    let notificationBubble = Array.isArray(children) && children[1] ? children[1] : false
 
     const location = useLocation()
 
@@ -51,23 +52,37 @@ function NavLink({to, icon, children}) {
         <Link to={to} className={`
             grid gap-2 items-center
             md:grid-cols-[40px_1fr] md:justify-start
-            px-4 py-2
+            relative px-4 py-2
             font-bold text-primary-100 text-center md:text-left
             ${to === location.pathname && 
                 'rounded bg-primary-600 '
             }
             `}>
             <img src={icon} className="mx-auto md:mx-0"/>
-            <div className="hidden sm:block">{children}</div>
+            <div>
+                <span className="hidden sm:inline">{linkText}</span>
+                { notificationBubble && notificationBubble }
+            </div>
         </Link>
     </li>
 }
 
 
 
-function NotificationBubble({children}) {
+function NotificationBubble({children, amount}) {
 
-    return <span className="inline-flex items-center justify-center mx-1 bg-rose-500 rounded-full aspect-square w-6">
-        {children}
-    </span>
+    if(amount > 0) {
+        return <span 
+            className="
+                absolute top-0 left-1/2
+                md:static md:left-0
+                inline-flex items-center justify-center 
+                mx-1 aspect-square w-6
+                bg-rose-500 rounded-full 
+            ">
+            {children}
+        </span>
+    }
+
+    return <></>
 }

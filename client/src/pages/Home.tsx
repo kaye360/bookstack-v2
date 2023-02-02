@@ -25,7 +25,7 @@ export default function Home() {
                 </h2>
 
                 <p>
-                    About the App. Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores expedita sed repellat quas quae debitis unde corrupti aperiam nemo nesciunt?
+                    Whether you are an avid reader or just starting your collection, BookStack is the perfect tool to help you stay organized and keep your books in order. Start organizing your books today and enjoy an enhanced  reading experience.
                 </p>
 
             </div>
@@ -37,7 +37,7 @@ export default function Home() {
                 </h2>
 
                 <p>
-                    About the App . Lorem ipsum dolor sit amet consectetur, adipisicing elit. Doloremque, impedit! Voluptate, incidunt molestias iste amet consequatur dolore enim quibusdam. Minus perspiciatis labore fugiat deleniti provident, asperiores laboriosam repudiandae consequuntur incidunt!
+                    With this app, you can share your book collection with friends, family, and other book enthusiasts from around the world. Whether you're looking to find new books to read, connect with others, or share your love for books, BookShare is the perfect app for you!
                 </p>
 
             </div>
