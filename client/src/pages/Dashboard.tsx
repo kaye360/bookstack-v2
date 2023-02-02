@@ -76,7 +76,9 @@ function DashboardNotifications() {
                 }
             </ul>
 
-            <Link to="/notifications">
+            <Link to="/notifications"
+                className="inline-block my-6 px-4 py-2 rounded-lg border border-primary-200 hover:border-secondary-400"
+            >
                 View your recent notifications
             </Link>
 

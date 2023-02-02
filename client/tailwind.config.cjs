@@ -45,8 +45,8 @@ module.exports = {
       keyframes : {
         'notification-flash' : {
           'from' : { backgroundColor : 'transparent' },
-          '5%' : { backgroundColor : 'rgb(226 232 240)' },
-          '50%' : { backgroundColor : 'rgb(226 232 240)' },
+          '5%' : { backgroundColor : 'hsl(219, 22%, 30%)' },
+          '50%' : { backgroundColor : 'hsl(219, 22%, 30%)' },
           'to' : { backgroundColor : 'transparent' }
         }
       },

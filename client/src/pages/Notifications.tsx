@@ -21,15 +21,28 @@ export default function Notifications() {
                 : <>
                     <ul className="animate-notification-flash">
                         { notifications.recent.map( 
-                            (notification: { message:string, url:string, type:string }, index: number) => {
+                            (notification: { 
+                                message:string, 
+                                url:string, 
+                                type:string 
+                            }, index: number) => {
                                 return(
-                                    <Notification type={notification.type} url={notification.url} key={index}>
+                                    <Notification 
+                                        type={notification.type} 
+                                        url={notification.url} 
+                                        key={index}
+                                    >
                                         {notification.message}
                                     </Notification>
                             )
                         } )}
                     </ul>
-                    <button onClick={ () => clearRecentNotifications() }>Mark as Read</button>
+                    <button 
+                        onClick={ () => clearRecentNotifications() }
+                        className="inline-block my-4 px-4 py-2 rounded bg-transparent border border-primary-500"
+                    >
+                        Mark as Read
+                    </button>
                 </>
             }
         </section>
