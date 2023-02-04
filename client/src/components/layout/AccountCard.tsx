@@ -11,7 +11,7 @@ interface Iprops {
 
 export default function AccountCard({defaultComponent} : Iprops) {
 
-    const { isLoggedIn, user } = useContext(UserContext)
+    const { isLoggedIn } = useContext(UserContext)
 
     const [isShown, setIsShown] = useState(defaultComponent)
 
@@ -26,25 +26,25 @@ export default function AccountCard({defaultComponent} : Iprops) {
 
             {!isLoggedIn && isShown === 'login' &&
                 <p className="mt-16">
-                Don't have an acount yet? 
-                <button 
-                    onClick={ () => setIsShown('register')}
-                    className="bg-transparent underline hover:border-primary-500 px-2 py-1 mx-2"
-                >
-                    Register
-                </button>
+                    Don't have an acount yet? 
+                    <button 
+                        onClick={ () => setIsShown('register')}
+                        className="bg-transparent underline hover:border-primary-500 px-2 py-1 mx-2"
+                    >
+                        Register
+                    </button>
                 </p>
             }
             
             {!isLoggedIn && isShown === 'register' &&
                 <p className="mt-16">
-                Already have an account?
-                <button 
-                    onClick={ () => setIsShown('login')}
-                    className="bg-transparent underline hover:border-primary-500 px-2 py-1 mx-2"
-                >
-                    Sign In
-                </button>
+                    Already have an account?
+                    <button 
+                        onClick={ () => setIsShown('login')}
+                        className="bg-transparent underline hover:border-primary-500 px-2 py-1 mx-2"
+                    >
+                        Sign In
+                    </button>
                 </p>
             }
 
@@ -152,7 +152,7 @@ function Login() {
                     />
                 </FormRow>
 
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-4 my-6">
                     <input type="submit" value="Sign In" 
                         className="px-4 py-2 rounded-lg bg-secondary-400 text-primary-800 cursor-pointer font-bold"/>
 
@@ -275,8 +275,8 @@ function Register() {
                     />
                 </FormRow>
 
-                <div className="flex items-center gap-4">
-                    <input type="submit" value="Sign In" className="px-4 py-2 rounded-lg bg-secondary-400 text-primary-800 cursor-pointer font-bold"/>
+                <div className="flex items-center gap-4 my-6">
+                    <input type="submit" value="Register" className="px-4 py-2 rounded-lg bg-secondary-400 text-primary-800 cursor-pointer font-bold"/>
                     <span>
                         {isLoading && 'Creating your account...' }
                         {isError && 'There was an error' }
@@ -296,7 +296,7 @@ function FormRow({children}) {
 
     return(
         <label className="
-            grid grid-cols-[1fr_350px] items-center gap-4
+            grid sm:grid-cols-[1fr_350px] items-center gap-4
             p-4 my-4 rounded-lg 
             bg-primary-700 text-primary-100 font-semibold">
             {children}

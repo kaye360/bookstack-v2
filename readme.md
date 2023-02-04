@@ -41,7 +41,6 @@ Can be found in the /api_docs folder. Crucial information for each class and met
 
 
 ## TODO
-- make book page responsive
 
 ## Bugs
 - explore the community not working on live
