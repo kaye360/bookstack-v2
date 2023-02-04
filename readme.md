@@ -57,7 +57,8 @@ Can be found in the /api_docs folder. Crucial information for each class and met
 - pagination or infinite scroll
 - currently reading
 - book page 404 error handling
-- list view for library
+- sorting library in book view
+- list view for library with sorting
 - library pagination
 - live search library with debouncing
 - use proper response codes on api fails
