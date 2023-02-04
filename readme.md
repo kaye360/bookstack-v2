@@ -42,13 +42,11 @@ Can be found in the /api_docs folder. Crucial information for each class and met
 
 ## TODO
 - make book page responsive
-- protected page
 
 ## Bugs
 - explore the community not working on live
 - sign in page broken
 - error with commenting
-- login not case sensitive
 - problem with commenting sometimes
 
 

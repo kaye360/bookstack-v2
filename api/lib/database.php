@@ -186,7 +186,7 @@ class Database
 			$returned_columns = isset($return)
 				? implode(', ', $return)
 				: '*';
-			$sql = "SELECT $returned_columns FROM $table WHERE $column = '$value'";
+			$sql = "SELECT $returned_columns FROM $table WHERE BINARY $column = '$value'";
 			$this->stmt = $this->dbh->prepare($sql);
 			$this->stmt->execute();
 
