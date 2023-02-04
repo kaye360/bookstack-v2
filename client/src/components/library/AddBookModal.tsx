@@ -71,8 +71,8 @@ export default function AddBookModal({setShowModal, refetchLibrary} : propType) 
     }
 
     let title: string = ''
-    let author:string = ''
-    let cover:string = ''
+    let author: string = ''
+    let cover: string = ''
     
     if (searchResult && searchResult.totalItems > 0) {
         console.log()
@@ -203,13 +203,15 @@ function Header({setShowModal, handleSearch, isbnField, setIsbnField, clearSearc
         <div className="text-primary-800">
             <form onSubmit={ handleSearch }>
 
-                <label> 
-                    Enter an ISBN number:
+                <label className="cursor-text"> 
+                    <span className="inline-block my-2 cursor-default ">
+                        Enter an ISBN number:
+                    </span>
 
-                    <div className="flex gap-2 w-full p-4 rounded border border-slate-300  bg-white">
+                    <div className="flex gap-2 w-full p-4 rounded border border-primary-400  bg-primary-50">
 
                         <input 
-                            className="w-full focus:outline-none"
+                            className="w-full focus:outline-none bg-primary-50"
                             type="text" 
                             value={ isbnField }
                             onChange={ (e:any) => {
@@ -218,7 +220,7 @@ function Header({setShowModal, handleSearch, isbnField, setIsbnField, clearSearc
                         />
 
                         <button
-                            className="cursor-pointer opacity-40"
+                            className="cursor-pointer bg-primary-50"
                             onClick={ clearSearch }
                         >
                             ✖

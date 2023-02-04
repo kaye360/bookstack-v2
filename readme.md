@@ -41,8 +41,6 @@ Can be found in the /api_docs folder. Crucial information for each class and met
 
 
 ## TODO
-- update empty library message UI
-- update add book isbn input
 - make book page responsive
 - protected page
 
