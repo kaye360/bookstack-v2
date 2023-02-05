@@ -41,11 +41,12 @@ Can be found in the /api_docs folder. Crucial information for each class and met
 
 
 ## TODO
+- update router docs
+- update apI docs where not GET request had arguents
+- update delete book UI
 
 ## Bugs
 - explore the community not working on live
-- sign in page broken
-- error with commenting
 - problem with commenting sometimes
 
 

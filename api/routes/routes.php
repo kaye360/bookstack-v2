@@ -1,77 +1,245 @@
 <?php
 
-/**
- * Init Router
- */
-$route = new Router();
-$route->baseURL = BASE_URL;
+
+
 
 /**
  * User Routes
  */
-$route->get('/users', ['User', 'get_all']);
-$route->get('/user/:id', ['User', 'get_single', 'id']);
-$route->get('/username/:username', ['User', 'get_single_by_username', 'username']);
 
-$route->post('/user', ['User', 'create']);
-$route->post('/user/login', ['User', 'login']);
-$route->post('/user/logout', ['User', 'logout']);
+$route->get('/users', function() {
+    return [
+        'class' => 'User',
+        'method' => 'get_all'
+    ];
+});
 
-$route->put('/user/:id', ['User', 'edit', 'id']);
+$route->get('/user/:param', function() {
+    return [
+        'class' => 'User', 
+        'method' => 'get_single'
+    ];
+});
 
-$route->delete('/user/:id', ['User', 'destroy', 'id']);
+$route->get('/username/:param', function() {
+    return [
+        'class' => 'User', 
+        'method' => 'get_single_by_username'
+    ];
+});
+
+$route->post('/user', function () {
+    return [
+        'class' => 'User',
+        'method' => 'create'
+    ];
+});
+
+$route->post('/user/login', function() {
+    return [
+        'class' => 'User', 
+        'method' => 'login'
+    ];
+});
+
+$route->post('/user/logout', function() {
+    return [
+        'class' => 'User', 
+        'method' => 'logout'
+    ];
+});
+
+$route->put('/user/:param', function () {
+    return [
+        'class' => 'User',
+        'method' => 'edit'
+    ];
+});
+
+$route->delete('/user/:param', function() {
+    return [
+        'class' => 'User', 
+        'method' => 'destroy'
+    ];
+});
+
+
+
 
 /**
  * Session Routes
  */
-$route->get('/session/:session', ['User', 'get_single_by_session', 'session']);
+
+$route->get('/session/:param', function() {
+    return [
+        'class' => 'User', 
+        'method' => 'get_single_by_session'
+    ];
+});
+
+
+
+
 
 /**
  * User Notification Routes
  */
-$route->get('/notifications/new/:id', ['Notification', 'get_new', 'id']);
-$route->get('/notifications/old/:id', ['Notification', 'get_old', 'id']);
 
-$route->put('/notifications/add', ['Notification', 'create']);
-$route->put('/notifications/clear_new', ['Notification', 'clear_new']);
+$route->get('/notifications/new/:param', function() {
+    return [
+        'class' => 'Notification',
+        'method' => 'get_new', 'id'
+    ];
+});
+
+$route->get('/notifications/old/:param', function() {
+    return [
+        'class' => 'Notification',
+        'method' => 'get_old', 'id'
+    ];
+});
+
+
+$route->put('/notifications/add', function() {
+    return [
+        'class' => 'Notification',
+        'method' => 'create'
+    ];
+});
+
+$route->put('/notifications/clear_new', function() {
+    return [
+        'class' => 'Notification',
+        'method' => 'clear_new'
+    ];
+});
+
 
 /**
  * Book Routes
  */
-$route->post('/book', ['Book', 'create']);
+$route->post('/book', function() {
+    return [
+        'class' => 'Book',
+        'method' => 'create'
+    ];
+});
 
-$route->get('/book/:id', ['Book', 'get_single', 'id']);
-$route->get('/books/:id', ['Book', 'get_all', 'id']);
-$route->get('/books/explore', ['Book', 'get_explore']);
 
-$route->put('/book/:id', ['Book', 'edit', 'id']);
-$route->put('/book/like', ['Book', 'like']);
-$route->put('/book/read', ['Book', 'toggle_read_status']);
+$route->get('/book/:param', function() {
+    return [
+        'class' => 'Book',
+        'method' => 'get_single', 'id'
+    ];
+});
 
-$route->delete('/book/:id', ['Book', 'destroy', 'id']);
+$route->get('/books/:param', function() {
+    return [
+        'class' => 'Book',
+        'method' => 'get_all', 'id'
+    ];
+});
+
+$route->get('/books/explore', function() {
+    return [
+        'class' => 'Book',
+        'method' => 'get_explore'
+    ];
+});
+
+
+$route->put('/book/:param', function() {
+    return [
+        'class' => 'Book',
+        'method' => 'edit', 'id'
+    ];
+});
+
+$route->put('/book/like', function() {
+    return [
+        'class' => 'Book',
+        'method' => 'like'
+    ];
+});
+
+$route->put('/book/read', function() {
+    return [
+        'class' => 'Book',
+        'method' => 'toggle_read_status'
+    ];
+});
+
+
+$route->delete('/book', function() {
+    return [
+        'class' => 'Book',
+        'method' => 'destroy'
+    ];
+});
+
+
+
 
 /**
  * Comment Routes
  */
-$route->post('/comment', ['Comment', 'create']);
 
-$route->get('/comment/:id', ['Comment', 'get_single', 'id']);
-$route->get('/comments/:id', ['Comment', 'get_all', 'id']);
+$route->post('/comment', function() {
+    return [
+        'class' => 'Comment',
+        'method' => 'create'
+    ];
+});
 
-$route->put('/comment/:id', ['Comment', 'edit', 'id']);
 
-$route->delete('/comment/:id', ['Comment', 'destroy', 'id']);
+$route->get('/comment/:param', function() {
+    return [
+        'class' => 'Comment',
+        'method' => 'get_single', 'id'
+    ];
+});
+
+$route->get('/comments/:param', function() {
+    return [
+        'class' => 'Comment',
+        'method' => 'get_all', 'id'
+    ];
+});
+
+
+$route->put('/comment/:param', function() {
+    return [
+        'class' => 'Comment',
+        'method' => 'edit', 'id'
+    ];
+});
+
+
+$route->delete('/comment/:param', function() {
+    return [
+        'class' => 'Comment',
+        'method' => 'destroy', 'id'
+    ];
+});
+
+
+
 
 /**
  * Community Feed Routes
  */
-$route->get('/community/:id', ['Community', 'get_user_feed', 'id']);
-$route->get('/community', ['Community', 'get_community_feed']);
 
-/**
- * Dev Routes
- * For generating fake data for testing purposes.
- */
-$route->get('/user-reset', ['User', 'reset']);
-$route->get('/book-reset', ['Book', 'reset']);
-$route->get('/comment-reset', ['Comment', 'reset']);
+$route->get('/community/:param', function() {
+    return [
+        'class' => 'Community',
+        'method' => 'get_user_feed', 'id'
+    ];
+});
+
+$route->get('/community', function() {
+    return [
+        'class' => 'Community',
+        'method' => 'get_community_feed'
+    ];
+});
+

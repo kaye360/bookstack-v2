@@ -268,7 +268,9 @@ function DeleteModal({bookID, setShowModal}) {
     const [message, setMessage] = useState(false)
 
     async function handleDelete() {
-        const res = await httpReq.delete(API_BASE_URL + '/book/' + bookID)
+        const res = await httpReq.delete(API_BASE_URL + '/book', {
+            id: bookID
+        })
         if(res.success) {
             setMessage('Deleted succesfully')
         }

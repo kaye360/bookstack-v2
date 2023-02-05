@@ -6,7 +6,6 @@ require_once './models/Community.php';
 
 
 
-
 class Book extends Database
 {
 
@@ -175,83 +174,89 @@ class Book extends Database
 	 */
 	public function like()
 	{
-		$put_data = $this->request();
 
-		// Validate request
-		if (
-			empty($put_data['id']) || // book ID
-			empty($put_data['user_id']) || // Liking user ID
-			empty($put_data['username']) // Liking username
-		) {
-			// http_response_code(400);
-			return [
-				'success' => false,
-				'message' => 'Book ID, user ID, and username are required.'
-			];
-		}
+		try {
 
-		// Get current book likes
-		$current_book = $this->get_row_by_id(
-			id: $put_data['id'],
-			table: self::TABLE,
-			return: ['likes', 'title', 'user_id', 'id']
-		);
+			$put_data = $this->request();
 
-		if (!array_key_exists('likes', $current_book)) {
-			// http_response_code(404);
-			return [
-				'success' => false,
-				'message' => 'This book doesn\'t exist'
-			];
-		}
+			// Validate request
+			if (
+				empty($put_data['id']) || // book ID
+				empty($put_data['user_id']) || // Liking user ID
+				empty($put_data['username']) // Liking username
+			) {
+				// http_response_code(400);
+				return [
+					'success' => false,
+					'message' => 'Book ID, user ID, and username are required.'
+				];
+			}
 
-		$current_book['likes'] = json_decode($current_book['likes'], true);
-
-		// Toggle Like/Unlike
-		if (in_array($put_data['user_id'], $current_book['likes'])) {
-
-			// UnLike
-			$user_id_key = array_search($put_data['user_id'], $current_book['likes']);
-			unset($current_book['likes'][$user_id_key]);
-
-			return $this->update_row(
+			// Get current book likes
+			$current_book = $this->get_row_by_id(
 				id: $put_data['id'],
 				table: self::TABLE,
-				columns: [
-					'likes' => json_encode($current_book['likes'])
-				],
-				return: ['likes']
-			);
-		} else {
-
-			// Like
-			array_push($current_book['likes'], $put_data['user_id']);
-
-			// Add to community feed
-			$this->community_feed->create(
-				type: 'like',
-				message: $put_data['username'] . ' liked the book: ' . $current_book['title'],
-				link: '/book/' . $put_data['id'],
-				user_id : $put_data['user_id']
+				return: ['likes', 'title', 'user_id', 'id']
 			);
 
-			// Create notification
-			$this->notifications->create(
-				sending_user_id: $put_data['user_id'],
-				recieving_user_id: $current_book['user_id'],
-				type: 'like',
-				message: $put_data['username'] . ' liked your book: ' . $current_book['title'],
-				url: '/book/' . $current_book['id'],
-			);
+			if (!array_key_exists('likes', $current_book)) {
+				// http_response_code(404);
+				return [
+					'success' => false,
+					'message' => 'This book doesn\'t exist'
+				];
+			}
+			
+			$current_book['likes'] = json_decode($current_book['likes'], true);
 
-			return $this->update_row(
-				id: $put_data['id'],
-				table: self::TABLE,
-				columns: [
-					'likes' => json_encode($current_book['likes'])
-				],
-				return: ['likes']
-			);
+			// Toggle Like/Unlike
+			if (in_array($put_data['user_id'], $current_book['likes'])) {
+
+				// UnLike
+				$user_id_key = array_search($put_data['user_id'], $current_book['likes']);
+				unset($current_book['likes'][$user_id_key]);
+
+				return $this->update_row(
+					id: $put_data['id'],
+					table: self::TABLE,
+					columns: [
+						'likes' => json_encode($current_book['likes'])
+					],
+					return: ['likes']
+				);
+			} else {
+
+				// Like
+				array_push($current_book['likes'], $put_data['user_id']);
+
+				// Add to community feed
+				$this->community_feed->create(
+					type: 'like',
+					message: $put_data['username'] . ' liked the book: ' . $current_book['title'],
+					link: '/book/' . $put_data['id'],
+					user_id : $put_data['user_id']
+				);
+
+				// Create notification
+				$this->notifications->create(
+					sending_user_id: $put_data['user_id'],
+					recieving_user_id: $current_book['user_id'],
+					type: 'like',
+					message: $put_data['username'] . ' liked your book: ' . $current_book['title'],
+					url: '/book/' . $current_book['id'],
+				);
+
+				return $this->update_row(
+					id: $put_data['id'],
+					table: self::TABLE,
+					columns: [
+						'likes' => json_encode($current_book['likes'])
+					],
+					return: ['likes']
+				);
+			}
+		} catch(Exception $error) {
+			var_dump($error);
 		}
 	}
 
@@ -301,10 +306,19 @@ class Book extends Database
 	/** 
 	 * @todo validate user ID
 	 */
-	public function destroy($id)
+	public function destroy()
 	{
+		$req = $this->request();
+		
+		if ( empty($req['id']) ) {
+			return [
+				'success' => false,
+				'message' => 'Book ID is required.'
+			];
+		}
+
 		return $this->destroy_row_by_id(
-			id: $id,
+			id: $req['id'],
 			table: self::TABLE,
 		);
 	}

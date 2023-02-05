@@ -61,10 +61,14 @@ class httpReq {
     /**
      * @todo update docs
      */
-    static async delete( url:string ) {
+    static async delete( url:string, body: object ) {
 
         const res = await fetch( url , {
             method : 'DELETE',
+            body : JSON.stringify(body),
+            headers : {
+                'Content-Type': 'application/json;charset=UTF-8'
+            }
         })
 
         let data: Data

@@ -72,7 +72,7 @@ export function CommentForm({username, userID, bookID, bookTitle, updateComments
         return res
     }
 
-    const {data, error, isError, isLoading, refetch, isSuccess} = useQuery('submitComment', postComment, { enabled:false })
+    const {data, error, isError, isLoading, refetch, isSuccess} = useQuery('submitComment', postComment, { enabled:false, retry: false })
 
     async function handleSubmit(e: any) {
         e.preventDefault()

@@ -5,168 +5,169 @@
 class Router
 {
 
-	public $baseURL;
 	private $url;
 	private $class;
 	private $method;
-	private $params;
-	private $get_req_routes = [];
-	private $post_req_routes = [];
-	private $put_req_routes = [];
-	private $delete_req_routes = [];
+	private $param;
+	private $routes;
 
-	//
-	// Get URL and split into array
+
+
+
+	/**
+	 * Get/set current URL
+	 */
 	public function __construct()
 	{
-
 		if (!isset($_SERVER['REQUEST_URI'])) $url = '/';
 		$url = trim($_SERVER['REQUEST_URI'], " \n\r\t\v\x00/");
 		$url = filter_var($url, FILTER_SANITIZE_URL);
 		$this->url = $url;
 	}
 
-	// 
-	// Determine which method to call based on req method
+
+
+
+	/**
+	 * Generate response JSON based on current route
+	 */
 	public function response()
 	{
+		// Get Methods associated with current request method type
+		$route_methods = $this->routes;
+		// var_dump($route_methods);
 
-		switch ($_SERVER['REQUEST_METHOD']) {
-			case 'GET':
-				$route_methods = $this->get_req_routes;
-				break;
-
-			case 'POST':
-				$route_methods = $this->post_req_routes;
-				break;
-
-			case 'PUT':
-				$route_methods = $this->put_req_routes;
-				break;
-
-			case 'DELETE':
-				$route_methods = $this->delete_req_routes;
-				break;
-
-			default:
-				$route_methods = $this->get_req_routes;
-				break;
+		// Apply Params if GET Req
+		if($_SERVER['REQUEST_METHOD'] === 'GET') {
+			$route_methods = $this->apply_params($route_methods);
 		}
 
-		$class_name = $route_methods[$this->url][0];
-		$method_name = $route_methods[$this->url][1];
-		$param_name = isset ($route_methods[$this->url][2]) ? $route_methods[$this->url][2] : false;
-
-		$this->class = isset($class_name) && class_exists($class_name)
-			? new $class_name
-			: false;
-
-		$this->method = 
-			isset($method_name) && 
-			is_object($this->class) && 
-			method_exists($this->class, $method_name)
-			? $method_name
-			: false;
-
-		$this->params = isset($param_name)
-			? $param_name
-			: false;
-
-		
-
-		if (empty($this->class)) {
-			// http_response_code(400);
-			return ['error' => 'No class found'];
+		// Check if current route exists in routes
+		if(!array_key_exists( $this->url, $route_methods  )) {
+			return 'This route doesn\'t exist';
 		}
-		
-		if (empty($this->method)) {
-			// http_response_code(400);
-			return ['error' => 'No method found'];
+
+		// Check/Set Classes and Methods
+		$this->class = $route_methods[$this->url]['class'];
+		$this->method = $route_methods[$this->url]['method'];
+
+		if( !class_exists($this->class) ) {
+			return $this->error("Class $this->class not found");
 		}
-		
-		// http_response_code(200);
-		return call_user_func_array([$this->class, $this->method], [$this->params]);
+
+		$this->class = new $this->class();
+
+		if( !method_exists($this->class, $this->method) ) {
+			return $this->error("Method $this->method not found");
+		}
+
+		// Everything is good, call function and return
+		return call_user_func_array([$this->class, $this->method], [$this->param]);
 	}
 
-	//
-	// Render response in JSON format
+
+
+
+
+	/**
+	 * Render response in JSON format
+	 */
 	public function json()
 	{
-		echo json_encode($this->response());
-	}
-
-	// 
-	// Set user defined REST routes
-	// 
-
-	// Set a Get request
-	public function get($route, $func_array)
-	{
-		[
-			'route' => $route,
-			'func_array' => $func_array
-		] = $this->check_params($route, $func_array);
-		$this->get_req_routes[$route] = $func_array;
-	}
-
-	// Set a Post Request
-	public function post($route, $func_array)
-	{
-		[
-			'route' => $route,
-			'func_array' => $func_array
-		] = $this->check_params($route, $func_array);
-
-		$this->post_req_routes[$route] = $func_array;
-	}
-
-	// Set a Delete Request
-	public function delete($route, $func_array)
-	{
-		[
-			'route' => $route,
-			'func_array' => $func_array
-		] = $this->check_params($route, $func_array);
-
-		$this->delete_req_routes[$route] = $func_array;
-	}
-
-	// Set a Put Request
-	public function put($route, $func_array)
-	{
-		[
-			'route' => $route,
-			'func_array' => $func_array
-		] = $this->check_params($route, $func_array);
-
-		$this->put_req_routes[$route] = $func_array;
+		echo json_encode( $this->response(), JSON_PRETTY_PRINT );
 	}
 
 
-	// 
-	// Get Param in dynamic URLs
-	private function check_params($route, $func_array)
+
+
+	/**
+	 * Render Error Message
+	 */
+	public function error($message) 
 	{
+		return ['error' => $message];
+	}
 
-		// Prepend App Base URL to current route
-		$route = $this->baseURL . $route;
 
-		// If a param is set on this route, replace :param with actual URL value
-		if (isset($func_array[2])) {
-			$param_value = explode('/', $this->url);
-			$param_value = end($param_value);
-			$func_array[2] = $param_value;
 
-			$route = explode('/', $route);
-			array_pop($route);
-			array_push($route, $param_value);
-			$route = implode('/', $route);
+
+	/**
+	 * Register a Route
+	 */
+	private function register_route($req_method, $route, $method)
+	{
+		if($_SERVER['REQUEST_METHOD'] !== $req_method) return;
+		$route = trim($route, '/');
+		$this->routes[$route] = $method();
+	}
+
+
+
+	/**
+	 * Register a Get request
+	 */
+	public function get($route, $method)
+	{
+		$this->register_route('GET', $route, $method);
+	}
+	
+
+
+
+	/**
+	 * Register a Post Request
+	 */
+	public function post($route, $method)
+	{
+		$this->register_route('POST', $route, $method);
+	}
+	
+
+
+	/**
+	 * Register a Delete Request
+	 */
+	public function delete($route, $method)
+	{
+		$this->register_route('DELETE', $route, $method);	
+	}
+	
+
+
+
+	/**
+	 * Register a Put Request
+	 */
+	public function put($route, $method)
+	{
+		$this->register_route('PUT', $route, $method);
+	}
+
+
+
+
+	/**
+	 * Apply Params to $route_methods in $this->response
+	 */
+	private function apply_params($route_methods)
+	{
+		// Get current url and potential param
+		$current_url_array = explode('/', $this->url);
+		$potential_param = end($current_url_array);
+		$this->param = $potential_param;
+
+		// replace :param with with $this->param in all routes
+		foreach($route_methods as $key => $value) {
+
+			$new_key = str_replace(':param', $potential_param, $key);
+
+			if( array_key_exists($new_key, $route_methods) ) continue;
+
+			unset($route_methods[$key]);
+			$route_methods[$new_key] = $value;
 		}
 
-		// Return new values
-		return [
-			'route' => $route,
-			'func_array' => $func_array
-		];
+		return $route_methods;
 	}
+	
 }
