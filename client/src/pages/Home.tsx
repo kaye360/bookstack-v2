@@ -15,7 +15,10 @@ export default function Home() {
         <div className="grid md:grid-cols-2 gap-x-2 gap-y-12 items-center">
 
             <div className="">
-                <img src={booksAngled} className="w-4/5" />
+                <img src={booksAngled} 
+                    className="w-full max-h-80 object-cover 
+                    md:max-h-screen md:w-4/5" 
+                />
             </div>
 
             <div className="">
@@ -43,7 +46,10 @@ export default function Home() {
             </div>
 
             <div className="">
-                <img src={booksScattered} className="w-4/5 ml-auto"  />
+                <img src={booksScattered} 
+                    className="w-full max-h-80 object-cover 
+                    md:max-h-screen md:w-4/5 md:ml-auto"
+                /> 
             </div>
 
         </div>

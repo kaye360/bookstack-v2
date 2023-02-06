@@ -28,6 +28,7 @@ export default function Book() {
     const bookID: number | undefined = parseInt(id)
     const { bookQuery, googleQuery } = useBook( bookID )
     const isRead = bookQuery.data?.is_read === 'true' ? true : false
+    const [showDeleteModal, setShowDeleteModal] = useState(false)
 
 
 
@@ -40,7 +41,7 @@ export default function Book() {
     }
 
     if(googleQuery.data.totalItems === 0) {
-        return <div>No book Found</div>
+        return <Loader />
     }
     
     let description: object[] | string[] = []
@@ -49,12 +50,22 @@ export default function Book() {
         googleQuery.data.items[0].volumeInfo.description
     )
 
+
     const likes = JSON.parse(bookQuery.data.likes) || []
-    const isLikedByUser = likes.includes(user.id)
+    const isLikedByUser = Array.isArray(likes)
+        ? likes.includes(user.id)
+        : false
 
     return <>
 
         <BackBtn />
+
+        { showDeleteModal && 
+            <DeleteModal 
+                bookID={bookID} 
+                setShowDeleteModal={setShowDeleteModal} 
+            />
+        }
 
         <div className="relative grid sm:grid-cols-[3fr_1.5fr] gap-16 sm:gap-8">
 
@@ -131,7 +142,10 @@ export default function Book() {
                         </p>
 
                         {user.id === bookQuery.data.user_id &&
-                           <DeleteBtn bookID={bookID} />
+                           <DeleteBtn
+                                bookID={bookID} 
+                                setShowDeleteModal={setShowDeleteModal}
+                            />
                         }
                 </div>
 
@@ -139,10 +153,10 @@ export default function Book() {
 
             {/* Book Description */}
             <div>
+                <h2 className="my-4 font-bold">Description</h2>
                 { description.map( (paragraph, index) => (
                     <React.Fragment key={index}>
-                        <h2 className="my-4 font-bold">Description</h2>
-                        <p className="text-lg" key={index}>
+                        <p className="text-lg my-6" key={index}>
                             {paragraph}
                         </p>
                     </React.Fragment>
@@ -248,22 +262,22 @@ function LikeBtn({isLikedByUser, user, bookID, bookQuery}) {
 
 
 
-function DeleteBtn({bookID}) {
-
-    const [showModal, setShowModal] = useState(false)
+function DeleteBtn({bookID, setShowDeleteModal}) {
 
     return ( <>
-        <button onClick={() => setShowModal(true)} className="bg-transparent">
+        <button 
+            onClick={() => setShowDeleteModal(true)} 
+            className="bg-transparent"
+        >
             <img src={iconDelete} />
         </button>
-        { showModal && <DeleteModal bookID={bookID} setShowModal={setShowModal} /> }
     </>)
 }
 
 
 
 
-function DeleteModal({bookID, setShowModal}) {
+function DeleteModal({bookID, setShowDeleteModal}) {
 
     const [message, setMessage] = useState(false)
 
@@ -285,12 +299,22 @@ function DeleteModal({bookID, setShowModal}) {
 
             {message && <p>
                 {message} &nbsp;
-                <Link to="/library">Back to your library</Link>
+                <Link to="/library" className="text-primary-500">Back to your library</Link>
             </p>}
 
             {!message && <>
-                <button onClick={handleDelete}>Yes, I'm sure.</button>
-                <button onClick={ () => setShowModal(false)} >No, close this.</button>
+                <button 
+                    onClick={handleDelete}
+                    className="hover:bg-primary-300 border-0"
+                    >
+                    Yes, I'm sure.
+                </button>
+                <button 
+                    onClick={ () => setShowDeleteModal(false)} 
+                    className="hover:bg-primary-300 border-0"
+                >
+                    No, close this.
+                </button>
             </>}
         </Modal>
     )

@@ -30,6 +30,7 @@ export default function Explore() {
                             id={book.id}
                             title={book.title} 
                             showInfo={true} 
+                            cover={book.cover_url}
                             key={book.id} 
                         />
                     })}

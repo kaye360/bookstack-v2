@@ -17,6 +17,16 @@ export default function PreviewUsersLibrary() {
         <section className="flex flex-col gap-4 p-8 bg-primary-900 rounded-xl">
             <h2 className="text-4xl">Your Library</h2>
             { isLoading && <Loader />}
+            { previewUsersBooks.length === 0 && 
+                <div className="my-4 text-lg">
+                    Your library is empty.&nbsp;
+                    <Link to="/library/add"
+                        className="text-secondary-400"
+                    > 
+                        Add some books
+                    </Link>
+                </div>
+            }
             <LibraryGrid>
                 { previewUsersBooks && previewUsersBooks.map( book => {
                     return <Book 

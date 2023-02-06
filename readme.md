@@ -42,15 +42,16 @@ Can be found in the /api_docs folder. Crucial information for each class and met
 
 ## TODO
 - update router docs
-- update apI docs where not GET request had arguents
-- update delete book UI
-- update Dashboard library w/ no books
-- update profile page w/ no books
-- update home page mobile images
+- update apI docs where PUT POST DELETE requests had arguents
 
 ## Bugs
-- explore the community not working on live
 - problem with commenting sometimes
+
+- update Dashboard library w/ no books
+- update home page mobile images
+- update profile page w/ no books
+- explore the community not working on live
+- update delete book UI
 - book description has 'description' heading multiple times
 
 
