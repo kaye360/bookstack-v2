@@ -4,21 +4,11 @@ import { BrowserRouter } from "react-router-dom"
 import { QueryClientProvider, QueryClient } from "react-query"
 import App from './App'
 import './index.css'
-import { createContext } from 'react'
-import useAuth from './utils/useAuth'
+import UserContextWrapper from './components/app/UserContextWrapper'
+
 
 const queryClient = new QueryClient()
-export const UserContext = createContext( false )
 
-
-function UserContextWrapper({children}) {
-
-	const Auth = useAuth()
-
-	return <UserContext.Provider value={Auth}>
-		{children}
-	</UserContext.Provider>
-}
 
 
 

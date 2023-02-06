@@ -1,5 +1,4 @@
 import { useContext, useState } from "react";
-import { UserContext } from "../main";
 import Loader from "../components/layout/Loader";
 import AddBookModal from "../components/library/AddBookModal";
 import Book from "../components/library/Book";
@@ -7,6 +6,7 @@ import { useLibrary } from "../utils/useLibrary";
 import iconAddBook from "../assets/img/icon-add-book.png"
 import LibraryGrid from "../components/layout/LibraryGrid";
 import booksMagical from "../assets/img/books-magical.png"
+import { UserContext } from "../components/app/UserContextWrapper";
 
 
 

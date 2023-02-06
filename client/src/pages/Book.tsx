@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import { useQuery } from "react-query";
 
 import { API_BASE_URL } from "../config";
-import { UserContext } from "../main";
 import { useBook } from "../utils/useBook";
 import httpReq from "../utils/httpReq";
 import { textToParagraphs } from "../utils/formatText";
@@ -18,6 +17,7 @@ import iconChat from "../assets/img/icon-chat.png"
 import iconDelete from "../assets/img/icon-delete.png"
 import { Comments, CommentForm } from "../components/library/Comments";
 import React from "react";
+import { UserContext } from "../components/app/UserContextWrapper";
 
 
 export default function Book() {

@@ -6,7 +6,7 @@ export default function About() {
 
         <Grid cols={2}>
             <Col>
-                <h1 className="my-4 text-3xl my-8">BookStack version 2</h1>
+                <h1 className="text-3xl my-8">BookStack version 2</h1>
 
                 <p className="max-w-lg">
                     BookStack is a social media web app for avid book readers! I have created this as a portfolio project from scratch. No tutorials were used. Any code found on the internet is credited to the author of the code.

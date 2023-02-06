@@ -17,9 +17,13 @@ export default function useAuth() {
      * User Auth Data
      */
 
-    const iUser: Iuser | object = {}
+    const iUser: Iuser = {
+        id: 0,
+        username : '',
+        token : ''
+    }
     const [user, setUser] = useState( iUser )
-    const [isLoggedIn, setIsLoggedIn] = useState(false)
+    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false)
     const localToken = localStorage.getItem('token') || false
 
     /**
@@ -48,7 +52,7 @@ export default function useAuth() {
     async function logout() {
         localStorage.removeItem('token')
         setIsLoggedIn(false)
-        setUser({})
+        setUser(iUser)
 
         const postData = {
             id: user.id

@@ -1,7 +1,7 @@
 import { useContext } from "react";
-import { UserContext } from "../main";
 import { useNotifications } from "../utils/useNotifications";
 import Notification from "../components/layout/Notification";
+import { UserContext } from "../components/app/UserContextWrapper";
 
 export default function Notifications() {
 

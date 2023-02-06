@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import Book from "./Book";
 import Loader from "../layout/Loader";
 import { useLibrary } from "../../utils/useLibrary";
-import { UserContext } from "../../main";
 import LibraryGrid from "../layout/LibraryGrid";
+import { UserContext } from "../app/UserContextWrapper";
 
 export default function PreviewUsersLibrary() {
 

@@ -10,7 +10,27 @@ export default function Footer() {
             rounded-xl bg-slate-700 text-slate-200
             ">
 
-            <Logo/>
+            <div className="flex flex-col gap-2">
+                <p>
+                    <Logo/> by Josh Kaye
+                </p>
+                <p>
+                    <a href="https://joshkaye.ca" 
+                        target="_blank" 
+                        className="text-secondary-400"
+                    >
+                        Portfolio
+                    </a>
+                </p>
+                <p>
+                    <a href="https://github.com/kaye360/bookstack-v2" 
+                        target="_blank" 
+                        className="text-secondary-400"
+                    >
+                        GitHub Repo
+                    </a> 
+                </p>
+            </div>
 
             <a href="#top">Top</a>
 

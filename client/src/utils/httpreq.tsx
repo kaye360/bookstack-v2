@@ -6,8 +6,7 @@
  */
 
 
-type HttpReturn = (object | [])
-type HttpFunc = (url:string, body?: object | []) => Promise<HttpReturn>
+type HttpFunc = (url:string, body?: object | []) => Promise<any>
 
 
 class httpReq {
@@ -18,7 +17,7 @@ class httpReq {
     static get: HttpFunc = async function( url ) {
 
         const res = await fetch(url)
-        let data: Promise<HttpReturn>
+        let data: Promise<any>
         if(res.ok) data = await res.json()
         return data
     }
@@ -38,7 +37,7 @@ class httpReq {
             mode : 'cors'
         })
 
-        let data: Promise<HttpReturn>
+        let data: Promise<any>
         if(res.ok) data = await res.json()
         return data
     }
@@ -58,7 +57,7 @@ class httpReq {
             mode : 'cors'
         })
 
-        let data: Promise<HttpReturn>
+        let data: Promise<any>
         if(res.ok) data = await res.json()
         return data
     }
@@ -78,7 +77,7 @@ class httpReq {
             mode : 'cors'
         })
 
-        let data: Promise<HttpReturn>
+        let data: Promise<any>
         if(res.ok) data = await res.json()
         return data
     }

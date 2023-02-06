@@ -1,9 +1,9 @@
 import { useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { UserContext } from "../../main";
 import Logo from "./Logo";
 import IconMenu from "../../assets/img/icon-menu.svg"
 import { useState } from "react";
+import { UserContext } from "../app/UserContextWrapper";
 
 export default function Header() {
 

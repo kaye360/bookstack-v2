@@ -26,8 +26,7 @@ import ProtectedPage from "./pages/ProtectedPage"
 import Book from "./pages/Book"
 import Logout from "./pages/Logout"
 import { useContext } from "react"
-import { UserContext } from "./main"
-
+import { UserContext } from "./components/app/UserContextWrapper"
 
 
 

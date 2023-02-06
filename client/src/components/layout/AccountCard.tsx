@@ -1,15 +1,15 @@
 import { useContext, useState } from "react";
 import { useQuery, useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
-import { UserContext } from "../../main";
 import { API_BASE_URL } from "../../config";
 import httpReq from "../../utils/httpReq";
+import { UserContext } from "../app/UserContextWrapper";
 
-interface Iprops {
+interface AccountCardProps {
     defaultComponent : string
 }
 
-export default function AccountCard({defaultComponent} : Iprops) {
+export default function AccountCard({defaultComponent} : AccountCardProps) {
 
     const { isLoggedIn } = useContext(UserContext)
 
@@ -57,7 +57,7 @@ export default function AccountCard({defaultComponent} : Iprops) {
 
 
 
-interface ILogin {
+interface IResponse {
     success : boolean,
     id: number,
     username: string,
@@ -78,6 +78,18 @@ function Login() {
     const [username, setUserName] = useState('')
     const [password, setPassword] = useState('')
 
+    interface IErrorMessage {
+        message : string
+    }
+
+    interface ILoginQuery {
+        isSuccess : boolean,
+        refetch : Function,
+        isLoading : boolean,
+        error : IErrorMessage,
+        isError : boolean
+    }
+
     /**
      * Query functions
      */
@@ -87,15 +99,15 @@ function Login() {
         isLoading, 
         error, 
         isError 
-    } = useQuery('login', loginUser, { enabled: false, retry: 1 })
+    } : ILoginQuery = useQuery('login', loginUser, { enabled: false, retry: 1 })
 
     async function loginUser() {
         const postData = {
             'username' : username,
             'password' : password
         }
-        const res : ILogin = await httpReq.post(API_BASE_URL + '/user/login', postData )
-        console.log(res)
+
+        const res : IResponse = await httpReq.post(API_BASE_URL + '/user/login', postData )
 
         if(res.success) {
             setTimeout( () => {
@@ -195,7 +207,7 @@ function Register() {
 
         // Attempt Register
         const postData = { username, password, confirm_password }
-        const res : ILogin = await httpReq.post(API_BASE_URL + '/user', postData)
+        const res : IResponse = await httpReq.post(API_BASE_URL + '/user', postData)
         if(res.success) {
             setMessage('')
 

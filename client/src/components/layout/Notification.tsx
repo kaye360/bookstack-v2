@@ -1,14 +1,19 @@
 import { Link, useLocation } from "react-router-dom"
 
 
+interface Iicons {
+    [key: string] : string
+}
+
+
 export default function Notification({type, url, children}) {
 
     const location = useLocation()
 
-    const icons = {
-        'upload' : '📖',
-        'comment' : '💬',
-        'like' : '💟'
+    const icons: Iicons = {
+        upload : '📖',
+        comment : '💬',
+        like : '💟',
     }
 
     return <li className="border-b border-primary-600 last:border-0 py-4">

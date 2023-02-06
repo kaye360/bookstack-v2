@@ -3,7 +3,7 @@
 /**
  * takes a block of text and splits into paragraphs of 3 sentences
  */
-export function textToParagraphs(text : string) {
+export function textToParagraphs(text : string): string[] {
 
     if (!text) return []
 

@@ -1,7 +1,6 @@
 import { useContext } from "react";
 import PreviewUsersLibrary from "../components/library/PreviewUsersLibrary";
 import Explore from "../components/library/Explore";
-import { UserContext } from "../main";
 import { useNotifications } from "../utils/useNotifications";
 import { Link, useLocation } from "react-router-dom";
 import httpReq from "../utils/httpReq";
@@ -9,7 +8,7 @@ import { API_BASE_URL } from "../config";
 import { useQuery } from "react-query";
 import Notification from "../components/layout/Notification";
 import Loader from "../components/layout/Loader";
-
+import { UserContext } from "../components/app/UserContextWrapper";
 
 
 export default function Dashboard() {

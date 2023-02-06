@@ -1,9 +1,9 @@
 import { useState, useContext } from "react"
 import { useQueryClient, useQuery } from "react-query"
 import { Link } from "react-router-dom"
-import { UserContext } from "../../main"
 import { API_BASE_URL } from "../../config"
 import httpReq from "../../utils/httpReq"
+import { UserContext } from "../app/UserContextWrapper"
 
 export function Comments({isLoading, isError, book}) {
 

@@ -1,6 +1,5 @@
 import { useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { UserContext } from "../../main";
 import { useNotifications } from "../../utils/useNotifications";
 
 import iconDashboard from "../../assets/img/icon-dashboard.png"
@@ -9,11 +8,12 @@ import iconCommunity from "../../assets/img/icon-community.png"
 import iconNotifications from "../../assets/img/icon-notifications.png"
 import iconProfile from "../../assets/img/icon-profile.png"
 import iconAdd from "../../assets/img/icon-add-book.png"
+import { UserContext } from "../app/UserContextWrapper";
 
 
 export default function SideBar() {
 
-    const {user } = useContext(UserContext)
+    const { user } = useContext(UserContext)
 
     const { amount: notificationsAmount } = useNotifications(user.id)
 
