@@ -4,7 +4,7 @@ import { API_BASE_URL, GOOGLE_KEY } from "../../config"
 import httpReq from "../../utils/httpReq"
 import Modal from "../layout/Modal"
 import Loader from "../layout/Loader"
-import { UserContext } from "../../App"
+import { UserContext } from "../../main"
 
 import IconCloseDark from "../../assets/img/icon-close-dark.svg"
 

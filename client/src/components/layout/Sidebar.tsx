@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { UserContext } from "../../App";
+import { UserContext } from "../../main";
 import { useNotifications } from "../../utils/useNotifications";
 
 import iconDashboard from "../../assets/img/icon-dashboard.png"

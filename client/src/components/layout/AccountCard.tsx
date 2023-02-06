@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { useQuery, useQueryClient } from "react-query";
-import { Link, useNavigate } from "react-router-dom";
-import { UserContext } from "../../App";
+import { useNavigate } from "react-router-dom";
+import { UserContext } from "../../main";
 import { API_BASE_URL } from "../../config";
 import httpReq from "../../utils/httpReq";
 
@@ -87,7 +87,7 @@ function Login() {
         isLoading, 
         error, 
         isError 
-    } = useQuery('login', loginUser, { enabled: false })
+    } = useQuery('login', loginUser, { enabled: false, retry: 1 })
 
     async function loginUser() {
         const postData = {

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useQuery } from "react-query";
 
 import { API_BASE_URL } from "../config";
-import { UserContext } from "../App";
+import { UserContext } from "../main";
 import { useBook } from "../utils/useBook";
 import httpReq from "../utils/httpReq";
 import { textToParagraphs } from "../utils/formatText";

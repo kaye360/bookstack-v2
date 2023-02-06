@@ -46,12 +46,12 @@ Can be found in the /api_docs folder. Crucial information for each class and met
 
 ## Bugs
 - problem with commenting sometimes
-- figure out useAuth/userContext situation
-- book like saving as object not array somehow
+- book like saving as object not array sometimes
 
 
 
 ## Future Feature Ideas
+- Randomize community feed
 - Full Typescript integration
 - add username to book DB. Show user affiliated with this book and link to profile
 - pagination or infinite scroll
@@ -62,4 +62,4 @@ Can be found in the /api_docs folder. Crucial information for each class and met
 - library pagination
 - live search library with debouncing
 - use proper response codes on api fails
-- user auth on protected api routes
+- user auth on protected api routes. send user id and uuid front frontend on 

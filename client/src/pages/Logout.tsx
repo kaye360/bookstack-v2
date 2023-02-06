@@ -1,5 +1,6 @@
 import { useEffect } from "react"
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import booksGlobe from "../assets/img/books-globe.png"
 
 export default function Logout() {
@@ -16,6 +17,11 @@ export default function Logout() {
     } 
 
     useEffect( () => interval(), [timer])
+
+    const navigate = useNavigate()
+    setTimeout( () => {
+        navigate('/')
+    },2850)
 
     return <div className="flex items-center flex-wrap sm:flex-nowrap gap-8 rounded-xl my-12 mx-auto p-4 bg-primary-700">
 

@@ -2,7 +2,7 @@ import httpReq from "./httpReq"
 import { API_BASE_URL } from "../config"
 import { useQueries } from "react-query"
 import { useContext } from "react"
-import { UserContext } from "../App"
+import { UserContext } from "../main"
 
 export const useNotifications = (userID: number) => {
     /**

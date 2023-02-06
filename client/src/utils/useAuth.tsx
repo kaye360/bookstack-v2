@@ -1,9 +1,14 @@
 import { useState } from "react"
 import { useQuery } from "react-query"
-import { useNavigate } from "react-router-dom"
 import { API_BASE_URL } from "../config"
 import httpReq from "./httpReq"
 
+
+interface Iuser {
+    id: number,
+    username: string,
+    token: string
+}
 
 
 export default function useAuth() {
@@ -12,10 +17,10 @@ export default function useAuth() {
      * User Auth Data
      */
 
-    const [user, setUser] = useState( {} )
+    const iUser: Iuser | object = {}
+    const [user, setUser] = useState( iUser )
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const localToken = localStorage.getItem('token') || false
-    const navigate = useNavigate()
 
     /**
      * User Auth Queries
@@ -49,10 +54,6 @@ export default function useAuth() {
             id: user.id
         }
         const res = await httpReq.post(API_BASE_URL + '/user/logout', postData)
-
-        setTimeout( () => {
-            navigate('/')
-        }, 5000)
     }
     
     return {user, setUser, isLoggedIn, setIsLoggedIn, logout }

@@ -5,9 +5,7 @@
  */
 
 // Dependencies
-import { createContext } from "react"
 import { Route, Routes, useLocation } from "react-router-dom"
-import useAuth from "./utils/useAuth"
 
 // Components
 import Header from "./components/layout/Header"
@@ -27,37 +25,10 @@ import Profile from "./pages/Profile"
 import ProtectedPage from "./pages/ProtectedPage"
 import Book from "./pages/Book"
 import Logout from "./pages/Logout"
+import { useContext } from "react"
+import { UserContext } from "./main"
 
 
-/**
- * User Context Types and default state
- */
-interface IUserContext {
-	user : {
-		username:string,
-		id: number, 
-		token: string
-	},
-	setUser?: Function,
-	isLoggedIn : boolean,
-	setIsLoggedIn? : Function,
-	logout? : Function,
-	verify? : Function
-}
-
-const UserContextDefault: IUserContext = {
-	user : {
-		username : '',
-		id : 0,
-		token : ''
-	},
-	isLoggedIn : false,
-}
-
-/**
- * Logged In User data
- */
-export const UserContext = createContext( UserContextDefault )
 
 
 
@@ -68,14 +39,16 @@ function App() {
 	/**
 	 * User Authentication
 	 */
-	const Auth: any = useAuth()
 
 	const location = useLocation()
 
-	const isSidebarShown = Auth.isLoggedIn && location.pathname !== '/'
+	const { isLoggedIn } = useContext(UserContext)
 
-	return (
-		<UserContext.Provider value={ Auth } >
+	const isSidebarShown: boolean = isLoggedIn && location.pathname !== '/'
+	console.log(isLoggedIn)
+
+	return <>
+
 		<div id="top" className={`
 			flex flex-col
 			w-100 max-w-6xl min-h-screen mx-auto pb-20 md:pb-0 px-[2vw]
@@ -103,35 +76,35 @@ function App() {
 
 					{/* Account Public/Protected Routes */}
 					<Route path="/account"
-						element={ Auth.isLoggedIn ? <Dashboard /> : <Account />} />
+						element={ isLoggedIn ? <Dashboard /> : <Account />} />
 
 					<Route path="/account/:action"
-						element={ Auth.isLoggedIn ? <Dashboard /> : <Account />} />
+						element={ isLoggedIn ? <Dashboard /> : <Account />} />
 
 					<Route path="/logout" element={<Logout />} />
 
 
 					{/* Protected User Routes */}
 					<Route path="/dashboard"
-						element={ Auth.isLoggedIn ? <Dashboard /> : <ProtectedPage />} />
+						element={ isLoggedIn ? <Dashboard /> : <ProtectedPage />} />
 
 					<Route path="/library"
-						element={ Auth.isLoggedIn ? <Library />	: <ProtectedPage />} />
+						element={ isLoggedIn ? <Library />	: <ProtectedPage />} />
 
 					<Route path="/library/add"		
-						element={ Auth.isLoggedIn ? <Library isUserAddingBook={true} />	: <ProtectedPage />} />
+						element={ isLoggedIn ? <Library isUserAddingBook={true} />	: <ProtectedPage />} />
 
 					<Route path="/feed"
-						element={ Auth.isLoggedIn ? <Feed /> : <ProtectedPage />} />
+						element={ isLoggedIn ? <Feed /> : <ProtectedPage />} />
 
 					<Route path="/notifications" 	
-						element={ Auth.isLoggedIn ? <Notifications />	: <ProtectedPage />} />
+						element={ isLoggedIn ? <Notifications />	: <ProtectedPage />} />
 
 					<Route path="/user"
-						element={ Auth.isLoggedIn ? <Profile /> : <ProtectedPage />} />
+						element={ isLoggedIn ? <Profile /> : <ProtectedPage />} />
 
 					<Route path="/user/:username"
-					 	element={ Auth.isLoggedIn ? <Profile /> : <ProtectedPage />} />
+					 	element={ isLoggedIn ? <Profile /> : <ProtectedPage />} />
 
 				</Routes>
 				</main>
@@ -141,8 +114,7 @@ function App() {
 			<Footer />
 
 		</div>
-		</UserContext.Provider>
-)
+	</>
 }
 
 export default App

@@ -5,22 +5,29 @@
  * 
  */
 
-type Data = []
+
+type HttpReturn = (object | [])
+type HttpFunc = (url:string, body?: object | []) => Promise<HttpReturn>
+
 
 class httpReq {
 
-    static async get(url:string) {
+
+
+
+    static get: HttpFunc = async function( url ) {
 
         const res = await fetch(url)
-        let data: Data
-
-        if(res.ok) {
-            data = await res.json()
-        }
+        let data: Promise<HttpReturn>
+        if(res.ok) data = await res.json()
         return data
     }
 
-    static async post( url:string, body: object | [] ) {
+
+
+
+
+    static post: HttpFunc = async function( url, body ) {
 
         const res = await fetch(url, {
             method: 'POST',
@@ -31,16 +38,16 @@ class httpReq {
             mode : 'cors'
         })
 
-        let data: Data
-
-        if(res.ok) {
-            data = await res.json()
-        }
-
+        let data: Promise<HttpReturn>
+        if(res.ok) data = await res.json()
         return data
     }
     
-    static async put( url:string, body: object | []) {
+
+
+
+
+    static put: HttpFunc = async function( url, body ) {
 
         const res = await fetch(url, {
             method : 'PUT',
@@ -51,19 +58,16 @@ class httpReq {
             mode : 'cors'
         })
 
-        let data: Data
-
-        if(res.ok) {
-            data = await res.json()
-        }
-
+        let data: Promise<HttpReturn>
+        if(res.ok) data = await res.json()
         return data
     }
 
-    /**
-     * @todo update docs
-     */
-    static async delete( url:string, body: object ) {
+
+
+
+
+    static delete: HttpFunc = async function( url, body ) {
 
         const res = await fetch( url , {
             method : 'DELETE',
@@ -74,12 +78,8 @@ class httpReq {
             mode : 'cors'
         })
 
-        let data: Data
-
-        if(res.ok) {
-            data = await res.json()
-        }
-
+        let data: Promise<HttpReturn>
+        if(res.ok) data = await res.json()
         return data
     }
 

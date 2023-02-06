@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import PreviewUsersLibrary from "../components/library/PreviewUsersLibrary";
 import Explore from "../components/library/Explore";
-import { UserContext } from "../App";
+import { UserContext } from "../main";
 import { useNotifications } from "../utils/useNotifications";
 import { Link, useLocation } from "react-router-dom";
 import httpReq from "../utils/httpReq";

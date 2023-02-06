@@ -5,7 +5,8 @@ export default function Account() {
 
     const { action } = useParams()
     
-    const defaultComponent = action === 'register' ? 'register' : 'login'
+    type TdefaultComponent = 'register' | 'login'
+    const defaultComponent: TdefaultComponent = action === 'register' ? 'register' : 'login'
 
     return(
     <>
