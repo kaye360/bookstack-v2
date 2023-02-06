@@ -46,13 +46,9 @@ Can be found in the /api_docs folder. Crucial information for each class and met
 
 ## Bugs
 - problem with commenting sometimes
+- figure out useAuth/userContext situation
+- book like saving as object not array somehow
 
-- update Dashboard library w/ no books
-- update home page mobile images
-- update profile page w/ no books
-- explore the community not working on live
-- update delete book UI
-- book description has 'description' heading multiple times
 
 
 ## Future Feature Ideas

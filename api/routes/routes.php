@@ -78,12 +78,12 @@ $route->get('/session/:param', function() {
 
 // GET
 $route->get('/notifications/new/:param', function() {
-    return ['class' => 'Notification', 'method' => 'get_new', 'id'];
+    return ['class' => 'Notification', 'method' => 'get_new'];
 });
 
 
 $route->get('/notifications/old/:param', function() {
-    return ['class' => 'Notification', 'method' => 'get_old', 'id'];
+    return ['class' => 'Notification', 'method' => 'get_old'];
 });
 
 

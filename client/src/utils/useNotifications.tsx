@@ -10,6 +10,7 @@ export const useNotifications = (userID: number) => {
      * early return here, otherwise there will 
      * be a conditional render due to useQuery
      */
+    userID = parseInt(userID)
     if(typeof userID !== 'number') userID = 0
 
 

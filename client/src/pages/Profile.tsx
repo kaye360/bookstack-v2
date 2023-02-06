@@ -35,7 +35,7 @@ export default function Profile() {
                 <>
                     <LibraryPreview userID={user.id} username={username} />
 
-                    <div className="border border-primary-600"></div>
+                    <div className="my-4 border border-primary-600"></div>
 
                     <h2 className="my-6 text-xl">
                         {user.username}'s recent activity

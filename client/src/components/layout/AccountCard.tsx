@@ -102,7 +102,7 @@ function Login() {
                 localStorage.setItem('token', res.uuid)
                 setIsLoggedIn(true)
                 setUser({
-                    id: res.id,
+                    id: Number(res.id),
                     username: res.username,
                     token: res.uuid
                 })
