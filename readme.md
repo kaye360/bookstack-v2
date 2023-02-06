@@ -44,13 +44,18 @@ Can be found in the /api_docs folder. Crucial information for each class and met
 - update router docs
 - update apI docs where not GET request had arguents
 - update delete book UI
+- update Dashboard library w/ no books
+- update profile page w/ no books
+- update home page mobile images
 
 ## Bugs
 - explore the community not working on live
 - problem with commenting sometimes
+- book description has 'description' heading multiple times
 
 
 ## Future Feature Ideas
+- Full Typescript integration
 - add username to book DB. Show user affiliated with this book and link to profile
 - pagination or infinite scroll
 - currently reading

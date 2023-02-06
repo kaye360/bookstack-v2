@@ -60,30 +60,45 @@ class Notification extends Database
 		string $type
 	)	{
 
+		if( 
+			empty($sending_user_id) ||
+			empty($recieving_user_id) ||
+			empty($message) ||
+			empty($url) ||
+			empty($type) 
+		) {
+			return;
+		}
+
 		if($sending_user_id === $recieving_user_id) return;
 
-		$user = $this->get_row_by_id(
-			id: $recieving_user_id,
-			table: self::TABLE,
-			return: ['new_notifications']
-		);
+		try {
 
-		$current_new_notifications = json_decode($user['new_notifications']);
-		$new_notification = [
-			'message' => $message,
-			'url' => $url,
-			'type' => $type
-		];
+			$user = $this->get_row_by_id(
+				id: $recieving_user_id,
+				table: self::TABLE,
+				return: ['new_notifications']
+			);
 
-		array_unshift($current_new_notifications, $new_notification);
+			$current_new_notifications = json_decode($user['new_notifications']);
+			$new_notification = [
+				'message' => $message,
+				'url' => $url,
+				'type' => $type
+			];
 
-		return $this->update_row(
-			id: $recieving_user_id,
-			table: self::TABLE,
-			columns: [
-				'new_notifications' => json_encode($current_new_notifications)
-			]
-		);
+			array_unshift($current_new_notifications, $new_notification);
+			
+			return $this->update_row(
+				id: $recieving_user_id,
+				table: self::TABLE,
+				columns: [
+					'new_notifications' => json_encode($current_new_notifications)
+				]
+			);
+		} catch(Exception $error) {
+			
+		}
 	}
 
 

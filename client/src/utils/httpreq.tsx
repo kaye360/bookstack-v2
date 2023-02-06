@@ -27,7 +27,8 @@ class httpReq {
             body: JSON.stringify(body),
             headers : {
                 'Content-Type': 'application/json;charset=UTF-8'
-            }
+            },
+            mode : 'cors'
         })
 
         let data: Data
@@ -46,7 +47,8 @@ class httpReq {
             body : JSON.stringify(body),
             headers : {
                 'Content-Type': 'application/json;charset=UTF-8'
-            }
+            },
+            mode : 'cors'
         })
 
         let data: Data
@@ -68,7 +70,8 @@ class httpReq {
             body : JSON.stringify(body),
             headers : {
                 'Content-Type': 'application/json;charset=UTF-8'
-            }
+            },
+            mode : 'cors'
         })
 
         let data: Data

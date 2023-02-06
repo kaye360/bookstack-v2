@@ -78,7 +78,9 @@ class User extends Database
 			columns: [
 				'username' => $post_data['username'],
 				'password' => password_hash($post_data['password'], PASSWORD_DEFAULT),
-				'session' => $this->make_UUID()
+				'session' => $this->make_UUID(),
+				'new_notifications' => "[]",
+				'old_notifications' => "[]"
 			],
 			return: ['username', 'id', 'session'],
 			table: self::TABLE

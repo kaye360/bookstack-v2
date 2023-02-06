@@ -79,6 +79,15 @@ class Router
 
 
 
+	
+	/**
+	 * 
+	 */
+	public function json2($stuff) {
+		echo "This is in the json2 method: $stuff";
+	}
+
+
 
 	/**
 	 * Render Error Message

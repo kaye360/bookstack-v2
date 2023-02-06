@@ -6,7 +6,7 @@ export default function Logout() {
 
     // Timer code found here:
     // https://stackoverflow.com/questions/36299174/setinterval-in-a-react-app
-    const [timer, setTimer] = useState(5)
+    const [timer, setTimer] = useState(3)
 
     function interval() {
         if (timer === 0) return
