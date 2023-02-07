@@ -45,8 +45,6 @@ Can be found in the /api_docs folder. Crucial information for each class and met
 - update apI docs where PUT POST DELETE requests had arguents
 
 ## Bugs
-- problem with commenting sometimes
-- book like saving as object not array sometimes
 
 
 
@@ -56,7 +54,6 @@ Can be found in the /api_docs folder. Crucial information for each class and met
 - add username to book DB. Show user affiliated with this book and link to profile
 - pagination or infinite scroll
 - currently reading
-- book page 404 error handling
 - sorting library in book view
 - list view for library with sorting
 - library pagination

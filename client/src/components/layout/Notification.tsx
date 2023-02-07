@@ -1,3 +1,8 @@
+
+/**
+ * @todo Remove this component and make a separate one for dashboard
+ */
+
 import { Link, useLocation } from "react-router-dom"
 
 
@@ -16,7 +21,7 @@ export default function Notification({type, url, children}) {
         like : '💟',
     }
 
-    return <li className="border-b border-primary-600 last:border-0 py-4">
+    return <li className="bg-primary-750">
         <span className="inline-block mr-4 py-2">
             { icons[type] }
         </span>

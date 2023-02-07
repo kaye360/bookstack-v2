@@ -1,11 +1,23 @@
+import {  ReactNode } from "react"
 
-export default function Modal(props: any) {
+interface IModalProps {
+    setModalState : Function,
+    children: ReactNode
+}
 
-    return(
-        <div className="fixed inset-0 grid items-center px-3 bg-primary-900 z-[1000] bg-opacity-75">
+export default function Modal({setModalState, children} : IModalProps) {
+
+        return <div 
+            className="fixed inset-0 grid items-center px-3 bg-primary-900 z-[1000] bg-opacity-75"
+            onClick={() => setModalState(false)}
+        >
+
             <div className="relative z-[2000] rounded-xl flex flex-col gap-8 bg-primary-200 w-full max-w-xl mx-auto p-4 text-primary-800">
-                {props.children}
+
+                {children}
+
             </div>
+
         </div>
-    )
+
 }

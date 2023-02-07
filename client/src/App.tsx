@@ -44,7 +44,6 @@ function App() {
 	const { isLoggedIn } = useContext(UserContext)
 
 	const isSidebarShown: boolean = isLoggedIn && location.pathname !== '/'
-	console.log(isLoggedIn)
 
 	return <>
 

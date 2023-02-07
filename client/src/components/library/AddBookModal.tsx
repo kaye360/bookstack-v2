@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react"
+import { useContext, useState } from "react"
 import { useQuery, useQueryClient } from "react-query"
 import { API_BASE_URL, GOOGLE_KEY } from "../../config"
 import httpReq from "../../utils/httpReq"
@@ -117,7 +117,7 @@ export default function AddBookModal({setShowModal, refetchLibrary} : propType) 
     }
 
     return(
-        <Modal>
+        <Modal setModalState={setShowModal}>
 
             <Header 
                 setShowModal={setShowModal} 

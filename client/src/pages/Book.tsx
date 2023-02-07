@@ -354,31 +354,31 @@ function DeleteModal({bookID, setShowDeleteModal}) {
     }
 
 
-    return(
-        <Modal>
-            {!message && <p>
-                Are you sure you want to delete this book?
-            </p>}
+    return <Modal setModalState={setShowDeleteModal}>
 
-            {message && <p>
-                {message} &nbsp;
-                <Link to="/library" className="text-primary-500">Back to your library</Link>
-            </p>}
+        {!message && <p>
+            Are you sure you want to delete this book?
+        </p>}
 
-            {!message && <>
-                <button 
-                    onClick={handleDelete}
-                    className="hover:bg-primary-300 border-0"
-                    >
-                    Yes, I'm sure.
-                </button>
-                <button 
-                    onClick={ () => setShowDeleteModal(false)} 
-                    className="hover:bg-primary-300 border-0"
+        {message && <p>
+            {message} &nbsp;
+            <Link to="/library" className="text-primary-500">Back to your library</Link>
+        </p>}
+
+        {!message && <>
+            <button 
+                onClick={handleDelete}
+                className="hover:bg-primary-300 border-0"
                 >
-                    No, close this.
-                </button>
-            </>}
-        </Modal>
-    )
+                Yes, I'm sure.
+            </button>
+            <button 
+                onClick={ () => setShowDeleteModal(false)} 
+                className="hover:bg-primary-300 border-0"
+            >
+                No, close this.
+            </button>
+        </>}
+        
+    </Modal>
 }

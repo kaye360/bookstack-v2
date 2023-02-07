@@ -2,13 +2,14 @@ import { useQuery } from "react-query";
 import Loader from "../components/layout/Loader";
 import { API_BASE_URL } from "../config";
 import httpReq from "../utils/httpReq";
-import Notification from "../components/layout/Notification";
+import { Link, useLocation } from "react-router-dom"
+import bookNoCover from  "../assets/img/book-no-cover.png"
 
-interface IFeedItem {
-    id: number,
-    type: string,
-    link: string,
-    message: string
+
+
+
+interface Inotification {
+    [key: string] : string | number
 }
 
 export default function Feed() {
@@ -19,6 +20,8 @@ export default function Feed() {
     }
 
     const { data, isLoading, isError } = useQuery('getCommunityFeed', getFeed)
+
+    // console.log(Array.isArray(data) ? data[0] : 'no data')
 
     if(isError) { 
         return <div>
@@ -32,17 +35,72 @@ export default function Feed() {
     
 
 
-    return <div className="w-full max-w-2xl mx-auto">
-    <h1 className="mb-4">Community Feed</h1>
-    <ul>
-        { data.map( (feedItem : IFeedItem ) => (
-            <Notification key={feedItem.id} type={feedItem.type} url={feedItem.link} >
-                {feedItem.message}
-            </Notification>
-        ))
+    return <div className="w-full max-w-2xl">
 
-        }
-    </ul>
+        <h1 className="mb-4 text-3xl">Community Feed</h1>
+
+        <ul className="flex flex-col gap-12 w-full max-w-lg ">
+            { data.map( (notification : Inotification ) => (
+                <Notification key={notification.id} notification={notification} />
+            ))}
+        </ul>
+
     </div>
 
+}
+
+
+
+
+
+
+interface Iicons {
+    [key: string] : string
+}
+
+
+function Notification({notification}) {
+
+    const location = useLocation()
+    console.log(notification)
+
+    const icons: Iicons = {
+        upload : '📖',
+        comment : '💬',
+        like : '💟',
+    }
+
+    return <li className="flex flex-col gap-6 px-4 py-8 rounded-xl bg-primary-750">
+
+        <span className="flex items-start gap-2 mr-4 py-2 italic font-light">
+
+            <span>{ icons[notification.type] }</span>
+            <span>{ notification.message }</span>
+
+        </span>
+
+        <img 
+            src={notification.image_url ? notification.image_url : bookNoCover} 
+            className={`
+                ${ notification.image_url ? 'aspect-square object-cover object-top w-full' : 'w-10/12'} mx-auto `} 
+            alt="Book Cover"
+        />
+
+        { notification.comment && <blockquote>
+            <span className="inline-block rounded-3xl px-4 py-1 mr-4 bg-primary-900">
+                {notification.username}
+            </span>
+
+            {notification.comment}
+        </blockquote>
+        }
+
+        <Link 
+            to={ notification.link } state={ {from : location.pathname } } 
+            className="px-4 py-2 border border-primary-600 hover:border-secondary-300 text-primary-100 rounded text-center"
+        >
+            View
+        </Link>
+
+    </li>
 }
