@@ -5,6 +5,17 @@ import { API_BASE_URL } from "../../config"
 import httpReq from "../../utils/httpReq"
 import { UserContext } from "../app/UserContextWrapper"
 
+interface IQuery {
+    error : {
+        message: string
+    }, 
+    isError : boolean, 
+    isLoading : boolean, 
+    refetch : Function, 
+    isSuccess : boolean
+}
+
+
 export function Comments({isLoading, isError, book}) {
 
     if(isLoading) {
@@ -72,7 +83,7 @@ export function CommentForm({username, userID, bookID, bookTitle, updateComments
         return res
     }
 
-    const {data, error, isError, isLoading, refetch, isSuccess} = useQuery('submitComment', postComment, { enabled:false, retry: false })
+    const {error, isError, isLoading, refetch, isSuccess} : IQuery = useQuery('submitComment', postComment, { enabled:false, retry: false })
 
     async function handleSubmit(e: any) {
         e.preventDefault()

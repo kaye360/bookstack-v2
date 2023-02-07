@@ -3,11 +3,18 @@ import { useNotifications } from "../utils/useNotifications";
 import Notification from "../components/layout/Notification";
 import { UserContext } from "../components/app/UserContextWrapper";
 
+
+interface Inotification {
+    message:string, 
+    url:string, 
+    type:string 
+}
+
 export default function Notifications() {
 
     const { user } = useContext(UserContext)
 
-    const { notifications, amount, clearRecentNotifications } = useNotifications(user.id)
+    const { notifications, clearRecentNotifications } = useNotifications(user.id)
 
     return <>
 
@@ -21,11 +28,7 @@ export default function Notifications() {
                 : <>
                     <ul className="animate-notification-flash">
                         { notifications.recent.map( 
-                            (notification: { 
-                                message:string, 
-                                url:string, 
-                                type:string 
-                            }, index: number) => {
+                            (notification: Inotification, index: number) => {
                                 return(
                                     <Notification 
                                         type={notification.type} 
@@ -54,7 +57,7 @@ export default function Notifications() {
                 ? <div>You have no notifications.</div>
                 : <ul>
                     { notifications.old.map( 
-                        (notification: { message:string, url:string, type:string }, index: number) => {
+                        (notification: Inotification, index: number) => {
                             return(
                                 <Notification type={notification.type} url={notification.url} key={index}>
                                     {notification.message}

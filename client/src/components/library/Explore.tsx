@@ -6,6 +6,13 @@ import Loader from "../layout/Loader"
 import { Link } from "react-router-dom";
 import LibraryGrid from "../layout/LibraryGrid";
 
+interface Ibook {
+    id: number,
+    title: string,
+    showInfo: boolean,
+    cover_url: string,
+}
+
 export default function Explore() {
     
     async function getBooks() {
@@ -25,7 +32,7 @@ export default function Explore() {
 
             { isFetched && 
                 <LibraryGrid>
-                    { exploreBooks && exploreBooks.map( (book: { title:string, id:number }) => {
+                    { exploreBooks && exploreBooks.map( (book: Ibook) => {
                         return <Book 
                             id={book.id}
                             title={book.title} 

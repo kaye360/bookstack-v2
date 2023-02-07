@@ -6,6 +6,7 @@
  */
 
 
+
 type HttpFunc = (url:string, body?: object | []) => Promise<any>
 
 
@@ -83,6 +84,5 @@ class httpReq {
     }
 
 }
-
 
 export default httpReq

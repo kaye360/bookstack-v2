@@ -68,71 +68,23 @@ interface IResponse {
 
 function Login() {
 
-    const {setUser, setIsLoggedIn } = useContext(UserContext)
+    const { 
+        username, setUserName, 
+        password, setPassword, 
+        login, isLoginError, isLoginLoading, isLoginSuccess, loginError
+    } = useContext(UserContext)
+
     const navigate = useNavigate()
-    const queryClient = useQueryClient()
 
-    /**
-     * Form state control
-     */
-    const [username, setUserName] = useState('')
-    const [password, setPassword] = useState('')
-
-    interface IErrorMessage {
-        message : string
-    }
-
-    interface ILoginQuery {
-        isSuccess : boolean,
-        refetch : Function,
-        isLoading : boolean,
-        error : IErrorMessage,
-        isError : boolean
-    }
 
     /**
      * Query functions
      */
-    const {
-        isSuccess, 
-        refetch, 
-        isLoading, 
-        error, 
-        isError 
-    } : ILoginQuery = useQuery('login', loginUser, { enabled: false, retry: 1 })
-
-    async function loginUser() {
-        const postData = {
-            'username' : username,
-            'password' : password
-        }
-
-        const res : IResponse = await httpReq.post(API_BASE_URL + '/user/login', postData )
-
-        if(res.success) {
-            setTimeout( () => {
-                localStorage.setItem('token', res.uuid)
-                setIsLoggedIn(true)
-                setUser({
-                    id: Number(res.id),
-                    username: res.username,
-                    token: res.uuid
-                })
-                queryClient.removeQueries('login', { exact : true } )
-                navigate('/dashboard')
-            }, 1500)
-        } else {
-            throw new Error(res.message)
-        }
-
-        return res
-    }
-
-
 
     async function handleLogin(e: any) {
         e.preventDefault()
-        refetch()
+        login()
+        if ( isLoginSuccess ) navigate('/dashboard')
     }
 
     
@@ -168,9 +120,9 @@ function Login() {
                     <input type="submit" value="Sign In" 
                         className="px-4 py-2 rounded-lg bg-secondary-400 text-primary-800 cursor-pointer font-bold"/>
 
-                    {isSuccess && <div>Sign in successful. Redirecting...</div> }
-                    {isLoading && <div className="animate-pulse">Logging in, please wait...</div> }
-                    {isError && <div className="text-red-400">{error.message}</div> }
+                    {isLoginSuccess && <div>Sign in successful. Redirecting...</div> }
+                    {isLoginLoading && <div className="animate-pulse">Logging in, please wait...</div> }
+                    {isLoginError && <div className="text-red-400">{loginError.message}</div> }
                 </div>
 
             </form>

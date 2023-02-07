@@ -2,7 +2,7 @@ import { useContext } from "react";
 import PreviewUsersLibrary from "../components/library/PreviewUsersLibrary";
 import Explore from "../components/library/Explore";
 import { useNotifications } from "../utils/useNotifications";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import httpReq from "../utils/httpReq";
 import { API_BASE_URL } from "../config";
 import { useQuery } from "react-query";

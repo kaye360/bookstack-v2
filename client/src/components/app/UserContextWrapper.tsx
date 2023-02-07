@@ -8,11 +8,22 @@ interface Iuser {
 }
 
 interface IDefaultUserContext {
-	isLoggedIn : boolean,
-	user?: Iuser,
-	setUser? : Function,
+	isLoggedIn? : boolean,
 	setIsLoggedIn? : Function,
+	user? : Iuser,
+	setUser? : Function,
+	username? : string,
+	setUserName? : Function,
+	password? : string,
+	setPassword? : Function,
+	login? : Function,
 	logout? : Function,
+	isLoginLoading? : boolean,
+	isLoginSuccess? : boolean,
+	isLoginError? : boolean,
+	loginError? : {
+		message? : string
+	}
 }
 
 const defaultUserContext: IDefaultUserContext = {

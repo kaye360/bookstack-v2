@@ -7,7 +7,7 @@ export default function Logout() {
 
     // Timer code found here:
     // https://stackoverflow.com/questions/36299174/setinterval-in-a-react-app
-    const [timer, setTimer] = useState(3)
+    const [timer, setTimer] = useState<number>(3)
 
     function interval() {
         if (timer === 0) return
@@ -35,10 +35,7 @@ export default function Logout() {
             </p>
         </div>
 
-        <img src={booksGlobe} className="
-            w-2/3 mx-auto
-            sm:w-1/2
-        " />
+        <img src={booksGlobe} className="w-2/3 mx-auto sm:w-1/2" />
 
     </div>
 }

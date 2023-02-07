@@ -4,7 +4,7 @@ import { useQuery } from "react-query"
 
 
 
-export const useBook = (bookID: number | string | undefined) => {
+export const useBook = (bookID: number | undefined) => {
 
 
     async function getBook() {

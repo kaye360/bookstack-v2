@@ -8,10 +8,11 @@ export const useNotifications = (userID: number) => {
     /**
      * Make sure we have a number. Can't do an
      * early return here, otherwise there will 
-     * be a conditional render due to useQuery
+     * be a conditional hook due to useQuery
      */
-    userID = parseInt(userID)
-    if(typeof userID !== 'number') userID = 0
+    if(typeof userID !== 'number') {
+        userID = parseInt(userID)
+    }
 
 
     const { isLoggedIn} = useContext(UserContext)
@@ -27,18 +28,17 @@ export const useNotifications = (userID: number) => {
     const { refetch : clearRecentNotifications } = queries[2]
     
     /**
-     * Early exit if userID is not a number or set to 0 earlier
+     * Early exit if userID is not a number
      * 
      * Note: This must be after useQueries because
      * otherwise there is a conditional hook
      */
-    if( 
-        (typeof userID !== 'number') ||
-        (userID === 0)
-    ) return { 
-        amount : { recent : 0, old : 0 }, 
-        notifications : { recent : [], old: [] }
-    }
+    if( typeof userID !== 'number') {
+        return { 
+            amount : { recent : 0, old : 0 }, 
+            notifications : { recent : [], old: [] }
+        }
+    } 
 
     /**
      * Query functions

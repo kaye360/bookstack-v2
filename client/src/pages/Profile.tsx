@@ -92,6 +92,12 @@ function LibraryPreview({userID, username}) {
 }
 
 
+interface IfeedItem {
+    id: number,
+    type : 'upload' | 'like' | 'comment',
+    message : string,
+    link : string
+}
 
 
 function UsersPublicFeed({userID}) {
@@ -117,7 +123,7 @@ function UsersPublicFeed({userID}) {
     
     return <ul className="flex flex-col">
         { data.length !== 0
-            ? data.slice(0,10).map( feedItem => (
+            ? data.slice(0,10).map( (feedItem : IfeedItem) => (
                 <li key={feedItem.id} className="py-8 border-b border-primary-500 last:border-0">
 
                     <span className="inline-block mx-4">

@@ -8,8 +8,8 @@ export function textToParagraphs(text : string): string[] {
     if (!text) return []
 
     // split text into array of sentences
-    const sentencesArray: RegExpMatchArray = text.match(/\(?[^\.\?\!]+[\.!\?]\)?/g)
     // credit: https://stackoverflow.com/questions/11761563/javascript-regexp-for-splitting-text-into-sentences-and-keeping-the-delimiter
+    const sentencesArray: RegExpMatchArray = text.match(/\(?[^\.\?\!]+[\.!\?]\)?/g)
 
     if( !Array.isArray(sentencesArray) ) return []
     

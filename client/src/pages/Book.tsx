@@ -279,7 +279,7 @@ function DeleteBtn({bookID, setShowDeleteModal}) {
 
 function DeleteModal({bookID, setShowDeleteModal}) {
 
-    const [message, setMessage] = useState(false)
+    const [message, setMessage] = useState<boolean | string>(false)
 
     async function handleDelete() {
         const res = await httpReq.delete(API_BASE_URL + '/book', {
