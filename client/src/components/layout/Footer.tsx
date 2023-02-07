@@ -32,7 +32,7 @@ export default function Footer() {
                 </p>
             </div>
 
-            <a href="#top">Top</a>
+            <a href="#top" className="rounded border border-primary-200 px-2 py-1">Top</a>
 
         </nav>
     )
