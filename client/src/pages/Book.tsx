@@ -27,10 +27,9 @@ export default function Book() {
     const { id } : any = useParams()
     const bookID: number | undefined = parseInt(id)
     const { bookQuery, googleQuery } = useBook( bookID )
-    const isRead = bookQuery.data?.is_read === 'true' ? true : false
     const [showDeleteModal, setShowDeleteModal] = useState(false)
-
-
+    
+    
 
     if(bookQuery.isError) {
         return <div>Error Getting Book</div>
@@ -40,21 +39,81 @@ export default function Book() {
         return <Loader />
     }
 
-    if(googleQuery.data.totalItems === 0) {
-        return <Loader />
+    if(bookQuery.data.success === false) {
+        return <div>Book not found</div>
+    }
+
+    // Add Book not found return
+    console.log(bookQuery.data)
+    
+    // BookStack API Data
+    let title : string
+    let author : string
+    let likes: number[] = []
+    let isRead : boolean
+    let coverUrl : string
+    let commentCount : number
+    let isLikedByUser: boolean = false
+    let bookUserID : number
+
+    // Google Books API Data
+    let subtitle : string = ''
+    let category : string = ''
+    let pageCount : number | string = ''
+    let rating : number | string = ''
+    let description: string[] = []
+    
+    /**
+     * Local BookStack API data formating
+     */
+    
+    title = bookQuery.data.title
+    author = bookQuery.data.author
+    isRead = bookQuery.data?.is_read === 'true'
+    coverUrl = bookQuery.data.cover_url
+    commentCount = bookQuery.data.comment_count
+    bookUserID = bookQuery.data.user_id
+    
+    if(bookQuery.data.likes) {
+        likes = JSON.parse(bookQuery.data.likes) || []
+        isLikedByUser = Array.isArray(likes) && likes.includes(user.id)
     }
     
-    let description: object[] | string[] = []
+    /**
+     * Google Books API data formating
+     */
 
-    description = textToParagraphs(
-        googleQuery.data.items[0].volumeInfo.description
-    )
+    // If Google Books API isLoading
+    if( googleQuery.isLoading ) {
+        [subtitle, category, pageCount, rating] = Array(4).fill(<Loader size="small" />)
+    }
+    
+    // If Google Books API isError
+    if( googleQuery.isError ) {
+        [subtitle, category, pageCount, rating] = Array(4).fill('Not Available')
+    }
+
+    // If Google Books API isSuccess
+    // 2nd and 3rd conditions are to check if a book was found
+    if( 
+        googleQuery.isSuccess &&
+        googleQuery.data.totalItems > 0 &&
+        Array.isArray(googleQuery.data.items)
+    ) {
+        subtitle = googleQuery.data.items[0].volumeInfo.subtitle || 'Not Available'
+        category = googleQuery.data.items[0].volumeInfo.categories || 'Not Available'
+        pageCount = googleQuery.data.items[0].volumeInfo.pageCount || 'Not Available'
+        rating = googleQuery.data.items[0].volumeInfo.averageRating || 'Not Available'
+        description = textToParagraphs(
+            googleQuery.data.items[0].volumeInfo.description
+        )
+    }  
 
 
-    const likes = JSON.parse(bookQuery.data.likes) || []
-    const isLikedByUser = Array.isArray(likes)
-        ? likes.includes(user.id)
-        : false
+
+
+
+
 
     return <>
 
@@ -71,7 +130,7 @@ export default function Book() {
 
             {/* Header blur Background */}
             <img 
-                src={bookQuery.data.cover_url} alt="Book Cover" 
+                src={coverUrl} alt="Book Cover" 
                 className="absolute top-0 left-0 right-0 z-10 object-cover object-center w-full h-[50vh] blur-lg opacity-20"
             />
 
@@ -79,27 +138,30 @@ export default function Book() {
             <div className="relative z-20 flex flex-col gap-8">
 
                 <h1 className="text-3xl">
-                    {bookQuery.data.title}
+                    {title}
                 </h1>
 
                 <div className="border border-primary-400"></div>
 
                 <div>
-                    <p className="font-semibold">
-                        {googleQuery.data.items[0].volumeInfo.subtitle}
+                    <p className="my-4 font-semibold">
+                        {subtitle}
                     </p>
 
                     <p>
-                        By: {bookQuery.data.author}
+                        By: {author}
                     </p>
+                    
                     <p>
-                        Category: {googleQuery.data.items[0].volumeInfo.categories}
+                        Category: {category}
                     </p>
+
                     <p>
-                        Pages: {googleQuery.data.items[0].volumeInfo.pageCount}
+                        Pages: {pageCount}
                     </p>
+
                     <p>
-                        Google Rating: {googleQuery.data.items[0].volumeInfo.averageRating}/5
+                        Google Rating: {rating}/5
                     </p>
                 </div>
             </div>
@@ -107,7 +169,7 @@ export default function Book() {
             {/* Book Cover */}
             <div className="relative z-20">
                 <img 
-                    src={bookQuery.data.cover_url} 
+                    src={coverUrl} 
                     alt="Book Cover" 
                     className="mx-auto w-full rounded-lg" 
                 />
@@ -128,7 +190,7 @@ export default function Book() {
                             <a href="#comments">
                                 <img src={iconChat} />
                             </a>
-                            { bookQuery.data.comment_count }
+                            { commentCount }
                         </p>
                         <p className="flex items-center gap-2">
                             { isLoggedIn && <LikeBtn 
@@ -141,11 +203,8 @@ export default function Book() {
                             {likes.length}
                         </p>
 
-                        {user.id === bookQuery.data.user_id &&
-                           <DeleteBtn
-                                bookID={bookID} 
-                                setShowDeleteModal={setShowDeleteModal}
-                            />
+                        {user.id === bookUserID &&
+                           <DeleteBtn setShowDeleteModal={setShowDeleteModal} />
                         }
                 </div>
 
@@ -154,13 +213,17 @@ export default function Book() {
             {/* Book Description */}
             <div>
                 <h2 className="my-4 font-bold">Description</h2>
-                { description.map( (paragraph, index) => (
-                    <React.Fragment key={index}>
-                        <p className="text-lg my-6" key={index}>
-                            {paragraph}
-                        </p>
-                    </React.Fragment>
-                ))}
+                
+                { description.length > 0
+                    ? description.map( (paragraph, index) => (
+                        <React.Fragment key={index}>
+                            <p className="text-lg my-6" key={index}>
+                                {paragraph}
+                            </p>
+                        </React.Fragment>
+                    ))
+                    : <Loader />
+                }
 
             </div>
         </div>
@@ -179,7 +242,7 @@ export default function Book() {
                 username={user.username}
                 userID={user.id}
                 bookID={bookID}
-                bookTitle={bookQuery.data.title}
+                bookTitle={title}
                 updateComments={bookQuery.refetch}
             />
 
@@ -262,7 +325,7 @@ function LikeBtn({isLikedByUser, user, bookID, bookQuery}) {
 
 
 
-function DeleteBtn({bookID, setShowDeleteModal}) {
+function DeleteBtn({setShowDeleteModal}) {
 
     return ( <>
         <button 

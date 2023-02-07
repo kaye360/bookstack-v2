@@ -22,23 +22,7 @@ export const useBook = (bookID: number | undefined) => {
 
     const bookQuery = useQuery('getbook', getBook )
     const googleQuery = useQuery('getGoogleBookData', getGoogleBook, { 
-        enabled : bookQuery.isSuccess,
-        placeholderData : {
-            items: [
-                { 
-                    volumeInfo : {
-                        authors : 'Loading',
-                        subtitle : 'Loading',
-                        averageRating : 'Loading',
-                        categories : 'Loading',
-                        description : 'Loading',
-                        pageCount : 'Loading',
-                        publishedDate : 'Loading',
-                    }
-                }
-            ],
-            totalItems : 0
-        }
+        enabled : bookQuery.isSuccess
     })
 
     return { bookQuery, googleQuery }
