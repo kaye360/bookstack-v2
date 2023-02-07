@@ -39,7 +39,7 @@ export default function Feed() {
 
         <h1 className="mb-4 text-3xl">Community Feed</h1>
 
-        <ul className="flex flex-col gap-12 w-full max-w-lg ">
+        <ul className="flex flex-col gap-12 w-full max-w-xl ">
             { data.map( (notification : Inotification ) => (
                 <Notification key={notification.id} notification={notification} />
             ))}
@@ -86,12 +86,14 @@ function Notification({notification}) {
             alt="Book Cover"
         />
 
-        { notification.comment && <blockquote>
-            <span className="inline-block rounded-3xl px-4 py-1 mr-4 bg-primary-900">
+        { notification.comment && <blockquote className="flex flex-wrap items-start gap-2">
+            <span className="inline-block rounded-3xl px-4 py-1 bg-primary-900">
                 {notification.username}
             </span>
 
-            {notification.comment}
+            <p className=" max-w-md">
+                {notification.comment}
+            </p>
         </blockquote>
         }
 
