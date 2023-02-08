@@ -144,9 +144,9 @@ export default function Book() {
                 <div className="border border-primary-400"></div>
 
                 <div>
-                    <p className="my-4 font-semibold">
+                    {subtitle && <p className="my-4 font-semibold">
                         {subtitle}
-                    </p>
+                    </p>}
 
                     <p>
                         By: {author}

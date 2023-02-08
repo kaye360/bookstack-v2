@@ -6,7 +6,7 @@ interface IModalProps {
 }
 
 /**
- * @todo fix id type
+ * @todo fix id type and add esc keypress to close
  */
 
 export default function Modal({setModalState, children} : IModalProps) {
@@ -16,6 +16,7 @@ export default function Modal({setModalState, children} : IModalProps) {
             id="modal"
             onClick={(e) => {
                 console.log(e.target)
+                // @ts-ignore
                 if (e.target.id === 'modal') setModalState(false)}
             }
         >

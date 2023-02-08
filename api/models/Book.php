@@ -33,7 +33,8 @@ class Book extends Database
 		// Validate empty fields
 		if (
 			empty($post_data['isbn']) ||
-			empty($post_data['user_id'])
+			empty($post_data['user_id']) ||
+			empty($post_data['username'])
 		) {
 			// http_response_code(400);
 			return [
@@ -49,7 +50,7 @@ class Book extends Database
 				'title' => $post_data['title'],
 				'author' => $post_data['author'],
 				'is_read' => $post_data['is_read'],
-				'likes' => json_encode([]),
+				'likes' => '[]',
 				'cover_url' => $post_data['cover_url'],
 				'user_id' => $post_data['user_id']
 			],
@@ -62,7 +63,9 @@ class Book extends Database
 			type: 'upload',
 			message: "$post_data[username] added a book to their library: $post_data[title]",
 			link: '/book/' . $new_book['id'],
-			user_id: $post_data['user_id']
+			user_id: $post_data['user_id'],
+			image_url: $post_data['cover_url'],
+			username: $post_data['username']
 		);
 
 		return $new_book;
@@ -196,7 +199,7 @@ class Book extends Database
 			$current_book = $this->get_row_by_id(
 				id: $put_data['id'],
 				table: self::TABLE,
-				return: ['likes', 'title', 'user_id', 'id']
+				return: ['likes', 'title', 'user_id', 'id', 'cover_url']
 			);
 
 			if (!array_key_exists('likes', $current_book)) {
@@ -234,7 +237,9 @@ class Book extends Database
 					type: 'like',
 					message: $put_data['username'] . ' liked the book: ' . $current_book['title'],
 					link: '/book/' . $put_data['id'],
-					user_id : $put_data['user_id']
+					user_id : $put_data['user_id'],
+					image_url: $current_book['cover_url'],
+					username: $put_data['username']
 				);
 
 				// Create notification

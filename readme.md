@@ -41,8 +41,9 @@ Can be found in the /api_docs folder. Crucial information for each class and met
 
 
 ## TODO
-- update router docs
-- update apI docs where PUT POST DELETE requests had arguents
+- update api docs: router
+- update api docs: where PUT POST DELETE requests had arguents
+- update api docs: community->create() with image)url, comment, and username fields
 
 ## Bugs
 

@@ -34,7 +34,8 @@ class Comment extends Database
 			empty($post_data['comment']) ||
 			empty($post_data['user_id']) ||
 			empty($post_data['book_id']) ||
-			empty($post_data['username'])
+			empty($post_data['username']) ||
+			empty($post_data['image_url'])
 		) {
 			// http_response_code(400);
 			return [
@@ -93,7 +94,10 @@ class Comment extends Database
 			type: 'comment',
 			message: "$post_data[username] commented on a book: $post_data[book_title]",
 			link: '/book/' . $post_data['book_id'],
-			user_id: $post_data['user_id']
+			user_id: $post_data['user_id'],
+			image_url: $post_data['image_url'],
+			comment: $post_data['comment'],
+			username: $post_data['username']
 		);
 
 		// Add notificaiton

@@ -46,7 +46,10 @@ class Community extends Database
         string $type,
         string $message,
         string $link,
-        int $user_id
+        int $user_id,
+        string $image_url,
+        string $comment = null, 
+        string $username
     ) {
 
         return $this->create_row(
@@ -55,7 +58,10 @@ class Community extends Database
                 'type' => $type,
                 'message' => $message,
                 'link' => $link,
-                'user_id' => $user_id
+                'user_id' => $user_id,
+                'image_url' => $image_url,
+                'comment' => $comment,
+                'username' => $username
             ]
         );
     }
