@@ -15,14 +15,15 @@ class Router
 
 
 	/**
-	 * Get/set current URL
+	 * Get/set current URL without url params
 	 */
 	public function __construct()
 	{
 		if (!isset($_SERVER['REQUEST_URI'])) $url = '/';
 		$url = trim($_SERVER['REQUEST_URI'], " \n\r\t\v\x00/");
 		$url = filter_var($url, FILTER_SANITIZE_URL);
-		$this->url = $url;
+		$url = explode('?', $url);
+		$this->url = $url[0];
 	}
 
 

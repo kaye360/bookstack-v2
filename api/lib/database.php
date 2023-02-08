@@ -221,7 +221,9 @@ class Database
 		string $table,
 		array $return = null,
 		int $id = null,
-		string $id_col = null
+		string $id_col = null,
+		int $page = null,
+		int $per_page = null
 	) {
 
 		try {
@@ -230,9 +232,13 @@ class Database
 				? implode(', ', $return)
 				: '*';
 
+			if($page < 0) $page = 0;
+			$start = $page * $per_page;
+			$limit = $per_page ? "LIMIT $start,$per_page" : '';
+
 			$where = $id && $id_col ? "WHERE $id_col = $id" : '';
 
-			$sql = "SELECT $returned_columns FROM $table $where ORDER BY id DESC";
+			$sql = "\n\n\n SELECT $returned_columns FROM $table $where ORDER BY id DESC $limit";
 			$this->stmt = $this->dbh->prepare($sql);
 			$this->stmt->execute();
 
@@ -334,6 +340,24 @@ class Database
 				'message' => 'Error with query'
 			];
 		}
+	}
+
+	/**
+	 * 
+	 * @method get a row count of a table.
+	 * 
+	 * @var col and @var id are for an optional where statment
+	 * 
+	 * @return int
+	 * 
+	 */
+	protected function get_row_count(string $table, string $col = '', int $id = null) {
+		$where = isset($id) && isset($col) ? "WHERE $col = $id" : '';
+		$sql = "SELECT COUNT(*) FROM $table $where";
+		echo $sql;
+		$this->stmt = $this->dbh->prepare($sql);
+		$this->stmt->execute();
+		return $this->stmt->fetchColumn();
 	}
 
 	/**

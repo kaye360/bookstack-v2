@@ -199,7 +199,7 @@ $route->delete('/comment/:param', function() {
 
 // GET
 $route->get('/community/:param', function() {
-    return ['class' => 'Community', 'method' => 'get_user_feed', 'id'];
+    return ['class' => 'Community', 'method' => 'get_user_feed'];
 });
 
 $route->get('/community', function() {

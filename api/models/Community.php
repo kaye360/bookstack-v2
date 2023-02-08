@@ -24,11 +24,23 @@ class Community extends Database
     public function get_user_feed(
         string $id
     ) {
-        return $this->get_all_rows(
+        $count = $this->get_row_count(table: self::TABLE, col: 'user_id', id: $id);
+
+        $page = isset($_GET['page']) ? $_GET['page'] - 1 : 1;
+        $per_page = isset($_GET['perpage']) ? $_GET['perpage'] : null;
+
+        $rows = $this->get_all_rows(
             table: self::TABLE,
             id: $id,
-            id_col: 'user_id'
+            id_col: 'user_id',
+            page:  $page,
+            per_page: $per_page
         );
+
+        return [
+            'count' => $count,
+            'data' => $rows,
+        ];
     }
 
 
@@ -36,7 +48,20 @@ class Community extends Database
 
     public function get_community_feed()
     {
-          return $this->get_all_rows(table: self::TABLE);
+        $count = $this->get_row_count(table: self::TABLE);
+        $page = isset($_GET['page']) ? $_GET['page'] - 1 : 1;
+        $per_page = isset($_GET['perpage']) ? $_GET['perpage'] : null;
+
+        $rows = $this->get_all_rows(
+            table: self::TABLE,
+            page: $page,
+            per_page: $per_page
+        );
+
+        return [
+            'count' => $count,
+            'rows' => $rows
+        ];
     }
 
 
