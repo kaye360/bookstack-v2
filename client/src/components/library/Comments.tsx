@@ -53,7 +53,7 @@ export function Comments({isLoading, isError, book}) {
 
 
 
-export function CommentForm({username, userID, bookID, bookTitle, updateComments}) {
+export function CommentForm({username, userID, bookID, bookTitle, bookCoverUrl, updateComments}) {
 
     const [userComment, setUserComment] = useState('')
     const queryClient = useQueryClient()
@@ -67,7 +67,8 @@ export function CommentForm({username, userID, bookID, bookTitle, updateComments
             user_id : userID,   
             book_id : bookID,
             book_title : bookTitle,
-            comment : userComment
+            comment : userComment,
+            image_url: bookCoverUrl
         }
 
         const res = await httpReq.post(API_BASE_URL + '/comment', comment)
@@ -83,7 +84,16 @@ export function CommentForm({username, userID, bookID, bookTitle, updateComments
         return res
     }
 
-    const {error, isError, isLoading, refetch, isSuccess} : IQuery = useQuery('submitComment', postComment, { enabled:false, retry: false })
+    const {
+        error, 
+        isError, 
+        isLoading, 
+        refetch, 
+        isSuccess
+    } : IQuery = useQuery('submitComment', postComment, { 
+        enabled:false, 
+        retry: false 
+    })
 
     async function handleSubmit(e: any) {
         e.preventDefault()

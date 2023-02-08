@@ -43,9 +43,6 @@ export default function Book() {
         return <div>Book not found</div>
     }
 
-    // Add Book not found return
-    console.log(bookQuery.data)
-    
     // BookStack API Data
     let title : string
     let author : string
@@ -197,6 +194,7 @@ export default function Book() {
                                 isLikedByUser={isLikedByUser} 
                                 user={user}
                                 bookID={id}
+                                bookCover={coverUrl}
                                 bookQuery={bookQuery}
                                 />
                             }
@@ -244,6 +242,7 @@ export default function Book() {
                 bookID={bookID}
                 bookTitle={title}
                 updateComments={bookQuery.refetch}
+                bookCoverUrl={coverUrl}
             />
 
         </section>
@@ -297,13 +296,14 @@ function ToggleIsReadBtn({isRead, bookID, bookQuery}) {
 
 
 
-function LikeBtn({isLikedByUser, user, bookID, bookQuery}) {
+function LikeBtn({isLikedByUser, user, bookID, bookCover, bookQuery}) {
 
     async function toggleLikeBook() {
         const body = {
             id: bookID,
             user_id: user.id,
-            username: user.username
+            username: user.username,
+            image_url: bookCover
         }
         const res = await httpReq.put(API_BASE_URL + '/book/like', body)
         bookQuery.refetch()

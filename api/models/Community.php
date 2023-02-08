@@ -48,8 +48,8 @@ class Community extends Database
         string $link,
         int $user_id,
         string $image_url,
-        string $comment = null, 
-        string $username
+        string $username,
+        string $comment = '',
     ) {
 
         return $this->create_row(
