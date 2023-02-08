@@ -37,7 +37,7 @@ export default function Feed() {
 
     return <div className="w-full max-w-2xl">
 
-        <h1 className="mb-4 text-3xl">Community Feed</h1>
+        <h1 className="mb-8 text-3xl">Community Feed</h1>
 
         <ul className="flex flex-col gap-12 w-full max-w-xl ">
             { data.map( (feedItem : IfeedItem ) => (
@@ -71,14 +71,16 @@ function FeedItem({feedItem}) {
 
     return <li className="flex flex-col gap-6 px-4 py-8 rounded-xl bg-primary-750">
 
-        <span className="flex items-start gap-2 mr-4 py-2 italic font-light">
+        <span className="flex items-start gap-2 mr-4 italic font-light">
 
             <span>{ icons[feedItem.type] }</span>
-            <span>{ feedItem.message }</span>
+            <span>{ feedItem.message }:</span>
 
         </span>
 
-        { feedItem.comment && <blockquote className="flex flex-wrap items-start gap-2">
+
+
+        { feedItem.comment && <><blockquote className="flex flex-wrap items-start gap-2">
             <span className="inline-block rounded-3xl px-4 py-1 bg-primary-900">
                 {feedItem.username}
             </span>
@@ -87,6 +89,9 @@ function FeedItem({feedItem}) {
                 {feedItem.comment}
             </p>
         </blockquote>
+
+        <div className="border border-primary-600"></div>
+        </>
         }
 
         <img 

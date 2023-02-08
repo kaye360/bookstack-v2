@@ -2,7 +2,6 @@
 module.exports = {
   content: [
     "./index.html",
-    // "./src/*.{js,ts,jsx,tsx}",
     "./src/**/*.{js,ts,jsx,tsx}"
   ],
   theme: {
@@ -51,6 +50,9 @@ module.exports = {
           'to' : { backgroundColor : 'transparent' }
         }
       },
+      dropShadow: {
+        'sidebar': '0 -10px 10px hsla(219, 22%, 15%, 0.5)',
+      }
     },
   },
   plugins: [],

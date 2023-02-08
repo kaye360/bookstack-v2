@@ -17,13 +17,14 @@ export default function SideBar() {
 
     const { amount: notificationsAmount } = useNotifications(user.id)
 
-    return <nav>
+    return <nav className="">
         <ul className="
             fixed bottom-0 left-0 right-0 w-full z-50
             flex justify-between
             md:relative md:flex-col md:gap-10 md:justify-start
             p-4 md:px-6 md:py-12 rounded-xl
-            bg-primary-700 text-primary-200 
+            bg-primary-800 text-primary-200 border-t-4 border-primary-750
+             drop-shadow-sidebar
         ">
             <NavLink to="/dashboard" icon={iconDashboard}>Dashboard</NavLink>
             <NavLink to="/library" icon={iconLibrary}>Library</NavLink>
