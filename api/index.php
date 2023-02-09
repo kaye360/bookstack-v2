@@ -7,7 +7,7 @@
  * https://joshkaye.ca
  * 
  */
-
+error_reporting(E_ALL);
 /**
  * Config Files
  */
