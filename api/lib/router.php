@@ -7,6 +7,7 @@ class Router
 
 	private $url;
 	private $class;
+	private $class_file;
 	private $method;
 	private $param;
 	private $routes;
@@ -30,11 +31,11 @@ class Router
 
 
 	/**
-	 * Generate response JSON based on current route
+	 * Generate response based on current route
 	 */
 	public function response()
 	{
-		// Get Methods associated with current request method type
+		// Get defined methods associated with current request method type (GET, POST, PUT DELETE)
 		$route_methods = $this->routes;
 		// var_dump($route_methods);
 
@@ -45,12 +46,19 @@ class Router
 
 		// Check if current route exists in routes
 		if(!array_key_exists( $this->url, $route_methods  )) {
-			return 'This route doesn\'t exist';
+			return ['error' => 'This route doesn\'t exist'];
 		}
 
 		// Check/Set Classes and Methods
 		$this->class = $route_methods[$this->url]['class'];
 		$this->method = $route_methods[$this->url]['method'];
+		$this->class_file = './models/' . ucwords($this->class) . '.php';
+
+		if( !file_exists($this->class_file) ) {
+			return $this->error("Class file $this->class_file not found");
+		}
+
+		require_once $this->class_file;
 
 		if( !class_exists($this->class) ) {
 			return $this->error("Class $this->class not found");
@@ -75,7 +83,19 @@ class Router
 	 */
 	public function json()
 	{
-		echo json_encode( $this->response(), JSON_PRETTY_PRINT );
+		if ( $_SERVER['HTTP_HOST'] === 'bookstackapi.joshkaye.ca' ) {
+			ob_clean();
+		}
+
+		$json = json_encode( $this->response(), JSON_PRETTY_PRINT );
+		$error = json_encode(['error' => 'Error encoding JSON']);
+		http_response_code(200);
+
+		if ( $json === false) {
+			echo $error;
+		} else { 
+			echo $json;
+		}
 	}
 
 
