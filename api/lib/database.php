@@ -405,8 +405,6 @@ class Database
 		return $has_forbidden_chars;
 	}
 
-
-
 	/**
 	 * 
 	 * @method checks if string too long
@@ -418,4 +416,25 @@ class Database
 	{
 		return strlen($string) > $limit;
 	}
+
+	/**
+	 * 
+	 * @method validates are request inputs are specified
+	 * 
+	 * @return bool
+	 * 
+	 */
+	protected function validate_req(array $request, array $required_keys) 
+	{
+		if( !is_array($request) || !is_array($required_keys) ) return false;
+
+		$validated = true;
+
+		foreach($required_keys as $key) {
+			if( !array_key_exists($key, $request) ) $validated = false;
+		}
+
+		return $validated;
+	}
+
 }
