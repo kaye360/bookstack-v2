@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 
 import { API_BASE_URL } from "../config";
 import { useBook } from "../utils/useBook";
@@ -141,25 +141,17 @@ export default function Book() {
                 <div className="border border-primary-400"></div>
 
                 <div>
-                    {subtitle && <p className="my-4 font-semibold">
+                    {subtitle !== 'Not Available' && <p className="my-4 font-semibold">
                         {subtitle}
                     </p>}
 
-                    <p>
-                        By: {author}
-                    </p>
+                    <p>By: {author}</p>
                     
-                    <p>
-                        Category: {category}
-                    </p>
+                    <p>Category: {category}</p>
 
-                    <p>
-                        Pages: {pageCount}
-                    </p>
+                    <p>Pages: {pageCount}</p>
 
-                    <p>
-                        Google Rating: {rating}/5
-                    </p>
+                    <p>Google Rating: {rating}/5</p>
                 </div>
             </div>
 

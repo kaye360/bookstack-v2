@@ -20,7 +20,7 @@ export const useBook = (bookID: number | undefined) => {
         return false
     }
 
-    const bookQuery = useQuery('getbook', getBook )
+    const bookQuery = useQuery(['getbook', bookID], getBook )
     const googleQuery = useQuery('getGoogleBookData', getGoogleBook, { 
         enabled : bookQuery.isSuccess
     })
