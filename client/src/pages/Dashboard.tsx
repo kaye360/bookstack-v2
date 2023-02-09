@@ -33,8 +33,8 @@ export default function Dashboard() {
 
             <Explore />
 
-            <section className="my-4">
-                <h2 className="text-4xl">Community Feed</h2>
+            <section className="">
+                <h2 className="text-3xl mb-6">Community Feed</h2>
                 
                 <DashboardCommunityFeed />
                 

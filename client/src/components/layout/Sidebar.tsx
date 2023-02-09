@@ -23,7 +23,7 @@ export default function SideBar() {
             flex justify-between
             md:relative md:flex-col md:gap-10 md:justify-start
             p-4 md:px-6 md:py-12 rounded-xl
-            bg-primary-800 text-primary-200 border-t-4 border-primary-750
+            bg-primary-800 text-primary-200 border-t-4 border-primary-750 md:border-0
              drop-shadow-sidebar
         ">
             <NavLink to="/dashboard" icon={iconDashboard}>Dashboard</NavLink>
