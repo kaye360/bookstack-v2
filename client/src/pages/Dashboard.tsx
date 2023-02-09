@@ -9,6 +9,7 @@ import { useQuery } from "react-query";
 import Notification from "../components/layout/Notification";
 import Loader from "../components/layout/Loader";
 import { UserContext } from "../components/app/UserContextWrapper";
+import bookNoCover from "../assets/img/book-no-cover.png"
 
 
 export default function Dashboard() {
@@ -86,16 +87,24 @@ function DashboardNotifications() {
 }
 
 
+interface IfeedItem {
+    id: number,
+    type : 'upload' | 'like' | 'comment',
+    message : string,
+    comment : string,
+    link : string,
+    image_url : string,
+}
 
 
 function DashboardCommunityFeed() {
 
     async function getFeed() {
-        const res = await httpReq.get(API_BASE_URL + '/community')
+        const res = await httpReq.get(API_BASE_URL + '/community?perpage=10&page=1')
         return res
     }
 
-    const { data, isLoading, isError } = useQuery('getCommunityFeed', getFeed)
+    const { data: feed, isLoading, isError } = useQuery('getDashCommunityFeed', getFeed)
 
     if(isError) { 
         return <div>
@@ -107,18 +116,39 @@ function DashboardCommunityFeed() {
         return <Loader />
     }
     
-    return <>
-    <ul className="flex flex-col">
-        { data.slice(0,15).map( feedItem => (
-            <Notification key={feedItem.id} type={feedItem.type} url={feedItem.link} >
-                {feedItem.message}
-            </Notification>
-        ))
+    return <ul className="flex flex-col gap-8">
+        { feed.data.length !== 0
+            ? feed.data.slice(0,10).map( (feedItem : IfeedItem) => (
+                <li key={feedItem.id} className="grid grid-cols-[1fr_2fr] gap-4 p-8 bg-primary-750 rounded-2xl">
 
+                    <div>
+                        <img src={feedItem.image_url ? feedItem.image_url : bookNoCover} alt="Book Cover" />
+                    </div>
+
+                    <div className="flex flex-col justify-between gap-6">
+                        <h3 className="inline-block">
+                            {feedItem.type === 'upload' && '📖' }
+                            {feedItem.type === 'like' && '💟' }
+                            {feedItem.type === 'comment' && '💬' }
+                            &nbsp;
+                            {feedItem.message}
+                        </h3>
+
+                        {feedItem.comment && <p className="italic">"{feedItem.comment}"</p> }
+
+                        <div>
+                            <Link to={feedItem.link} 
+                                className="inline-block px-2 border rounded-md border-primary-400 px1 py-2 text-primary-200 hover:border-secondary-300"
+                            >
+                                View
+                            </Link>
+                        </div>
+                    </div>
+                </li>
+            ))
+            : <div className="p-4 rounded bg-primary-700">
+                This user has no recent activity.
+            </div>
         }
     </ul>
-
-    <Link to="/feed">View more activity</Link>
-
-    </>
 }

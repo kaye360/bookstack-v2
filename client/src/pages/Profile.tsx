@@ -7,6 +7,7 @@ import httpReq from "../utils/httpReq";
 import { API_BASE_URL } from "../config";
 import LibraryGrid from "../components/layout/LibraryGrid";
 import iconProfile from "../assets/img/icon-profile.png"
+import bookNoCover from "../assets/img/book-no-cover.png"
 
 export default function Profile() {
 
@@ -96,7 +97,9 @@ interface IfeedItem {
     id: number,
     type : 'upload' | 'like' | 'comment',
     message : string,
-    link : string
+    comment : string,
+    link : string,
+    image_url : string,
 }
 
 
@@ -107,9 +110,13 @@ function UsersPublicFeed({userID}) {
         return res
     }
 
-    const { data, isLoading, isError } = useQuery('getUsersFeed', getUsersFeed, {
-        initialData : []
+    const { data: feed, isLoading, isError } = useQuery('getUsersFeed', getUsersFeed, {
+        initialData : {
+            count : 0,
+            data : []
+        }
     })
+    console.log(feed)
 
     if(isError) { 
         return <div>
@@ -121,24 +128,34 @@ function UsersPublicFeed({userID}) {
         return <Loader />
     }
     
-    return <ul className="flex flex-col">
-        { data.length !== 0
-            ? data.slice(0,10).map( (feedItem : IfeedItem) => (
-                <li key={feedItem.id} className="py-8 border-b border-primary-500 last:border-0">
+    return <ul className="flex flex-col gap-8">
+        { feed.data.length !== 0
+            ? feed.data.slice(0,10).map( (feedItem : IfeedItem) => (
+                <li key={feedItem.id} className="grid grid-cols-[1fr_2fr] gap-4 p-8 bg-primary-750 rounded-2xl">
 
-                    <span className="inline-block mx-4">
-                        {feedItem.type === 'upload' && '📖' }
-                        {feedItem.type === 'like' && '💟' }
-                        {feedItem.type === 'comment' && '💬' }
-                    </span>
+                    <div>
+                        <img src={feedItem.image_url ? feedItem.image_url : bookNoCover} alt="Book Cover" />
+                    </div>
 
-                    <span className="mx-4">
-                        {feedItem.message}
-                    </span>
+                    <div className="flex flex-col justify-between gap-6">
+                        <h3 className="inline-block">
+                            {feedItem.type === 'upload' && '📖' }
+                            {feedItem.type === 'like' && '💟' }
+                            {feedItem.type === 'comment' && '💬' }
+                            &nbsp;
+                            {feedItem.message}
+                        </h3>
 
-                    <Link to={feedItem.link} className="text-primary-400">
-                        View
-                    </Link>
+                        {feedItem.comment && <p className="italic">"{feedItem.comment}"</p> }
+
+                        <div>
+                            <Link to={feedItem.link} 
+                                className="inline-block px-2 border rounded-md border-primary-400 px1 py-2 text-primary-200 hover:border-secondary-300"
+                            >
+                                View
+                            </Link>
+                        </div>
+                    </div>
                 </li>
             ))
             : <div className="p-4 rounded bg-primary-700">
