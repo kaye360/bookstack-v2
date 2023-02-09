@@ -60,7 +60,7 @@ class Community extends Database
 
         return [
             'count' => $count,
-            'rows' => $rows
+            'data' => $rows
         ];
     }
 

@@ -354,7 +354,6 @@ class Database
 	protected function get_row_count(string $table, string $col = '', int $id = null) {
 		$where = isset($id) && isset($col) ? "WHERE $col = $id" : '';
 		$sql = "SELECT COUNT(*) FROM $table $where";
-		echo $sql;
 		$this->stmt = $this->dbh->prepare($sql);
 		$this->stmt->execute();
 		return $this->stmt->fetchColumn();

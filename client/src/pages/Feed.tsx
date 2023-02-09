@@ -1,9 +1,10 @@
-import { useQuery } from "react-query";
+import { useInfiniteQuery, useQuery } from "react-query";
 import Loader from "../components/layout/Loader";
 import { API_BASE_URL } from "../config";
 import httpReq from "../utils/httpReq";
 import { Link, useLocation } from "react-router-dom"
 import bookNoCover from  "../assets/img/book-no-cover.png"
+import React from "react";
 
 
 
@@ -14,15 +15,32 @@ interface IfeedItem {
 
 export default function Feed() {
 
-    async function getFeed() {
-        const res = await httpReq.get(API_BASE_URL + '/community')
+    const perPage = 10
+
+    async function getFeed({pageParam = 1}) {
+        const res = await httpReq.get(API_BASE_URL + `/community?perpage=${perPage}&page=${pageParam}`)
         return res
     }
 
-    const { data, isLoading, isError } = useQuery('getCommunityFeed', getFeed)
+    const { 
+        data: feed, 
+        isLoading, 
+        isError,
+        isFetchingNextPage,
+        hasNextPage,
+        fetchNextPage
+    } = useInfiniteQuery(
+        ['getCommunityFeed'], 
+        getFeed,
+        {
+            getNextPageParam : (lastPage, pages) => {
+                const pageCount: number = Math.ceil(lastPage?.count / perPage)
+                return pages.length < pageCount ? pages.length + 1 : undefined
+            }
+        } 
+    )
 
-    // console.log(Array.isArray(data) ? data[0] : 'no data')
-
+    
     if(isError) { 
         return <div>
             Error loading community feed.
@@ -33,17 +51,32 @@ export default function Feed() {
         return <Loader />
     }
     
-
-
     return <div className="w-full max-w-2xl">
 
         <h1 className="mb-8 text-3xl">Community Feed</h1>
 
-        <ul className="flex flex-col gap-12 w-full max-w-xl ">
-            { data.map( (feedItem : IfeedItem ) => (
-                <FeedItem key={feedItem.id} feedItem={feedItem} />
+        <ul className="flex flex-col gap-12 w-full max-w-xl">
+            { feed.pages.map( (page, i) => (
+                <React.Fragment key={i}>
+                    { page.data.map( (feedItem : IfeedItem ) => (
+                        <FeedItem key={feedItem.id} feedItem={feedItem} />
+                     ))}
+                </React.Fragment>
             ))}
         </ul>
+
+        { hasNextPage &&
+            <button
+                className="block w-full max-w-xl my-4 py-4 text-center bg-transparent text-primary-200 hover:border-primary-200"
+                onClick={ () => {
+                    fetchNextPage()
+                }}
+            >
+                {isFetchingNextPage ? 'Loading...' : 'Load More' }
+            </button>
+        }
+
+
 
     </div>
 
