@@ -184,15 +184,11 @@ class Book extends Database
 			$put_data = $this->request();
 
 			// Validate request
-			if (
-				empty($put_data['id']) || // book ID
-				empty($put_data['user_id']) || // Liking user ID
-				empty($put_data['username']) // Liking username
-			) {
+			if ( !$this->validate_req($put_data, ['id', 'user_id', 'username']) ) {
 				// http_response_code(400);
 				return [
 					'success' => false,
-					'message' => 'Book ID, user ID, and username are required.'
+					'message' => 'Request validation failed in Book->like'
 				];
 			}
 
@@ -203,11 +199,11 @@ class Book extends Database
 				return: ['likes', 'title', 'user_id', 'id', 'cover_url']
 			);
 
-			if (!array_key_exists('likes', $current_book)) {
+			if ($current_book['success'] === false) {
 				// http_response_code(404);
 				return [
 					'success' => false,
-					'message' => 'This book doesn\'t exist'
+					'message' => 'Book not found'
 				];
 			}
 			
@@ -220,14 +216,6 @@ class Book extends Database
 				$user_id_key = array_search($put_data['user_id'], $current_book['likes']);
 				unset($current_book['likes'][$user_id_key]);
 
-				return $this->update_row(
-					id: $put_data['id'],
-					table: self::TABLE,
-					columns: [
-						'likes' => json_encode($current_book['likes'])
-					],
-					return: ['likes']
-				);
 			} else {
 
 				// Like
@@ -251,18 +239,21 @@ class Book extends Database
 					message: $put_data['username'] . ' liked your book: ' . $current_book['title'],
 					url: '/book/' . $current_book['id'],
 				);
-
-				return $this->update_row(
-					id: $put_data['id'],
-					table: self::TABLE,
-					columns: [
-						'likes' => json_encode($current_book['likes'])
-					],
-					return: ['likes']
-				);
 			}
+
+			$current_book['likes'] = (array) $current_book['likes'];
+
+			return $this->update_row(
+				id: $put_data['id'],
+				table: self::TABLE,
+				columns: [
+					'likes' => json_encode($current_book['likes'])
+				],
+				return: ['likes']
+			);
+
 		} catch(Exception $error) {
-			var_dump($error);
+			return ['error' => 'Something went wrong...'];
 		}
 	}
 
