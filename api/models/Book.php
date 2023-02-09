@@ -3,6 +3,7 @@
 
 require_once './lib/database.php';
 require_once './models/Community.php';
+require_once './models/Notification.php';
 
 
 
