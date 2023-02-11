@@ -14,7 +14,7 @@ export default function PreviewUsersLibrary() {
     let previewUsersBooks = library.slice(0, 6)
 
     return(
-        <section className="flex flex-col gap-4 p-8 bg-primary-900 rounded-xl">
+        <section className="flex flex-col gap-8 p-8 bg-primary-900 rounded-xl">
             <h2 className="text-4xl">Your Library</h2>
             { isLoading && <Loader />}
             { previewUsersBooks.length === 0 && 

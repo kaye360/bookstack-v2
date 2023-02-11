@@ -34,10 +34,6 @@ module.exports = {
         }
       },
 
-      gridTemplateColumns : {
-        content : 'auto 1fr'
-      },
-
       animation : {
         'notification-flash' : 'notification-flash 2s linear'
       },

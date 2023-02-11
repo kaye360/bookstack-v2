@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  font-family: 'Poppins', Helvetica, Arial, sans-serif;
+  font-family: 'Barlow', Helvetica, Arial, sans-serif;
   font-size: 16px;
   line-height: 24px;
   font-weight: 400;
@@ -30,7 +30,7 @@ a:hover {
 }
 
 body {
-  font-family: 'Poppins', Helvetica, Arial, sans-serif;
+  font-family: 'Barlow', Helvetica, Arial, sans-serif;
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
@@ -42,10 +42,10 @@ body {
   );
   background-attachment: fixed;
   color : #EFF2F5;
+  font-size: 1.1rem;
 }
 
 h1 {
-  font-size: 3.2em;
   line-height: 1.1;
 }
 

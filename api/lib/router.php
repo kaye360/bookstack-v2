@@ -84,7 +84,7 @@ class Router
 	public function json()
 	{
 		if ( $_SERVER['HTTP_HOST'] === 'bookstackapi.joshkaye.ca' ) {
-			// ob_clean();
+			ob_clean();
 		}
 
 		$json = json_encode( $this->response(), JSON_PRETTY_PRINT );

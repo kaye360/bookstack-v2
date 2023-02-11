@@ -1,4 +1,5 @@
 import { Link, useLocation } from "react-router-dom"
+import Icon from "../elements/Icon"
 
 type propTypes = {
     id: number
@@ -29,7 +30,7 @@ export default function Book({
         <div className="
             flex flex-col justify-end 
             relative h-full 
-            text-sm rounded-xl overflow-hidden aspect-[1/1.5]
+            text-sm rounded-xl overflow-hidden aspect-[1/1.7]
             hover:shadow-lg hover:shadow-primary-600"
             
             
@@ -40,10 +41,21 @@ export default function Book({
                 }
 
                 { showInfo && 
-                    <div className="relative z-20 flex justify-between p-1 bg-primary-900 bg-opacity-75 text-slate-200">
-                        <span>💖{likes}</span>
-                        <span>💬{commentCount}</span>
-                        <span>{isRead ? '☑️' : '🔲' }</span>
+                    <div className="relative z-20 flex justify-between p-1 bg-primary-900 bg-opacity-75 text-slate-200  text-sm text-opacity-50 hover:text-opacity-100">
+
+                        <span className="flex items-center gap-1">
+                            <Icon icon="favorite" className="text-sm" />
+                            {likes}
+                        </span>
+
+                        <span className="flex items-center gap-1">
+                            <Icon icon="chat_bubble" className="text-sm" />
+                            {commentCount}
+                        </span>
+
+                        <span className="flex items-center gap-1">
+                            <Icon icon={isRead ? 'check_box' : 'check_box_outline_blank'} className="text-sm" />
+                        </span>
                     </div>
                 }
 

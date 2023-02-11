@@ -10,6 +10,7 @@ import Notification from "../components/layout/Notification";
 import Loader from "../components/layout/Loader";
 import { UserContext } from "../components/app/UserContextWrapper";
 import bookNoCover from "../assets/img/book-no-cover.png"
+import { ButtonPrimaryOutlined } from "../components/elements/buttons";
 
 
 export default function Dashboard() {
@@ -17,10 +18,10 @@ export default function Dashboard() {
     const { user } = useContext(UserContext)
     
     return(
-        <>
+        <div className="flex flex-col gap-20">
             <h1 className="text-4xl">Dashboard</h1>
 
-            <div className="text-2xl my-4">
+            <div className="text-2xl">
                 Welcome back, {user.username}
             </div>
 
@@ -30,13 +31,9 @@ export default function Dashboard() {
 
             <Explore />
 
-            <section className="">
-                <h2 className="text-3xl mb-6">Community Feed</h2>
+            <DashboardCommunityFeed />
                 
-                <DashboardCommunityFeed />
-                
-            </section>
-        </>
+        </div>
     )
 
 }
@@ -53,7 +50,7 @@ function DashboardNotifications() {
 
 
     return(
-        <section className="rounded-xl bg-gradient-to-r from-primary-750 to bg-primary-800  p-8">
+        <section className="flex flex-col gap-8 rounded-xl bg-gradient-to-r from-primary-750 to bg-primary-800  p-8">
             <h2 className="text-3xl">Notifications</h2>
 
 
@@ -73,10 +70,10 @@ function DashboardNotifications() {
                 }
             </ul>
 
-            <Link to="/notifications"
-                className="inline-block my-6 px-4 py-2 rounded-lg border border-primary-200 hover:border-secondary-400"
-            >
-                View your recent notifications
+            <Link to="/notifications">
+                <ButtonPrimaryOutlined >
+                    View your recent notifications
+                </ButtonPrimaryOutlined>
             </Link>
 
         </section>
@@ -113,39 +110,45 @@ function DashboardCommunityFeed() {
         return <Loader />
     }
     
-    return <ul className="flex flex-col gap-8">
-        { feed.data.length !== 0
-            ? feed.data.slice(0,10).map( (feedItem : IfeedItem) => (
-                <li key={feedItem.id} className="grid grid-cols-[1fr_2fr] gap-4 p-8 rounded-2xl bg-gradient-to-l from-primary-900 to-primary-750 ">
+    return (
+        <section className="flex flex-col gap-8">
+            <h2 className="text-3xl mb-6">Community Feed</h2>
 
-                    <div>
-                        <img src={feedItem.image_url ? feedItem.image_url : bookNoCover} alt="Book Cover" />
-                    </div>
-
-                    <div className="flex flex-col justify-between gap-6">
-                        <h3 className="inline-block">
-                            {feedItem.type === 'upload' && '📖' }
-                            {feedItem.type === 'like' && '💟' }
-                            {feedItem.type === 'comment' && '💬' }
-                            &nbsp;
-                            {feedItem.message}
-                        </h3>
-
-                        {feedItem.comment && <p className="italic">"{feedItem.comment}"</p> }
+            <ul className="flex flex-col gap-8">
+            { feed.data.length !== 0
+                ? feed.data.slice(0,10).map( (feedItem : IfeedItem) => (
+                    <li key={feedItem.id} className="grid grid-cols-[1fr_2fr] gap-4 p-8 rounded-2xl bg-gradient-to-l from-primary-900 to-primary-750 ">
 
                         <div>
-                            <Link to={feedItem.link} 
-                                className="inline-block px-2 border rounded-md border-primary-400 px1 py-2 text-primary-200 hover:border-secondary-300"
-                            >
-                                View
-                            </Link>
+                            <img src={feedItem.image_url ? feedItem.image_url : bookNoCover} alt="Book Cover" />
                         </div>
-                    </div>
-                </li>
-            ))
-            : <div className="p-4 rounded bg-primary-700">
-                This user has no recent activity.
-            </div>
-        }
-    </ul>
+
+                        <div className="flex flex-col justify-between gap-6">
+                            <h3 className="inline-block">
+                                {feedItem.type === 'upload' && '📖' }
+                                {feedItem.type === 'like' && '💟' }
+                                {feedItem.type === 'comment' && '💬' }
+                                &nbsp;
+                                {feedItem.message}
+                            </h3>
+
+                            {feedItem.comment && <p className="italic">"{feedItem.comment}"</p> }
+
+                            <div>
+                                <Link to={feedItem.link} 
+                                    className="inline-block px-2 border rounded-md border-primary-400 px1 py-2 text-primary-200 hover:border-secondary-300"
+                                >
+                                    View
+                                </Link>
+                            </div>
+                        </div>
+                    </li>
+                ))
+                : <div className="p-4 rounded bg-primary-700">
+                    This user has no recent activity.
+                </div>
+            }
+            </ul>
+        </section>
+    )
 }

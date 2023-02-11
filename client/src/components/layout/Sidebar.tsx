@@ -10,6 +10,7 @@ import iconProfile from "../../assets/img/icon-profile.png"
 import iconAdd from "../../assets/img/icon-add-book.png"
 import { UserContext } from "../app/UserContextWrapper";
 import Separator from "./Separator";
+import Icon from "../elements/Icon";
 
 
 export default function SideBar() {
@@ -20,36 +21,54 @@ export default function SideBar() {
 
     return <nav className="
         fixed bottom-0 left-0 right-0 w-full z-50
-        md:relative p-4 md:px-2 md:py-8 
+        md:relative p-4 md:px-2 md:py-8 max-w-[250px]
         bg-primary-750 bg-starsVertical bg-repeat-space
         text-primary-200 border-t-4 border-primary-750 md:border-0
         drop-shadow-sidebar rounded-xl
     ">
         <ul className="flex justify-between md:flex-col md:gap-6 md:justify-start">
-            <li className="hidden md:block px-4">
-                
-                <span className="text-sm"> 
-                    Logged in as:<br />
-                </span>
-                <span className="text-xl font-medium text-primary-100">
-                    {user.username}
-                </span>
-                <Separator className="mt-2" />
-            </li>
-            <NavLink to="/dashboard" icon={iconDashboard}>Dashboard</NavLink>
-            <NavLink to="/library" icon={iconLibrary}>Library</NavLink>
-            <NavLink to="/feed" icon={iconCommunity}>Community</NavLink>
-            <NavLink to="/notifications" icon={iconNotifications}>
+            <User username={user.username} />
+            <NavLink to="/dashboard" icon="dashboard">Dashboard</NavLink>
+            <NavLink to="/library" icon="library_books">Library</NavLink>
+            <NavLink to="/feed" icon="groups">Community</NavLink>
+            <NavLink to="/notifications" icon="notifications">
                 Notifications
                 <NotificationBubble amount={notificationsAmount.recent}>{notificationsAmount.recent}</NotificationBubble>
             </NavLink>
-            <NavLink to={`/user/${user.username}`} icon={iconProfile}>Profile</NavLink>
-            <NavLink to="/library/add" icon={iconAdd}>Add</NavLink>
+            <NavLink to={`/user/${user.username}`} icon="account_circle">Profile</NavLink>
+            <NavLink to="/library/add" icon="library_add">Add</NavLink>
 
         </ul>
 
     </nav>
 }
+
+
+
+
+interface UserProptype {
+    username: string
+}
+
+function User({username}: UserProptype) {
+
+    return <li className="hidden md:block px-4">
+                
+        <span className="text-sm"> 
+            Logged in as:<br />
+        </span>
+
+        <span className="flex items-center gap-2 my-2 text-xl font-medium text-primary-100 bg-primary-750 overflow-hidden hover:overflow-visible">
+            <Icon icon="person" />
+            {username}
+        </span>
+
+        <Separator className="mt-2" />
+    </li>
+}
+
+
+
 
 
 function NavLink({to, icon, children}) {
@@ -71,7 +90,7 @@ function NavLink({to, icon, children}) {
                 'rounded bg-primary-600 '
             }
             `}>
-            <img src={icon} className="mx-auto md:mx-0"/>
+            <Icon icon={icon} />
             <div>
                 <span className="hidden sm:inline">{linkText}</span>
                 { notificationBubble && notificationBubble }
@@ -91,7 +110,7 @@ function NotificationBubble({children, amount}) {
                 md:static md:left-0
                 inline-flex items-center justify-center 
                 mx-1 aspect-square w-6
-                bg-rose-500 rounded-full 
+                bg-secondary-500 rounded-full text-primary-800
             ">
             {children}
         </span>

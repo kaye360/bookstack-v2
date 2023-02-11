@@ -60,7 +60,7 @@ function App() {
 
 			<div className={`
 				grid
-				${ isSidebarShown ? 'md:grid-cols-content md:gap-8 py-8' : ''} 
+				${ isSidebarShown ? 'md:grid-cols-[auto_1fr] md:gap-8 py-8' : ''} 
 			`}>
 
 

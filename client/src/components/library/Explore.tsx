@@ -5,6 +5,7 @@ import Book from "./Book";
 import Loader from "../layout/Loader"
 import { Link } from "react-router-dom";
 import LibraryGrid from "./LibraryGrid";
+import { ButtonPrimaryOutlined, ButtonPrimaryPlain, ButtonSecondaryPlain } from "../elements/buttons";
 
 interface Ibook {
     id: number,
@@ -36,8 +37,8 @@ export default function Explore() {
     }
 
     return(
-        <section className="flex flex-col gap-4 py-8">
-            <h2 className="text-4xl mb-8">Explore</h2>
+        <section className="flex flex-col gap-8">
+            <h2 className="text-4xl">Explore</h2>
 
             <LibraryGrid>
                 { exploreBooks && exploreBooks.map( (book: Ibook) => {
@@ -51,7 +52,11 @@ export default function Explore() {
                 })}
             </LibraryGrid>
 
-            <Link to="/explore" className="my-8">See more books in the community</Link>
+            <Link to="/explore" className="mt-">
+                <ButtonPrimaryOutlined>
+                    See more books in the community
+                </ButtonPrimaryOutlined>
+            </Link>
         </section>
     )
 }

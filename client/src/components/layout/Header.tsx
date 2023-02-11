@@ -4,6 +4,7 @@ import Logo from "./Logo";
 import IconMenu from "../../assets/img/icon-menu.svg"
 import { useState } from "react";
 import { UserContext } from "../app/UserContextWrapper";
+import Icon from "../elements/Icon";
 
 export default function Header() {
 
@@ -36,15 +37,32 @@ export default function Header() {
                 <Logo/>
 
                 <ul className={`${baseMenuCss} ${isMenuOpen ? menuShownCss : menuHiddenCss}`} >
-                    <NavLink to="/" event={toggleMenu}>Home</NavLink>
-                    <NavLink to="/explore" event={toggleMenu}>Explore</NavLink>
-                    <NavLink to="/about" event={toggleMenu}>About</NavLink>
+                    <NavLink to="/" event={toggleMenu}>
+                        <Icon icon="home" />
+                        Home
+                    </NavLink>
+
+                    <NavLink to="/explore" event={toggleMenu}>
+                        <Icon icon="explore" />
+                        Explore 
+                    </NavLink>
+                    
+                    <NavLink to="/about" event={toggleMenu}>
+                        <Icon icon="scatter_plot" />
+                        About
+                    </NavLink>
                     { isLoggedIn
                         ? <NavLink to="/logout" event={ () => {
                             logout() 
                             toggleMenu()
-                        }}>Logout</NavLink>
-                        : <NavLink to="/account" event={toggleMenu}>Account</NavLink>
+                        }}>
+                            <Icon icon="account_circle" />
+                            Logout
+                        </NavLink>
+                        : <NavLink to="/account" event={toggleMenu}>
+                            <Icon icon="account_circle" />
+                            Account
+                        </NavLink>
                      }
                 </ul>
 
@@ -59,6 +77,8 @@ export default function Header() {
         </header>
     )
 }
+
+
 
 
 interface INavLink {
@@ -77,7 +97,7 @@ function NavLink({to, children, event} : INavLink) {
             to={to} 
             onClick={event} 
             className={`
-                inline-block text-primary-100 font-semibold rounded px-4 py-2
+                inline-flex items-center gap-2 text-primary-100 font-semibold rounded px-4 py-2
                 ${to === location.pathname && 'bg-primary-700'}
                 `}>
                 {children}

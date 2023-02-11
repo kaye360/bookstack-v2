@@ -18,7 +18,7 @@ export default function Explore() {
 
     return(
         <section className="flex flex-col gap-4 py-8">
-            <h2 className="text-4xl">Explore</h2>
+            <h2 className="text-4xl">Explore </h2>
 
             <p className="p-4 rounded-xl bg-primary-900 my-8">
                 Check out some books of the books in the community

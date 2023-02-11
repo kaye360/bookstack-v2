@@ -18,6 +18,7 @@ import iconDelete from "../assets/img/icon-delete.png"
 import { Comments, CommentForm } from "../components/library/Comments";
 import { UserContext } from "../components/app/UserContextWrapper";
 import bookNoCover from "../assets/img/book-no-cover.png"
+import Icon from "../components/elements/Icon";
 
 
 export default function Book() {
@@ -179,7 +180,7 @@ export default function Book() {
                 />
 
                 { user.id === bookQuery.data.user_id &&
-                    <p className="text-center ">
+                    <p className="flex items-center justify-center my-2">
                         <ToggleIsReadBtn 
                             isRead={isRead} 
                             bookID={ bookID } 
@@ -191,8 +192,8 @@ export default function Book() {
 
                 <div className="w-full flex items-center justify-between font-bold">
                         <p className="flex items-center gap-2">
-                            <a href="#comments">
-                                <img src={iconChat} />
+                            <a href="#comments" className="translate-y-1">
+                                <Icon icon="chat_bubble" />
                             </a>
                             { commentCount }
                         </p>
@@ -273,7 +274,7 @@ function BackBtn() {
 
     return  <div>
         <Link to={refferer} className="flex items-center gap-2">
-            <img src={iconBack} />
+            <Icon icon="keyboard_backspace" />
             {titles.hasOwnProperty(titlesKey) ? titles[titlesKey] : 'Back'}
         </Link>
     </div>
@@ -294,7 +295,11 @@ function ToggleIsReadBtn({isRead, bookID, bookQuery}) {
     const { refetch } = useQuery('toggleIsRead', toggleIsRead, {enabled: false})
 
     return <button onClick={ () => refetch() } className='p-0 mx-2 cursor-pointer bg-transparent outline-0 border-0 focus:outline-0 hover:border-0'>
-        {isRead ? '☑️' : '🔲' }
+        {isRead ? (
+            <Icon icon="check_box" />
+        ) : (
+            <Icon icon="check_box_outline_blank" />
+        )}
     </button>
 }
 
@@ -318,11 +323,8 @@ function LikeBtn({isLikedByUser, user, bookID, bookCover, bookQuery}) {
         enabled : false
     })
 
-    return <button onClick={ () => {refetch()} } className='p-0 bg-transparent outline-0 border-0 focus:outline-0 hover:border-0'>
-        { isLikedByUser 
-            ? <img src={iconLiked} /> 
-            : <img src={iconLike} />
-        }
+    return <button onClick={ () => {refetch()} } className={`p-0 bg-transparent outline-0 border-0 focus:outline-0 hover:border-0 translate-y-1 ${isLikedByUser ? 'text-red-400' : ''} `}>
+        <Icon icon="favorite" />
     </button>
 
 }
@@ -337,7 +339,7 @@ function DeleteBtn({setShowDeleteModal}) {
             onClick={() => setShowDeleteModal(true)} 
             className="bg-transparent"
         >
-            <img src={iconDelete} />
+            <Icon icon="delete" />
         </button>
     </>)
 }

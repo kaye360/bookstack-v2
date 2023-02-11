@@ -5,6 +5,7 @@ import httpReq from "../utils/httpReq";
 import { Link, useLocation } from "react-router-dom"
 import bookNoCover from  "../assets/img/book-no-cover.png"
 import React from "react";
+import Icon from "../components/elements/Icon";
 
 
 
@@ -97,16 +98,16 @@ function FeedItem({feedItem}) {
     const location = useLocation()
 
     const icons: Iicons = {
-        upload : '📖',
-        comment : '💬',
-        like : '💟',
+        upload : 'book',
+        comment : 'chat_bubble',
+        like : 'favorite',
     }
 
     return <li className="flex flex-col gap-6 px-4 py-8 rounded-xl bg-gradient-to-r from-primary-900 to-primary-750 ">
 
         <span className="flex items-start gap-2 mr-4 italic font-light">
 
-            <span>{ icons[feedItem.type] }</span>
+            <span className="text-primary-300"><Icon icon={ icons[feedItem.type] } /></span>
             <span>{ feedItem.message }:</span>
 
         </span>
@@ -114,11 +115,11 @@ function FeedItem({feedItem}) {
 
 
         { feedItem.comment && <><blockquote className="flex flex-wrap items-start gap-2">
-            <span className="inline-block rounded-3xl px-4 py-1 bg-primary-900">
+            <span className="inline-block rounded-3xl px-4 py-1 bg-primary-300 text-primary-800 font-semibold">
                 {feedItem.username}
             </span>
 
-            <p className=" max-w-md">
+            <p className="max-w-md">
                 {feedItem.comment}
             </p>
         </blockquote>
