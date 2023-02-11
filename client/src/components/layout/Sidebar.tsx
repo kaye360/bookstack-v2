@@ -9,6 +9,7 @@ import iconNotifications from "../../assets/img/icon-notifications.png"
 import iconProfile from "../../assets/img/icon-profile.png"
 import iconAdd from "../../assets/img/icon-add-book.png"
 import { UserContext } from "../app/UserContextWrapper";
+import Separator from "./Separator";
 
 
 export default function SideBar() {
@@ -17,15 +18,23 @@ export default function SideBar() {
 
     const { amount: notificationsAmount } = useNotifications(user.id)
 
-    return <nav className="">
-        <ul className="
-            fixed bottom-0 left-0 right-0 w-full z-50
-            flex justify-between
-            md:relative md:flex-col md:gap-10 md:justify-start
-            p-4 md:px-6 md:py-12 rounded-xl
-            bg-primary-800 text-primary-200 border-t-4 border-primary-750 md:border-0
-             drop-shadow-sidebar
-        ">
+    return <nav className="
+        fixed bottom-0 left-0 right-0 w-full z-50
+        md:relative p-4 md:px-2 md:py-8 
+        bg-primary-750 text-primary-200 border-t-4 border-primary-750 md:border-0
+        drop-shadow-sidebar rounded-xl
+    ">
+        <ul className="flex justify-between md:flex-col md:gap-6 md:justify-start">
+            <li className="hidden md:block px-4">
+                
+                <span className="text-sm"> 
+                    Logged in as:<br />
+                </span>
+                <span className="text-xl font-medium text-primary-100">
+                    {user.username}
+                </span>
+                <Separator className="mt-2" />
+            </li>
             <NavLink to="/dashboard" icon={iconDashboard}>Dashboard</NavLink>
             <NavLink to="/library" icon={iconLibrary}>Library</NavLink>
             <NavLink to="/feed" icon={iconCommunity}>Community</NavLink>
@@ -35,8 +44,10 @@ export default function SideBar() {
             </NavLink>
             <NavLink to={`/user/${user.username}`} icon={iconProfile}>Profile</NavLink>
             <NavLink to="/library/add" icon={iconAdd}>Add</NavLink>
+
         </ul>
-</nav>
+
+    </nav>
 }
 
 
