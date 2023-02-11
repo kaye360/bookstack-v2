@@ -1,12 +1,19 @@
 import { Link } from "react-router-dom";
+import logo from "../../assets/img/logo.png"
 
 
 export default function Logo() {
 
 
     return(
-        <Link to="/" className="text-2xl font-bold text-primary-100">
-            BookStack
+        <Link to="/" className="flex items-center gap-[2px] text-2xl font-bold text-primary-100">
+            <img src={logo} className="-translate-y-[2px]" />
+            <span>
+                Book    
+                <span className="text-secondary-500 font-normal text-2xl">
+                    Stack
+                </span>
+            </span>
         </Link>
     )
 }

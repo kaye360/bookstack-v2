@@ -20,14 +20,11 @@ export default function Dashboard() {
         <>
             <h1 className="text-4xl">Dashboard</h1>
 
-            <section className="grid gap-4 md:grid-cols-2">
+            <div className="text-2xl my-4">
+                Welcome back, {user.username}
+            </div>
 
-                <div className="flex items-center text-xl">
-                    Welcome back, {user.username}
-                </div>
-
-                <DashboardNotifications />
-            </section>
+            <DashboardNotifications />
 
             <PreviewUsersLibrary />
 
@@ -56,8 +53,8 @@ function DashboardNotifications() {
 
 
     return(
-        <div className="rounded-xl bg-primary-700 p-4">
-            <h3 className="text-lg font-bold">Notifications</h3>
+        <section className="rounded-xl bg-gradient-to-r from-primary-750 to bg-primary-800  p-8">
+            <h2 className="text-3xl">Notifications</h2>
 
 
             { amount.recent === 0 &&
@@ -66,7 +63,7 @@ function DashboardNotifications() {
 
             <ul>
                 {
-                    notifications.recent.map( 
+                    notifications.recent.slice(0, 3).map( 
                         (notification : { message:string, url:string, type:string }, index) => (
                             <Notification key={index} type={notification.type} url={notification.url} >
                                 {notification.message}
@@ -82,7 +79,7 @@ function DashboardNotifications() {
                 View your recent notifications
             </Link>
 
-        </div>
+        </section>
     )
 }
 
@@ -100,7 +97,7 @@ interface IfeedItem {
 function DashboardCommunityFeed() {
 
     async function getFeed() {
-        const res = await httpReq.get(API_BASE_URL + '/community?perpage=10&page=1')
+        const res = await httpReq.get(API_BASE_URL + '/community?perpage=5&page=1')
         return res
     }
 
@@ -119,7 +116,7 @@ function DashboardCommunityFeed() {
     return <ul className="flex flex-col gap-8">
         { feed.data.length !== 0
             ? feed.data.slice(0,10).map( (feedItem : IfeedItem) => (
-                <li key={feedItem.id} className="grid grid-cols-[1fr_2fr] gap-4 p-8 bg-primary-750 rounded-2xl">
+                <li key={feedItem.id} className="grid grid-cols-[1fr_2fr] gap-4 p-8 rounded-2xl bg-gradient-to-l from-primary-900 to-primary-750 ">
 
                     <div>
                         <img src={feedItem.image_url ? feedItem.image_url : bookNoCover} alt="Book Cover" />

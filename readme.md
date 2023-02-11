@@ -51,9 +51,7 @@ Can be found in the /api_docs folder. Crucial information for each class and met
 
 
 ## Future Feature Ideas
-- Full Typescript integration
 - add username to book DB. Show user affiliated with this book and link to profile
-- pagination or infinite scroll
 - currently reading
 - sorting library in book view
 - list view for library with sorting
@@ -61,3 +59,4 @@ Can be found in the /api_docs folder. Crucial information for each class and met
 - live search library with debouncing
 - use proper response codes on api fails
 - user auth on protected api routes. send user id and uuid front frontend on 
+- dark/light mode

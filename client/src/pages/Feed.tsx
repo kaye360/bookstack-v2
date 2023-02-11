@@ -67,7 +67,7 @@ export default function Feed() {
 
         { hasNextPage &&
             <button
-                className="block w-full max-w-xl my-4 py-4 text-center bg-transparent text-primary-200 hover:border-primary-200"
+                className="block w-full max-w-xl my-12 py-4 text-center text-xl bg-primary-600 text-primary-200 hover:border-primary-200 hover:bg-secondary-600 outline-none border-none"
                 onClick={ () => {
                     fetchNextPage()
                 }}
@@ -102,7 +102,7 @@ function FeedItem({feedItem}) {
         like : '💟',
     }
 
-    return <li className="flex flex-col gap-6 px-4 py-8 rounded-xl bg-primary-750">
+    return <li className="flex flex-col gap-6 px-4 py-8 rounded-xl bg-gradient-to-r from-primary-900 to-primary-750 ">
 
         <span className="flex items-start gap-2 mr-4 italic font-light">
 

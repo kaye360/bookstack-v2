@@ -16,7 +16,7 @@ export default function Header() {
         md:relative md:px-4 md:max-h-[1000px] md:py-0 
         md:flex md:flex-row items-center md:gap-8 
         transition-all duration-300 ease-in-out
-        bg-primary-900 bg-opacity-90 rounded`
+        `
 
 
     const menuHiddenCss = `max-h-[0px] overflow-hidden px-16 py-0`
@@ -29,7 +29,7 @@ export default function Header() {
     }
 
     return(
-        <header className="relative z-50 bg-primary-900 bg-opacity-80 rounded-xl px-1 py-4">
+        <header className="relative z-50 bg-primary-900 bg-stars bg-opacity-80 rounded-xl px-1 py-4">
 
             <nav className="relative flex items-center justify-between p-2">
 

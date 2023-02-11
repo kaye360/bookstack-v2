@@ -50,8 +50,16 @@ module.exports = {
           'to' : { backgroundColor : 'transparent' }
         }
       },
-      dropShadow: {
+      dropShadow : {
         'sidebar': '0 -10px 10px hsla(219, 22%, 15%, 0.5)',
+      },
+      backgroundImage : {
+        'stars' : "url(./assets/img/bg-stars.png)",
+        'starsVertical' : "url(./assets/img/bg-stars-vertical.png)"
+      },
+      letterSpacing : {
+        normal : '1rem',
+        default : '1rem'
       }
     },
   },

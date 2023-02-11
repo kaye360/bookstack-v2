@@ -21,7 +21,8 @@ export default function SideBar() {
     return <nav className="
         fixed bottom-0 left-0 right-0 w-full z-50
         md:relative p-4 md:px-2 md:py-8 
-        bg-primary-750 text-primary-200 border-t-4 border-primary-750 md:border-0
+        bg-primary-750 bg-starsVertical bg-repeat-space
+        text-primary-200 border-t-4 border-primary-750 md:border-0
         drop-shadow-sidebar rounded-xl
     ">
         <ul className="flex justify-between md:flex-col md:gap-6 md:justify-start">
