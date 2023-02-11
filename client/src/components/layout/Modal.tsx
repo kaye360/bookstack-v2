@@ -15,7 +15,6 @@ export default function Modal({setModalState, children} : IModalProps) {
             className="fixed inset-0 grid items-center px-3 bg-primary-900 z-[1000] bg-opacity-75"
             id="modal"
             onClick={(e) => {
-                console.log(e.target)
                 // @ts-ignore
                 if (e.target.id === 'modal') setModalState(false)}
             }

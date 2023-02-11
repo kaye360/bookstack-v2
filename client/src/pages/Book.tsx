@@ -16,8 +16,8 @@ import iconLiked from "../assets/img/icon-liked.png"
 import iconChat from "../assets/img/icon-chat.png"
 import iconDelete from "../assets/img/icon-delete.png"
 import { Comments, CommentForm } from "../components/library/Comments";
-import React from "react";
 import { UserContext } from "../components/app/UserContextWrapper";
+import bookNoCover from "../assets/img/book-no-cover.png"
 
 
 export default function Book() {
@@ -77,7 +77,7 @@ export default function Book() {
     title = bookQuery.data.title
     author = bookQuery.data.author
     isRead = bookQuery.data?.is_read === 'true'
-    coverUrl = bookQuery.data.cover_url
+    coverUrl = bookQuery.data.cover_url || bookNoCover
     commentCount = bookQuery.data.comment_count
     bookUserID = bookQuery.data.user_id
     
@@ -109,6 +109,7 @@ export default function Book() {
         googleQuery.data.totalItems > 0 &&
         Array.isArray(googleQuery.data.items)
     ) {
+        author = googleQuery.data.items[0].volumeInfo.author || 'Not Available'
         subtitle = googleQuery.data.items[0].volumeInfo.subtitle || 'Not Available'
         category = googleQuery.data.items[0].volumeInfo.categories || 'Not Available'
         pageCount = googleQuery.data.items[0].volumeInfo.pageCount || 'Not Available'
@@ -116,10 +117,11 @@ export default function Book() {
         description = textToParagraphs(
             googleQuery.data.items[0].volumeInfo.description
         )
+        description = description.length === 0 ? ['Not Available'] : description
     }  
 
 
-
+    console.log(description)
 
 
 
@@ -170,13 +172,11 @@ export default function Book() {
             {/* Book Cover */}
             <div className="relative z-20">
 
-                { coverUrl &&
-                    <img 
-                        src={coverUrl} 
-                        alt="Book Cover" 
-                        className="mx-auto w-full rounded-lg" 
-                    />
-                }
+                <img 
+                    src={coverUrl} 
+                    alt="Book Cover" 
+                    className="mx-auto w-full rounded-lg" 
+                />
 
                 { user.id === bookQuery.data.user_id &&
                     <p className="text-center ">
@@ -221,11 +221,9 @@ export default function Book() {
                 
                 { description.length > 0
                     ? description.map( (paragraph, index) => (
-                        <React.Fragment key={index}>
-                            <p className="text-lg my-6" key={index}>
-                                {paragraph}
-                            </p>
-                        </React.Fragment>
+                        <p className="text-lg my-6" key={index}>
+                            {paragraph}
+                        </p>
                     ))
                     : <Loader />
                 }

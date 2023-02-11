@@ -45,7 +45,6 @@ Can be found in the /api_docs folder. Crucial information for each class and met
 - update api docs: where PUT POST DELETE requests had arguents
 - update api docs: community->create() with image)url, comment, and username fields
 - add communtiy api docs
-- community feed not updating in production
 
 ## Bugs
 
