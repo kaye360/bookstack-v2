@@ -4,7 +4,7 @@ import AddBookModal from "../components/library/AddBookModal";
 import Book from "../components/library/Book";
 import { useLibrary } from "../utils/useLibrary";
 import iconAddBook from "../assets/img/icon-add-book.png"
-import LibraryGrid from "../components/layout/LibraryGrid";
+import LibraryGrid from "../components/library/LibraryGrid";
 import booksMagical from "../assets/img/books-magical.png"
 import { UserContext } from "../components/app/UserContextWrapper";
 

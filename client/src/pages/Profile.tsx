@@ -5,7 +5,7 @@ import Book from  '../components/library/Book'
 import { useQuery } from "react-query";
 import httpReq from "../utils/httpReq";
 import { API_BASE_URL } from "../config";
-import LibraryGrid from "../components/layout/LibraryGrid";
+import LibraryGrid from "../components/library/LibraryGrid";
 import iconProfile from "../assets/img/icon-profile.png"
 import bookNoCover from "../assets/img/book-no-cover.png"
 

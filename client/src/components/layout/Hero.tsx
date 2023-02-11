@@ -14,7 +14,7 @@ export default function Hero() {
 
             <Header />
 
-            <div className="relative max-w-xl z-40 md:pl-12 py-12 flex flex-col gap-6">
+            <div className="relative max-w-xl z-40 pl-4 md:pl-12 py-12 flex flex-col gap-6">
                 <h1 className="text-3xl font-bold leading-normal tracking-wide">
                     A Better Way to Manage Your Personal Book Collection
                 </h1>

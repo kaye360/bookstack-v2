@@ -3,7 +3,7 @@ import Book from "../components/library/Book";
 import Loader from "../components/layout/Loader";
 import { API_BASE_URL } from "../config";
 import httpReq from "../utils/httpReq";
-import LibraryGrid from "../components/layout/LibraryGrid";
+import LibraryGrid from "../components/library/LibraryGrid";
 
 export default function Explore() {
     
