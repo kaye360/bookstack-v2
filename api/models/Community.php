@@ -51,12 +51,15 @@ class Community extends Database
         $count = $this->get_row_count(table: self::TABLE);
         $page = isset($_GET['page']) ? $_GET['page'] - 1 : 1;
         $per_page = isset($_GET['perpage']) ? $_GET['perpage'] : null;
+        $isShuffled = !(isset($_GET['shuffle']) && $_GET['shuffle'] === 'false');
 
         $rows = $this->get_all_rows(
             table: self::TABLE,
             page: $page,
             per_page: $per_page
         );
+
+        if($isShuffled) shuffle($rows);
 
         return [
             'count' => $count,

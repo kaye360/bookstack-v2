@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { useQuery, useQueryClient } from "react-query";
+import { useQuery } from "react-query";
 
 import { API_BASE_URL } from "../config";
 import { useBook } from "../utils/useBook";
@@ -43,6 +43,14 @@ export default function Book() {
         return <div>Book not found</div>
     }
 
+    /**
+     * 
+     * Type Definitions and instantiations
+     * 
+     * Don't need a loading/error state here, already covered above
+     * 
+     */
+
     // BookStack API Data
     let title : string
     let author : string
@@ -61,7 +69,9 @@ export default function Book() {
     let description: string[] = []
     
     /**
+     * 
      * Local BookStack API data formating
+     * 
      */
     
     title = bookQuery.data.title
@@ -77,7 +87,9 @@ export default function Book() {
     }
     
     /**
+     * 
      * Google Books API data formating
+     * 
      */
 
     // If Google Books API isLoading
@@ -157,11 +169,14 @@ export default function Book() {
 
             {/* Book Cover */}
             <div className="relative z-20">
-                <img 
-                    src={coverUrl} 
-                    alt="Book Cover" 
-                    className="mx-auto w-full rounded-lg" 
-                />
+
+                { coverUrl &&
+                    <img 
+                        src={coverUrl} 
+                        alt="Book Cover" 
+                        className="mx-auto w-full rounded-lg" 
+                    />
+                }
 
                 { user.id === bookQuery.data.user_id &&
                     <p className="text-center ">
