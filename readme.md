@@ -52,7 +52,6 @@ Can be found in the /api_docs folder. Crucial information for each class and met
 
 
 ## Future Feature Ideas
-- Randomize community feed
 - Full Typescript integration
 - add username to book DB. Show user affiliated with this book and link to profile
 - pagination or infinite scroll

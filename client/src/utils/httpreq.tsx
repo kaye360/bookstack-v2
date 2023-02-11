@@ -1,13 +1,15 @@
 /**
  * 
- * httpReq
- * Facade for fetch functions  
+ * Facade @class httpReq
+ * 
+ * This is a fetch wrapper class to simplify GET POST
+ * PUT and DELETE fetch requests
  * 
  */
 
 
 
-type HttpFunc = (url:string, body?: object | []) => Promise<any>
+type HttpMethod = (url:string, body?: object | []) => Promise<any>
 
 
 class httpReq {
@@ -15,7 +17,7 @@ class httpReq {
 
 
 
-    static get: HttpFunc = async function( url ) {
+    static get: HttpMethod = async function( url ) {
 
         const res = await fetch(url)
         let data: Promise<any>
@@ -27,7 +29,7 @@ class httpReq {
 
 
 
-    static post: HttpFunc = async function( url, body ) {
+    static post: HttpMethod = async function( url, body ) {
 
         const res = await fetch(url, {
             method: 'POST',
@@ -47,7 +49,7 @@ class httpReq {
 
 
 
-    static put: HttpFunc = async function( url, body ) {
+    static put: HttpMethod = async function( url, body ) {
 
         const res = await fetch(url, {
             method : 'PUT',
@@ -67,7 +69,7 @@ class httpReq {
 
 
 
-    static delete: HttpFunc = async function( url, body ) {
+    static delete: HttpMethod = async function( url, body ) {
 
         const res = await fetch( url , {
             method : 'DELETE',

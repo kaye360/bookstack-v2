@@ -1,3 +1,12 @@
+/**
+ * 
+ * custom hook @function useAuth()
+ * 
+ * This is the user authentication logic and is used as the as a global
+ * useContext hook UserContext.
+ * 
+ */
+
 import { useState } from "react"
 import { useQuery, useQueryClient } from "react-query"
 import { API_BASE_URL } from "../config"
@@ -14,7 +23,9 @@ interface IdefaultUser {
 export default function useAuth() {
 
     /**
-     * User Auth Data
+     * 
+     * User Auth State
+     * 
      */
 
     const defaultUser: IdefaultUser = {
@@ -24,10 +35,13 @@ export default function useAuth() {
     }
     const [user, setUser] = useState( defaultUser )
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false)
-    const localToken = localStorage.getItem('token') || false
+    const localToken: string | false = localStorage.getItem('token') || false
 
     /**
-     * Check if Token is stored and preserve login status Query
+     * 
+     * Check if Token is stored in Local Storage and 
+     * validate against token in Database
+     * 
      */
     const { isError: isGetUserError } = useQuery('getUser', getUser)
 
@@ -50,7 +64,9 @@ export default function useAuth() {
     }
 
     /**
-     * Login Query
+     * 
+     * Login query and logic
+     * 
      */
 
     const [username, setUserName] = useState<string>('')
@@ -68,7 +84,6 @@ export default function useAuth() {
     async function loginQuery() {
 
         const postData = { username, password }
-
         const res = await httpReq.post(API_BASE_URL + '/user/login', postData )
 
         if(res.success) {
@@ -90,8 +105,11 @@ export default function useAuth() {
     }
 
     /**
-     * Logout Query
+     * 
+     * Logout query and logic
+     * 
      */
+
     async function logout() {
         localStorage.removeItem('token')
         setIsLoggedIn(false)
@@ -102,6 +120,12 @@ export default function useAuth() {
         }
         const res = await httpReq.post(API_BASE_URL + '/user/logout', postData)
     }
+
+    /**
+     * 
+     * @returns an object of values and functions to be used
+     * 
+     */
     
     return {
         user, setUser, 

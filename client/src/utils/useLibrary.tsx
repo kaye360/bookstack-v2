@@ -1,3 +1,12 @@
+/**
+ * 
+ * Custom hook @function useLibrary()
+ * 
+ * This hook retrieves a user's personal library from the 
+ * local DB.
+ * 
+ */
+
 import httpReq from "./httpReq"
 import { API_BASE_URL } from "../config"
 import { useQuery } from "react-query"
@@ -29,6 +38,12 @@ interface IBookAPI {
 
 export const useLibrary = (userId: number) => {
 
+    /**
+     * 
+     * Get library query and function
+     * 
+     */
+
     async function getLibrary() {
         const res = await httpReq.get(API_BASE_URL + '/books/' + userId)
         return res
@@ -36,7 +51,12 @@ export const useLibrary = (userId: number) => {
 
     const { data, isError, isLoading, refetch: refetchLibrary } = useQuery('library', getLibrary)
 
-
+    /**
+     * 
+     * Create an array in @var library and format the
+     * data and keys to be used in the app
+     * 
+     */
 
     let library: IBook[] = []
 

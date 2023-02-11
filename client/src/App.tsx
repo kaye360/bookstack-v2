@@ -2,6 +2,8 @@
  * 
  * Book Stack User Interface
  * 
+ * @author Josh Kaye
+ * 
  */
 
 // Dependencies
@@ -11,6 +13,7 @@ import { Route, Routes, useLocation } from "react-router-dom"
 import Header from "./components/layout/Header"
 import SideBar from "./components/layout/Sidebar"
 import Footer from "./components/layout/Footer"
+
 
 // Pages
 import About from "./pages/About"
@@ -65,6 +68,7 @@ function App() {
 
 				<main id="#content" className="flex flex-col gap-8 px-2">
 				<Routes>
+
 					{/* Public Routes */}
 					<Route path="/"	element={<Home />} />
 					<Route path="/explore" element={<Explore />} />

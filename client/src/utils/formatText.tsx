@@ -1,8 +1,16 @@
-
-
 /**
- * takes a block of text and splits into paragraphs of 3 sentences
+ * 
+ * utility @function textToParagraphs
+ * 
+ * This utility function takes a block of text and 
+ * splits it into paragraphs of 3 sentences.
+ * 
+ * This is needed because the Google Books API  returns
+ * book descriptions as 1 long chunk of text.
+ * 
  */
+
+
 export function textToParagraphs(text : string): string[] {
 
     if (!text) return []
