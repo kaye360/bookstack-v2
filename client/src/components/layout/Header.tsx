@@ -14,14 +14,16 @@ export default function Header() {
     const baseMenuCss = `
         absolute right-0 top-full 
         flex flex-col gap-4 
-        md:relative md:px-4 md:max-h-[1000px] md:py-0 
+        w-full md:w-auto bg-primary-900 md:bg-transparent rounded-lg overflow-hidden
+        md:relative md:px-4 md:max-h-[500px] md:py-0 
         md:flex md:flex-row items-center md:gap-8 
-        transition-all duration-300 ease-in-out
+        transition-all duration-500 ease-in-out
+        md:blur-none
         `
 
 
-    const menuHiddenCss = `max-h-[0px] overflow-hidden px-16 py-0`
-    const menuShownCss = `max-h-[600px] px-16 py-4`
+    const menuHiddenCss = `max-h-[0px] overflow-hidden px-16 py-0 blur-md`
+    const menuShownCss = `max-h-[600px] px-16 py-4 blur-none`
     const [isMenuOpen, setIsMenuOpen] = useState(false)
 
 

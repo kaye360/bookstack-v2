@@ -2,12 +2,6 @@ import { useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useNotifications } from "../../utils/useNotifications";
 
-import iconDashboard from "../../assets/img/icon-dashboard.png"
-import iconLibrary from "../../assets/img/icon-library.png"
-import iconCommunity from "../../assets/img/icon-community.png"
-import iconNotifications from "../../assets/img/icon-notifications.png"
-import iconProfile from "../../assets/img/icon-profile.png"
-import iconAdd from "../../assets/img/icon-add-book.png"
 import { UserContext } from "../app/UserContextWrapper";
 import Separator from "./Separator";
 import Icon from "../elements/Icon";
@@ -21,12 +15,12 @@ export default function SideBar() {
 
     return <nav className="
         fixed bottom-0 left-0 right-0 w-full z-50
-        md:relative p-4 md:px-2 md:py-8 max-w-[250px]
+        md:relative p-4 md:px-2 md:py-8 md:max-w-[250px]
         bg-primary-750 bg-starsVertical bg-repeat-space
         text-primary-200 border-t-4 border-primary-750 md:border-0
         drop-shadow-sidebar rounded-xl
     ">
-        <ul className="flex justify-between md:flex-col md:gap-6 md:justify-start">
+        <ul className="relative z-50 flex justify-between md:flex-col md:gap-6 md:justify-start">
             <User username={user.username} />
             <NavLink to="/dashboard" icon="dashboard">Dashboard</NavLink>
             <NavLink to="/library" icon="library_books">Library</NavLink>
@@ -110,7 +104,7 @@ function NotificationBubble({children, amount}) {
                 md:static md:left-0
                 inline-flex items-center justify-center 
                 mx-1 aspect-square w-6
-                bg-secondary-500 rounded-full text-primary-800
+                bg-secondary-500 rounded-full text-primary-800 text-sm font-bold
             ">
             {children}
         </span>

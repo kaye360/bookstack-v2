@@ -1,6 +1,9 @@
 /**
  * 
- * This component causes scroll to top of the page on every <Link> click
+ * This component causes scroll to top of the page on every
+ * <Link> click, which doesn't happen by default with 
+ * React Router
+ * 
  * Used in main.tsx inside <BrowserRouter>
  * 
  * Code found here:
