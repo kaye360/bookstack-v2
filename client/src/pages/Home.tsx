@@ -3,12 +3,13 @@ import Hero from "../components/layout/Hero";
 import Explore from "../components/library/Explore";
 import booksScattered from "../assets/img/books-scattered.png"
 import booksAngled from "../assets/img/books-angled.png"
+import TextBlock from "../components/elements/TextBlock";
 
 export default function Home() {
 
     
     return(
-    <div className="flex flex-col gap-12">
+    <div className="flex flex-col gap-12 pb-12">
         
         <Hero />
 
@@ -21,9 +22,9 @@ export default function Home() {
                 />
             </div>
 
-            <div className="">
+            <TextBlock>
 
-                <h2 className="text-3xl mb-8">
+                <h2 className="text-3xl">
                     Stay Organized
                 </h2>
 
@@ -31,11 +32,11 @@ export default function Home() {
                     Whether you are an avid reader or just starting your collection, BookStack is the perfect tool to help you stay organized and keep your books in order. Start organizing your books today and enjoy an enhanced  reading experience.
                 </p>
 
-            </div>
+            </TextBlock>
 
-            <div className="">
+            <TextBlock>
 
-                <h2 className="text-3xl mb-8">
+                <h2 className="text-3xl">
                     Share your collection
                 </h2>
 
@@ -43,7 +44,7 @@ export default function Home() {
                     With this app, you can share your book collection with friends, family, and other book enthusiasts from around the world. Whether you're looking to find new books to read, connect with others, or share your love for books, BookShare is the perfect app for you!
                 </p>
 
-            </div>
+            </TextBlock>
 
             <div className="">
                 <img src={booksScattered} 

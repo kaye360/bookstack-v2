@@ -11,12 +11,6 @@ export default function Header() {
 
     const { isLoggedIn, logout } = useContext(UserContext)
 
-    function toggleDarkMode() {
-        const htmlEL = document.querySelector('html')
-        htmlEL.classList.toggle('dark')
-    }
-
-
     const baseMenuCss = `
         absolute right-0 top-full 
         flex flex-col gap-4 
@@ -60,6 +54,7 @@ export default function Header() {
                         <Icon icon="scatter_plot" />
                         About
                     </NavLink>
+                    
                     { isLoggedIn ? (
                         <NavLink to="/logout" event={ () => {
                             logout() 
@@ -75,6 +70,8 @@ export default function Header() {
                         </NavLink>
                     )}
 
+                    <ThemeToggler />
+
                 </ul>
 
                 <button 
@@ -86,10 +83,6 @@ export default function Header() {
                     </TextInline>
                 </button>
             </nav>
-
-            <button className="fixed top-2 right-2 bg-black text-white p-0 m-0" onClick={ toggleDarkMode }>
-                Mode
-            </button>
 
         </header>
     )
@@ -117,9 +110,35 @@ function NavLink({to, children, event} : INavLink) {
                 inline-flex items-center gap-2 
                 text-primary-800 dark:text-primary-100 
                 font-semibold rounded px-4 py-2
-                ${to === location.pathname && 'bg-primary-500 dark:bg-primary-700'}
+                hover:text-primary-750 hover:bg-primary-250
+                ${to === location.pathname && 'bg-primary-300 dark:bg-primary-700'}
             `}>
                 {children}
         </Link>
     </li>
+}
+
+
+
+
+function ThemeToggler() {
+    
+    function toggleDarkMode() {
+        const htmlEL = document.querySelector('html')
+        htmlEL.classList.toggle('dark')
+    }
+
+    return (
+        <li>
+            <button 
+                className="border-none outline-none focus:border-none focus:outline-none rounded-full flex items-center gap-4 bg-primary-300 dark:bg-primary-700 text-white m-0 p-0 px-2 py-1" 
+                onClick={ toggleDarkMode }
+            >
+
+                <Icon icon="light_mode" className="opacity-100 dark:opacity-50" />
+                <Icon icon="dark_mode"  className="opacity-50 dark:opacity-100" />
+
+            </button>
+        </li>
+    )
 }

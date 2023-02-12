@@ -20,7 +20,7 @@ export default function SideBar() {
         md:relative p-4 md:px-2 md:py-8 md:max-w-[250px]
         dark:bg-primary-750 bg-primary-100
         bg-starsVertical bg-repeat-space
-        text-primary-200 border-t-4 border-primary-750 md:border-0
+        text-primary-200 border-t-4 border-primary-200 dark:border-primary-750 md:border-0
         drop-shadow-sidebar-light dark:drop-shadow-sidebar-dark
         rounded-xl
     ">
@@ -87,7 +87,7 @@ function NavLink({to, icon, children}) {
             text-primary-800 hover:text-primary-600 hover:bg-primary-150
             dark:text-primary-100 dark:hover:text-primary-100 dark:hover:bg-primary-700
             ${to === location.pathname && 
-                'rounded bg-primary-300 dark:bg-primary-600'
+                'rounded bg-primary-250 dark:bg-primary-600'
             }
             `}>
             <Icon icon={icon} />
