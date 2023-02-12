@@ -7,6 +7,27 @@ interface ButtonProps {
     children: ReactNode
 }
 
+
+
+
+export function ButtonBasic({className, children, onClick} : ButtonProps) {
+
+    return (
+        <button
+            className={`border-none outline-none bg-transparent text-primary-750 dark:text-primary-100 ${className}`}
+            onClick={onClick}
+        >
+
+            {children}
+            
+        </button>
+    )
+}
+
+
+
+
+
 export function ButtonPrimaryOutlined({className, children, onClick} : ButtonProps) {
 
     return (

@@ -10,15 +10,16 @@ import { textToParagraphs } from "../utils/formatText";
 
 import Loader from "../components/layout/Loader";
 import Modal from "../components/layout/Modal";
-import iconBack from "../assets/img/icon-back.png"
-import iconLike from "../assets/img/icon-like.png"
-import iconLiked from "../assets/img/icon-liked.png"
-import iconChat from "../assets/img/icon-chat.png"
-import iconDelete from "../assets/img/icon-delete.png"
 import { Comments, CommentForm } from "../components/library/Comments";
 import { UserContext } from "../components/app/UserContextWrapper";
 import bookNoCover from "../assets/img/book-no-cover.png"
 import Icon from "../components/elements/Icon";
+import PageHeading from "../components/elements/PageHeading";
+import TextInline from "../components/elements/TextInline";
+import TextFlex from "../components/elements/TextFlex";
+import Separator from "../components/layout/Separator";
+import TextBlock from "../components/elements/TextBlock";
+import { ButtonBasic, ButtonPrimaryPlain } from "../components/elements/buttons";
 
 
 export default function Book() {
@@ -143,22 +144,24 @@ export default function Book() {
             {/* Header blur Background */}
             <img 
                 src={coverUrl} alt="Book Cover" 
-                className="absolute top-0 left-0 right-0 z-10 object-cover object-center w-full h-[50vh] blur-lg opacity-20"
+                className="absolute top-0 left-0 right-0 z-10 object-cover object-center w-full h-[50vh] blur-lg opacity-[15%]"
             />
 
             {/* Book Info Header */}
             <div className="relative z-20 flex flex-col gap-8">
 
-                <h1 className="text-3xl">
+                <PageHeading>
                     {title}
-                </h1>
+                </PageHeading>
 
-                <div className="border border-primary-400"></div>
+                <Separator />
 
-                <div>
-                    {subtitle !== 'Not Available' && <p className="my-4 font-semibold">
-                        {subtitle}
-                    </p>}
+                <TextBlock>
+                    {subtitle !== 'Not Available' && 
+                        <p className="my-4 font-semibold">
+                            {subtitle}
+                        </p>
+                    }
 
                     <p>By: {author}</p>
                     
@@ -167,7 +170,8 @@ export default function Book() {
                     <p>Pages: {pageCount}</p>
 
                     <p>Google Rating: {rating}/5</p>
-                </div>
+                </TextBlock>
+
             </div>
 
             {/* Book Cover */}
@@ -176,65 +180,82 @@ export default function Book() {
                 <img 
                     src={coverUrl} 
                     alt="Book Cover" 
-                    className="mx-auto w-full rounded-lg" 
+                    className="mx-auto w-full rounded-lg opacity-50 dark:opacity-100" 
                 />
 
                 { user.id === bookQuery.data.user_id &&
-                    <p className="flex items-center justify-center my-2">
+
+                    <TextFlex className="justify-center w-full my-4">
+
                         <ToggleIsReadBtn 
                             isRead={isRead} 
                             bookID={ bookID } 
                             bookQuery={bookQuery} 
                         /> 
-                        {isRead ? 'I have read this book' : 'I haven\'t read this book'}
-                    </p>
+
+                        {isRead ? (
+                            <span>Read</span>
+                        ) : (
+                            <span>Not Read</span> 
+                        )}
+
+                    </TextFlex>
                 }
 
                 <div className="w-full flex items-center justify-between font-bold">
-                        <p className="flex items-center gap-2">
-                            <a href="#comments" className="translate-y-1">
-                                <Icon icon="chat_bubble" />
-                            </a>
-                            { commentCount }
-                        </p>
-                        <p className="flex items-center gap-2">
-                            { isLoggedIn && <LikeBtn 
-                                isLikedByUser={isLikedByUser} 
-                                user={user}
-                                bookID={id}
-                                bookCover={coverUrl}
-                                bookQuery={bookQuery}
-                                />
-                            }
-                            {likes.length}
-                        </p>
 
-                        {user.id === bookUserID &&
-                           <DeleteBtn setShowDeleteModal={setShowDeleteModal} />
+                    <a href="#comments">
+                        <TextFlex>
+                            <Icon icon="chat_bubble" className="translate-y-1" />
+                            { commentCount }
+                        </TextFlex>
+                    </a>
+
+                    <TextFlex>
+                        { isLoggedIn && <LikeBtn 
+                            isLikedByUser={isLikedByUser} 
+                            user={user}
+                            bookID={id}
+                            bookCover={coverUrl}
+                            bookQuery={bookQuery}
+                            />
                         }
+                        {likes.length}
+                    </TextFlex>
+
+                    {user.id === bookUserID &&
+                        <DeleteBtn setShowDeleteModal={setShowDeleteModal} />
+                    }
+
                 </div>
 
             </div>
 
             {/* Book Description */}
-            <div>
-                <h2 className="my-4 font-bold">Description</h2>
+            <TextBlock>
+                <h2 className="font-bold">Description</h2>
                 
-                { description.length > 0
-                    ? description.map( (paragraph, index) => (
-                        <p className="text-lg my-6" key={index}>
-                            {paragraph}
-                        </p>
+                { description.length > 0 ? (
+
+                    description.map( (paragraph, index) => (
+                        <p key={index}> {paragraph} </p>
                     ))
-                    : <Loader />
-                }
 
-            </div>
+                ) : (
+
+                    <Loader />
+
+                )}
+
+            </TextBlock>
         </div>
-    
 
-        <section className="" id="comments">
-            <h2 className="my-4 py-4 text-2xl font-bold border-t border-slate-200">Comments</h2>
+        <Separator />
+
+        <section id="comments" className="flex flex-col gap-6">
+            <TextBlock>
+                <h2 className="text-2xl font-bold">Comments</h2>
+            </TextBlock>
 
             <Comments 
                 isLoading={bookQuery.isLoading}
@@ -272,12 +293,14 @@ function BackBtn() {
         notifications : 'Back to your notifications'
     }
 
-    return  <div>
+    return(
         <Link to={refferer} className="flex items-center gap-2">
-            <Icon icon="keyboard_backspace" />
-            {titles.hasOwnProperty(titlesKey) ? titles[titlesKey] : 'Back'}
+            <TextFlex>
+                <Icon icon="keyboard_backspace" />
+                {titles.hasOwnProperty(titlesKey) ? titles[titlesKey] : 'Back'}
+            </TextFlex>
         </Link>
-    </div>
+    )
 }
 
 
@@ -323,9 +346,16 @@ function LikeBtn({isLikedByUser, user, bookID, bookCover, bookQuery}) {
         enabled : false
     })
 
-    return <button onClick={ () => {refetch()} } className={`p-0 bg-transparent outline-0 border-0 focus:outline-0 hover:border-0 translate-y-1 ${isLikedByUser ? 'text-red-400' : ''} `}>
-        <Icon icon="favorite" />
-    </button>
+    return (
+        <button 
+            onClick={ () => {refetch()} } 
+            className={`p-0 bg-transparent outline-0 border-0 focus:outline-0 hover:border-0 translate-y-1 ${isLikedByUser ? 'text-red-400' : ''} `}
+        >
+
+            <Icon icon="favorite" />
+            
+        </button>
+    )
 
 }
 
@@ -334,14 +364,16 @@ function LikeBtn({isLikedByUser, user, bookID, bookCover, bookQuery}) {
 
 function DeleteBtn({setShowDeleteModal}) {
 
-    return ( <>
-        <button 
+    return (
+        <ButtonBasic
             onClick={() => setShowDeleteModal(true)} 
-            className="bg-transparent"
+            className="bg-transparent no-underline translate-y-1"
         >
+            
             <Icon icon="delete" />
-        </button>
-    </>)
+
+        </ButtonBasic>
+    )
 }
 
 

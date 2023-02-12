@@ -4,6 +4,8 @@ import { Link } from "react-router-dom"
 import { API_BASE_URL } from "../../config"
 import httpReq from "../../utils/httpReq"
 import { UserContext } from "../app/UserContextWrapper"
+import TextBlock from "../elements/TextBlock"
+import TextInline from "../elements/TextInline"
 
 interface IQuery {
     error : {
@@ -16,36 +18,46 @@ interface IQuery {
 }
 
 
+interface Icomment {
+    [index:string] : string | number
+}
+
+
+
+
 export function Comments({isLoading, isError, book}) {
 
     if(isLoading) {
-        return <div>Comments are loading</div>
+        return <TextBlock>Comments are loading</TextBlock>
     }
 
     if(isError) {
-        return <div>Error Loading Comments</div>
+        return <TextBlock>Error Loading Comments</TextBlock>
     }
 
     if(book.comments.success === false) {
-        return <div>No comments were found on this book. Be the first!</div>
+        return <TextBlock>No comments were found on this book. Be the first!</TextBlock>
     }
 
     return (
         <ul className="flex flex-col gap-8 text-left" id="comments">
-            { 
-            book.comments.map( comment => {
-                return(
-                    <li key={comment.id}>
-                        <h3 className="w-fit px-4 py-2 rounded-2xl font-bold text-xl bg-primary-900">
-                            <Link to={`/user/${comment.username}`}>
+
+            { book.comments.map( (comment: Icomment) =>(
+                <li key={comment.id}>
+                    <h3 className="w-fit px-4 py-2 rounded-2xl font-bold text-xl bg-primary-300 dark:bg-primary-900">
+                        <Link to={`/user/${comment.username}`}>
+                            <TextInline>
                                 {comment.username}
-                            </Link>
-                        </h3>
-                        <p className="m-[1rem_0_1rem_1rem] px-4 border-l-4 border-primary-600">
+                            </TextInline>
+                        </Link>
+                    </h3>
+                    <p className="m-[1rem_0_1rem_1rem] px-4 border-l-4 border-primary-600">
+                        <TextInline>
                             {comment.comment}
-                        </p>
-                    </li>
-            )})
+                        </TextInline>
+                    </p>
+                </li>
+            ))
             }
         </ul>
     )
@@ -102,23 +114,26 @@ export function CommentForm({username, userID, bookID, bookTitle, bookCoverUrl, 
 
     return(
         <form onSubmit={handleSubmit} >
-            <div className="flex flex-col gap-4 text-left max-w-lg my-4 p-4 rounded-md bg-primary-600">
+            <div className="flex flex-col gap-4 text-left max-w-lg my-4 p-4 rounded-md bg-primary-100 dark:bg-primary-600">
 
                 <h4 className="font-bold">
-                    { isLoggedIn 
-                        ? <>
-                            Commenting as: { username } &nbsp;
-                            <span className="text-sm font-normal">
-                                ({userComment.length}/200 characters)
-                            </span>
-                        </>
-                        : <span className="inline-block ml-2 font-normal">Please sign in to post a comment</span>
-                    }
+                    <TextInline>
+                        { isLoggedIn ? (
+                            <>
+                                Commenting as: { username } &nbsp;
+                                <span className="text-sm font-normal">
+                                    ({userComment.length}/200 characters)
+                                </span>
+                            </>
+                        ) : (
+                            <span className="inline-block ml-2 font-normal">Please sign in to post a comment</span>
+                        )}
+                    </TextInline>
                 </h4>
 
                 { isLoggedIn && <>
                     <textarea 
-                        className="resize-none rounded p-2 w-full h-32 bg-primary-300 text-primary-800"
+                        className="resize-none rounded p-2 w-full h-32 bg-primary-150 dark:bg-primary-300 text-primary-800"
                         onChange={ (e) => setUserComment(e.target.value) }
                         value={userComment}
                     ></textarea>
