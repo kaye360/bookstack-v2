@@ -132,6 +132,7 @@ export function CommentForm({username, userID, bookID, bookTitle, bookCoverUrl, 
                 </h4>
 
                 { isLoggedIn && <>
+
                     <textarea 
                         className="resize-none rounded p-2 w-full h-32 bg-primary-150 dark:bg-primary-300 text-primary-800"
                         onChange={ (e) => setUserComment(e.target.value) }
@@ -139,10 +140,15 @@ export function CommentForm({username, userID, bookID, bookTitle, bookCoverUrl, 
                     ></textarea>
 
                     <div className="flex items-center gap-4">
+
                         <input type="submit" value="Post Comment" className="rounded-md px-4 py-2 bg-primary-200 text-primary-900 font-bold w-fit cursor-pointer" />
-                        { isSuccess && 'Comment Posted!'}
-                        { isLoading && 'Please wait...'}
-                        { isError && error.message }
+
+                        <TextInline>
+                            { isSuccess && 'Comment Posted!'}
+                            { isLoading && 'Please wait...'}
+                            { isError && error.message }
+                        </TextInline>
+                        
                     </div>
                 </>
                 }

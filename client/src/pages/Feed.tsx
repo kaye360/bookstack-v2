@@ -6,6 +6,12 @@ import { Link, useLocation } from "react-router-dom"
 import bookNoCover from  "../assets/img/book-no-cover.png"
 import React from "react";
 import Icon from "../components/elements/Icon";
+import TextBlock from "../components/elements/TextBlock";
+import PageHeading from "../components/elements/PageHeading";
+import TextFlex from "../components/elements/TextFlex";
+import Separator from "../components/layout/Separator";
+import TextInline from "../components/elements/TextInline";
+import { ButtonPrimaryFilled, ButtonPrimaryOutlined } from "../components/elements/buttons";
 
 
 
@@ -43,44 +49,48 @@ export default function Feed() {
 
     
     if(isError) { 
-        return <div>
-            Error loading community feed.
-        </div>
+        return (
+            <TextBlock>
+                Error loading community feed.
+            </TextBlock>
+        )
     }
 
     if(isLoading) {
         return <Loader />
     }
     
-    return <div className="w-full max-w-2xl">
+    return (
+        <div className="flex flex-col gap-8 w-full max-w-2xl">
 
-        <h1 className="mb-8 text-3xl">Community Feed</h1>
+            <PageHeading>
+                Community Feed
+            </PageHeading>
 
-        <ul className="flex flex-col gap-12 w-full max-w-xl">
-            { feed.pages.map( (page, i) => (
-                <React.Fragment key={i}>
-                    { page.data.map( (feedItem : IfeedItem ) => (
-                        <FeedItem key={feedItem.id} feedItem={feedItem} />
-                     ))}
-                </React.Fragment>
-            ))}
-        </ul>
+            <ul className="flex flex-col gap-12 w-full max-w-xl">
+                { feed.pages.map( (page, i) => (
+                    <React.Fragment key={i}>
+                        { page.data.map( (feedItem : IfeedItem ) => (
+                            <FeedItem key={feedItem.id} feedItem={feedItem} />
+                        ))}
+                    </React.Fragment>
+                ))}
+            </ul>
 
-        { hasNextPage &&
-            <button
-                className="block w-full max-w-xl my-12 py-4 text-center text-xl bg-primary-600 text-primary-200 hover:border-primary-200 hover:bg-secondary-600 outline-none border-none"
-                onClick={ () => {
-                    fetchNextPage()
-                }}
-            >
-                {isFetchingNextPage ? 'Loading...' : 'Load More' }
-            </button>
-        }
+            { hasNextPage &&
+                <ButtonPrimaryFilled
+                    className="justify-center max-w-xl"
+                    onClick={ () => {
+                        fetchNextPage()
+                    }}
+                >
+                    {isFetchingNextPage ? 'Loading...' : 'Load More' }
+                </ButtonPrimaryFilled>
+            }
 
+        </div>
 
-
-    </div>
-
+    )
 }
 
 
@@ -103,44 +113,55 @@ function FeedItem({feedItem}) {
         like : 'favorite',
     }
 
-    return <li className="flex flex-col gap-6 px-4 py-8 rounded-xl bg-gradient-to-r from-primary-900 to-primary-750 ">
+    return (
+        <li className={`
+            flex flex-col gap-6 px-4 py-8 rounded-xl 
+            bg-gradient-to-r from-primary-150 to-primary-100
+            dark:from-primary-900 dark:to-primary-750`}>
 
-        <span className="flex items-start gap-2 mr-4 italic font-light">
+            <TextFlex>
 
-            <span className="text-primary-300"><Icon icon={ icons[feedItem.type] } /></span>
-            <span>{ feedItem.message }:</span>
+                <Icon icon={ icons[feedItem.type] } className="text-primary-300 translate-y-[2px]" />
 
-        </span>
+                <span className="italic">
+                    { feedItem.message }:
+                </span>
+
+            </TextFlex>
 
 
+            { feedItem.comment && (
+                <>
+                    <blockquote className="flex flex-wrap items-start gap-2">
+                        <span className="inline-block rounded-3xl px-4 py-1 bg-primary-300 text-primary-800 font-semibold">
+                            {feedItem.username}
+                        </span>
 
-        { feedItem.comment && <><blockquote className="flex flex-wrap items-start gap-2">
-            <span className="inline-block rounded-3xl px-4 py-1 bg-primary-300 text-primary-800 font-semibold">
-                {feedItem.username}
-            </span>
+                        <p className="max-w-md">
+                            <TextInline>
+                                {feedItem.comment}
+                            </TextInline>
+                        </p>
+                    </blockquote>
 
-            <p className="max-w-md">
-                {feedItem.comment}
-            </p>
-        </blockquote>
+                    <Separator />
+                </>
+            )}
 
-        <div className="border border-primary-600"></div>
-        </>
-        }
+            <img 
+                src={feedItem.image_url ? feedItem.image_url : bookNoCover} 
+                className={`
+                    ${ feedItem.image_url ? 'aspect-square object-cover object-top w-full' : 'w-10/12  opacity-30 dark:opacity-100'} mx-auto`} 
+                alt="Book Cover"
+            />
 
-        <img 
-            src={feedItem.image_url ? feedItem.image_url : bookNoCover} 
-            className={`
-                ${ feedItem.image_url ? 'aspect-square object-cover object-top w-full' : 'w-10/12'} mx-auto `} 
-            alt="Book Cover"
-        />
+            <Link to={ feedItem.link } state={ {from : location.pathname } }>
+                <ButtonPrimaryOutlined className="w-full justify-center">
+                    <Icon icon="bookmark" />
+                    View
+                </ButtonPrimaryOutlined>
+            </Link>
 
-        <Link 
-            to={ feedItem.link } state={ {from : location.pathname } } 
-            className="px-4 py-2 border border-primary-600 hover:border-secondary-300 text-primary-100 rounded text-center"
-        >
-            View
-        </Link>
-
-    </li>
+        </li>
+    )
 }

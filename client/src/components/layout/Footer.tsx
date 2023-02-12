@@ -1,3 +1,6 @@
+import Icon from "../elements/Icon"
+import TextFlex from "../elements/TextFlex"
+import TextInline from "../elements/TextInline"
 import Logo from "./Logo"
 
 export default function Footer() {
@@ -13,27 +16,32 @@ export default function Footer() {
 
             <div className="flex flex-col gap-2">
                 <p>
-                    <Logo/> by Josh Kaye
+                    <TextInline>
+                        <Logo/> by Josh Kaye
+                    </TextInline>
                 </p>
                 <p>
-                    <a href="https://joshkaye.ca" 
-                        target="_blank" 
-                        className="text-secondary-400"
-                    >
-                        Portfolio
+                    <a href="https://joshkaye.ca" target="_blank">
+                        <TextInline className="hover:text-secondary-400">
+                            Portfolio
+                        </TextInline>
                     </a>
                 </p>
                 <p>
-                    <a href="https://github.com/kaye360/bookstack-v2" 
-                        target="_blank" 
-                        className="text-secondary-400"
-                    >
-                        GitHub Repo
+                    <a href="https://github.com/kaye360/bookstack-v2" target="_blank">
+                        <TextInline className="hover:text-secondary-400">
+                            GitHub Repo
+                        </TextInline>
                     </a> 
                 </p>
             </div>
 
-            <a href="#top" className="rounded border border-primary-200 px-2 py-1">Top</a>
+            <a href="#top">
+                <TextFlex className="hover:text-secondary-500">
+                    Top
+                    <Icon icon="north" />
+                </TextFlex>
+            </a>
 
         </nav>
     )

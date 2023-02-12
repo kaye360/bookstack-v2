@@ -37,20 +37,27 @@ module.exports = {
       },
 
       animation : {
-        'notification-flash' : 'notification-flash 2s linear'
+        'notification-flash-dark' : 'notification-flash-dark 2s linear',
+        'notification-flash-light' : 'notification-flash-light 2s linear'
       },
 
       keyframes : {
-        'notification-flash' : {
+        'notification-flash-dark' : {
           'from' : { backgroundColor : 'transparent' },
-          '5%' : { backgroundColor : 'hsl(219, 22%, 30%)' },
-          '50%' : { backgroundColor : 'hsl(219, 22%, 30%)' },
+          '5%' : { backgroundColor : 'hsl(219, 22%, 25%)' },
+          '30%' : { backgroundColor : 'hsl(219, 22%, 25%)' },
+          'to' : { backgroundColor : 'transparent' }
+        },
+        'notification-flash-light' : {
+          'from' : { backgroundColor : 'transparent' },
+          '5%' : { backgroundColor : 'hsl(219, 22%, 80%)' },
+          '30%' : { backgroundColor : 'hsl(219, 22%, 80%)' },
           'to' : { backgroundColor : 'transparent' }
         }
       },
       dropShadow : {
         'sidebar-dark': '0 -10px 10px hsla(219, 22%, 15%, 0.5)',
-        'sidebar-light': '0 -10px 10px hsla(219, 22%, 75%, 0.5)',
+        'sidebar-light': '0 -10px 10px hsla(219, 22%, 85%, 0.5)',
       },
       backgroundImage : {
         'stars' : "url(./assets/img/bg-stars.png)",

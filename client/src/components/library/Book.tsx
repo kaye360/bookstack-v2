@@ -31,7 +31,7 @@ export default function Book({
 
             <BookWrapper>
 
-                <img src={cover ? cover : bookNoCover} className="absolute inset-0 z-10 object-cover w-full" />
+                <img src={cover ? cover : bookNoCover} className={`absolute inset-0 z-10 object-cover w-full ${ !cover ? 'opacity-20' :  ''} `} />
 
                 { showInfo && 
                     <div className="

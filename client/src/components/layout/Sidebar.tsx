@@ -83,9 +83,9 @@ function NavLink({to, icon, children}) {
             grid gap-2 items-center
             md:grid-cols-[40px_1fr] md:justify-start
             relative px-4 py-2
-            font-bold text-center md:text-left
-            text-primary-800 hover:text-secondary-600 
-            dark:text-primary-100 dark:hover:text-secondary-400
+            font-bold text-center md:text-left transition-all duration-[50ms]
+            text-primary-800 hover:text-primary-600 hover:bg-primary-150
+            dark:text-primary-100 dark:hover:text-primary-100 dark:hover:bg-primary-700
             ${to === location.pathname && 
                 'rounded bg-primary-300 dark:bg-primary-600'
             }

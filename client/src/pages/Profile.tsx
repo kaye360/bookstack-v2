@@ -6,8 +6,14 @@ import { useQuery } from "react-query";
 import httpReq from "../utils/httpReq";
 import { API_BASE_URL } from "../config";
 import LibraryGrid from "../components/library/LibraryGrid";
-import iconProfile from "../assets/img/icon-profile.png"
 import bookNoCover from "../assets/img/book-no-cover.png"
+import PageHeading from "../components/elements/PageHeading";
+import Icon from "../components/elements/Icon";
+import Separator from "../components/layout/Separator";
+import TextBlock from "../components/elements/TextBlock";
+import TextInline from "../components/elements/TextInline";
+import TextFlex from "../components/elements/TextFlex";
+import { ButtonPrimaryOutlined } from "../components/elements/buttons";
 
 export default function Profile() {
 
@@ -20,13 +26,16 @@ export default function Profile() {
 
     const { data : user, isSuccess, isLoading } = useQuery('getUserId', getUser)
 
-    return(<>
+    return(
         
         <section className="min-h-screen">
-            <h1 className="flex items-center gap-4 text-2xl">
-                <img src={iconProfile} />
-                {username}
-            </h1>
+
+            <PageHeading>
+                <div className="flex items-center gap-2">
+                    <Icon icon="account_circle" className="text-4xl" />
+                    {username}
+                </div>
+            </PageHeading>
 
             {
                 isLoading && <Loader />
@@ -36,10 +45,12 @@ export default function Profile() {
                 <>
                     <LibraryPreview userID={user.id} username={username} />
 
-                    <div className="my-4 border border-primary-600"></div>
+                    <Separator className="my-8" />
 
                     <h2 className="my-6 text-xl">
-                        {user.username}'s recent activity
+                        <TextInline>
+                            {user.username}'s recent activity
+                        </TextInline>
                     </h2>
 
                     <UsersPublicFeed userID={user.id} />
@@ -48,8 +59,6 @@ export default function Profile() {
 
         </section>
     
-    </>
-        
     )
 
 }
@@ -63,33 +72,38 @@ function LibraryPreview({userID, username}) {
     const libraryPreview = library.slice(0,12)
 
     if(isError) {
-        return <div>Error loading user's library</div>
+        return <TextBlock>Error loading user's library</TextBlock>
     }
 
     if(isLoading) {
         return <Loader />
     }
 
-    return <div>
-        <h2 className="my-6 text-lg font-medium">
-            {username} has {amount} {amount === 1 ? 'book' : 'books'} in their library.
-        </h2>
+    return (
+        <div>
+            <h2 className="my-6 text-lg font-medium">
+                <TextInline>
+                    {username} has {amount} {amount === 1 ? 'book' : 'books'} in their library.
+                    { amount !== 0 && (
+                        <span> Here's just a few:</span>
+                    )}        
+                </TextInline>
+            </h2>
 
-        { amount !== 0 && <p className="mb-4">Here's just a few:</p> }        
 
-        <LibraryGrid>
-            { libraryPreview.map( book => (
-                <Book 
-                    id={book.id} 
-                    title={book.title} 
-                    cover={book.coverUrl}
-                    key={book.id}
-                />
-            ))}
-        </LibraryGrid>
-    
-    </div>
-
+            <LibraryGrid>
+                { libraryPreview.map( book => (
+                    <Book 
+                        id={book.id} 
+                        title={book.title} 
+                        cover={book.coverUrl}
+                        key={book.id}
+                    />
+                ))}
+            </LibraryGrid>
+        
+        </div>
+    )
 }
 
 
@@ -100,6 +114,10 @@ interface IfeedItem {
     comment : string,
     link : string,
     image_url : string,
+}
+
+interface Iicons {
+    [key: string] : string
 }
 
 
@@ -116,51 +134,65 @@ function UsersPublicFeed({userID}) {
             data : []
         }
     })
-    console.log(feed)
+
 
     if(isError) { 
-        return <div>
-            Error community feed.
-        </div>
+        return (
+            <TextBlock>Error community feed.</TextBlock>
+        )
     }
 
     if(isLoading) {
         return <Loader />
     }
+
+    const icons: Iicons = {
+        upload : 'book',
+        comment : 'chat_bubble',
+        like : 'favorite',
+    }
     
-    return <ul className="flex flex-col gap-8">
-        { feed.data.length !== 0
-            ? feed.data.slice(0,10).map( (feedItem : IfeedItem) => (
-                <li key={feedItem.id} className="grid grid-cols-[1fr_2fr] gap-4 p-8 bg-primary-750 rounded-2xl">
+    return (
+        <ul className="flex flex-col gap-8">
+            { feed.data.length !== 0 ? (
+                feed.data.slice(0,10).map( (feedItem : IfeedItem) => (
 
-                    <div>
-                        <img src={feedItem.image_url ? feedItem.image_url : bookNoCover} alt="Book Cover" />
-                    </div>
+                    <li key={feedItem.id} className="grid grid-cols-[1fr_2fr] gap-6 p-8 bg-primary-150 dark:bg-primary-750 rounded-2xl">
+                        <img src={feedItem.image_url ? feedItem.image_url : bookNoCover} alt="Book Cover"
+                            className={` ${feedItem.image_url ? '' : 'opacity-20' } hi dark:opacity-100 `}
+                        />
 
-                    <div className="flex flex-col justify-between gap-6">
-                        <h3 className="inline-block">
-                            {feedItem.type === 'upload' && '📖' }
-                            {feedItem.type === 'like' && '💟' }
-                            {feedItem.type === 'comment' && '💬' }
-                            &nbsp;
-                            {feedItem.message}
-                        </h3>
+                        <div className="flex flex-col justify-between gap-6">
+                            <TextFlex>
+                                <Icon icon={ icons[feedItem.type] } className="text-primary-300 translate-y-[2px]" />
+                                {feedItem.message}
+                            </TextFlex>
 
-                        {feedItem.comment && <p className="italic">"{feedItem.comment}"</p> }
+                            {feedItem.comment && (
+                                <p className="italic">
+                                    <TextInline>
+                                        "{feedItem.comment}"
+                                    </TextInline>
+                                </p>
+                            )}
 
-                        <div>
-                            <Link to={feedItem.link} 
-                                className="inline-block px-2 border rounded-md border-primary-400 px1 py-2 text-primary-200 hover:border-secondary-300"
-                            >
-                                View
+                            <Link to={feedItem.link}>
+                                <ButtonPrimaryOutlined>
+                                    <Icon icon="bookmark" />
+                                    View
+                                </ButtonPrimaryOutlined>
                             </Link>
                         </div>
-                    </div>
-                </li>
-            ))
-            : <div className="p-4 rounded bg-primary-700">
-                This user has no recent activity.
-            </div>
-        }
-    </ul>
+                    </li>
+                ))
+                
+            ) : ( 
+                
+                <TextBlock>
+                    This user has no recent activity.
+                </TextBlock>
+
+            )}
+        </ul>
+    )
 }

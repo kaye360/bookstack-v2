@@ -5,6 +5,7 @@ import IconMenu from "../../assets/img/icon-menu.svg"
 import { useState } from "react";
 import { UserContext } from "../app/UserContextWrapper";
 import Icon from "../elements/Icon";
+import TextInline from "../elements/TextInline";
 
 export default function Header() {
 
@@ -19,9 +20,10 @@ export default function Header() {
     const baseMenuCss = `
         absolute right-0 top-full 
         flex flex-col gap-4 
-        w-full md:w-auto bg-primary-900 md:bg-transparent rounded-lg overflow-hidden
+        w-full md:w-auto rounded-lg overflow-hidden
         md:relative md:px-4 md:max-h-[500px] md:py-0 
         md:flex md:flex-row items-center md:gap-8 
+        bg-primary-200 dark:bg-primary-900 md:bg-transparent 
         transition-all duration-500 ease-in-out
         md:blur-none
         `
@@ -37,7 +39,7 @@ export default function Header() {
     }
 
     return(
-        <header className="relative z-50 bg-primary-200 dark:bg-primary-900 bg-stars bg-opacity-80 rounded-xl px-1 py-4">
+        <header className="relative z-50 bg-primary-200 dark:bg-primary-900 bg-stars bg-opacity-80 rounded-xl px-1 py-2">
 
             <nav className="relative flex items-center justify-between p-2">
 
@@ -79,7 +81,9 @@ export default function Header() {
                     className="bg-transparent outline-0 border-0 focus:border-0 focus:outline-0 md:hidden"
                     onClick={toggleMenu}
                 >
-                    <img src={IconMenu} />
+                    <TextInline>
+                        <Icon icon="menu" className="text-4xl" />
+                    </TextInline>
                 </button>
             </nav>
 
@@ -110,9 +114,11 @@ function NavLink({to, children, event} : INavLink) {
             to={to} 
             onClick={event} 
             className={`
-                inline-flex items-center gap-2 text-primary-800 dark:text-primary-100 font-semibold rounded px-4 py-2
+                inline-flex items-center gap-2 
+                text-primary-800 dark:text-primary-100 
+                font-semibold rounded px-4 py-2
                 ${to === location.pathname && 'bg-primary-500 dark:bg-primary-700'}
-                `}>
+            `}>
                 {children}
         </Link>
     </li>

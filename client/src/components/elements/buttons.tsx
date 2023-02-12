@@ -120,4 +120,23 @@ export function ButtonSecondaryPlain({className, children, onClick} : ButtonProp
 
 
 
+export function ButtonPrimaryFilled({className, children, onClick} : ButtonProps) {
 
+    return (
+        <button className={`
+            inline-flex items-center gap-2 
+            border-none bg-transparent outline outline-1 
+            bg-primary-600 outline-primary-600 text-primary-100
+            dark:bg-primary-300 dark:outline-primary-300 dark:text-primary-800
+            hover:outline-secondary-400 hover:bg-secondary-400
+            rounded-md font-semibold
+            ${className} `} 
+
+            onClick={onClick}
+        >
+                
+        
+           {children}
+        </button>
+    )
+}
