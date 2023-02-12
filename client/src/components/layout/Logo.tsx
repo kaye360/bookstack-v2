@@ -6,7 +6,7 @@ export default function Logo() {
 
 
     return(
-        <Link to="/" className="flex items-center gap-[2px] text-2xl font-bold text-primary-100 hover:text-primary-100 border-b-2 border-transparent hover:border-secondary-400">
+        <Link to="/" className="flex items-center gap-[2px] text-2xl font-bold text-primary-700 dark:text-primary-100 hover:text-primary-700 dark:hover:text-primary-100 border-b-2 border-transparent hover:border-secondary-400">
             <img src={logo} className="-translate-y-[1px]" />
             <span>
                 Book    

@@ -5,6 +5,8 @@ import { useNotifications } from "../../utils/useNotifications";
 import { UserContext } from "../app/UserContextWrapper";
 import Separator from "./Separator";
 import Icon from "../elements/Icon";
+import TextInline from "../elements/TextInline";
+import TextFlex from "../elements/TextFlex";
 
 
 export default function SideBar() {
@@ -16,9 +18,11 @@ export default function SideBar() {
     return <nav className="
         fixed bottom-0 left-0 right-0 w-full z-50
         md:relative p-4 md:px-2 md:py-8 md:max-w-[250px]
-        bg-primary-750 bg-starsVertical bg-repeat-space
+        dark:bg-primary-750 bg-primary-100
+        bg-starsVertical bg-repeat-space
         text-primary-200 border-t-4 border-primary-750 md:border-0
-        drop-shadow-sidebar rounded-xl
+        drop-shadow-sidebar-light dark:drop-shadow-sidebar-dark
+        rounded-xl
     ">
         <ul className="relative z-50 flex justify-between md:flex-col md:gap-6 md:justify-start">
             <User username={user.username} />
@@ -48,14 +52,14 @@ function User({username}: UserProptype) {
 
     return <li className="hidden md:block px-4">
                 
-        <span className="text-sm"> 
+        <TextInline className="text-sm"> 
             Logged in as:<br />
-        </span>
+        </TextInline>
 
-        <span className="flex items-center gap-2 my-2 text-xl font-medium text-primary-100 bg-primary-750 overflow-hidden hover:overflow-visible">
+        <TextFlex className="my-2 text-xl font-medium text-primary-800 dark:text-primary-100 bg-primary-100 dark:bg-primary-750 overflow-hidden hover:overflow-visible">
             <Icon icon="person" />
             {username}
-        </span>
+        </TextFlex>
 
         <Separator className="mt-2" />
     </li>
@@ -79,9 +83,11 @@ function NavLink({to, icon, children}) {
             grid gap-2 items-center
             md:grid-cols-[40px_1fr] md:justify-start
             relative px-4 py-2
-            font-bold text-primary-100 text-center md:text-left
+            font-bold text-center md:text-left
+            text-primary-800 hover:text-secondary-600 
+            dark:text-primary-100 dark:hover:text-secondary-400
             ${to === location.pathname && 
-                'rounded bg-primary-600 '
+                'rounded bg-primary-300 dark:bg-primary-600'
             }
             `}>
             <Icon icon={icon} />

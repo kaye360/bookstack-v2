@@ -5,6 +5,9 @@ import Loader from "../layout/Loader";
 import { useLibrary } from "../../utils/useLibrary";
 import LibraryGrid from "./LibraryGrid";
 import { UserContext } from "../app/UserContextWrapper";
+import TextInline from "../elements/TextInline";
+import { ButtonPrimaryOutlined } from "../elements/buttons";
+import Icon from "../elements/Icon";
 
 export default function PreviewUsersLibrary() {
 
@@ -14,19 +17,25 @@ export default function PreviewUsersLibrary() {
     let previewUsersBooks = library.slice(0, 6)
 
     return(
-        <section className="flex flex-col gap-8 p-8 bg-primary-900 rounded-xl">
-            <h2 className="text-4xl">Your Library</h2>
+        <section className="flex flex-col gap-8 p-8 bg-primary-200 dark:bg-primary-900 rounded-xl">
+
+            <h2 className="text-4xl">
+                <TextInline>
+                    Your Library
+                </TextInline>
+            </h2>
+
             { isLoading && <Loader />}
+
             { previewUsersBooks.length === 0 && 
                 <div className="my-4 text-lg">
                     Your library is empty.&nbsp;
-                    <Link to="/library/add"
-                        className="text-secondary-400"
-                    > 
+                    <Link to="/library/add" className="text-secondary-400"> 
                         Add some books
                     </Link>
                 </div>
             }
+
             <LibraryGrid>
                 { previewUsersBooks && previewUsersBooks.map( book => {
                     return <Book 
@@ -42,7 +51,12 @@ export default function PreviewUsersLibrary() {
                 })}
             </LibraryGrid>
 
-            <Link to="/library" className="text-primary-100">View your library</Link>
+            <Link to="/library">
+                <ButtonPrimaryOutlined>
+                    <Icon icon="library_books" />
+                    View your library
+                </ButtonPrimaryOutlined>
+            </Link>
 
         </section>
     )

@@ -10,6 +10,11 @@ export default function Header() {
 
     const { isLoggedIn, logout } = useContext(UserContext)
 
+    function toggleDarkMode() {
+        const htmlEL = document.querySelector('html')
+        htmlEL.classList.toggle('dark')
+    }
+
 
     const baseMenuCss = `
         absolute right-0 top-full 
@@ -32,7 +37,7 @@ export default function Header() {
     }
 
     return(
-        <header className="relative z-50 bg-primary-900 bg-stars bg-opacity-80 rounded-xl px-1 py-4">
+        <header className="relative z-50 bg-primary-200 dark:bg-primary-900 bg-stars bg-opacity-80 rounded-xl px-1 py-4">
 
             <nav className="relative flex items-center justify-between p-2">
 
@@ -53,19 +58,21 @@ export default function Header() {
                         <Icon icon="scatter_plot" />
                         About
                     </NavLink>
-                    { isLoggedIn
-                        ? <NavLink to="/logout" event={ () => {
+                    { isLoggedIn ? (
+                        <NavLink to="/logout" event={ () => {
                             logout() 
                             toggleMenu()
                         }}>
                             <Icon icon="account_circle" />
                             Logout
                         </NavLink>
-                        : <NavLink to="/account" event={toggleMenu}>
+                    ) : ( 
+                        <NavLink to="/account" event={toggleMenu}>
                             <Icon icon="account_circle" />
                             Account
                         </NavLink>
-                     }
+                    )}
+
                 </ul>
 
                 <button 
@@ -75,6 +82,10 @@ export default function Header() {
                     <img src={IconMenu} />
                 </button>
             </nav>
+
+            <button className="fixed top-2 right-2 bg-black text-white p-0 m-0" onClick={ toggleDarkMode }>
+                Mode
+            </button>
 
         </header>
     )
@@ -99,8 +110,8 @@ function NavLink({to, children, event} : INavLink) {
             to={to} 
             onClick={event} 
             className={`
-                inline-flex items-center gap-2 text-primary-100 font-semibold rounded px-4 py-2
-                ${to === location.pathname && 'bg-primary-700'}
+                inline-flex items-center gap-2 text-primary-800 dark:text-primary-100 font-semibold rounded px-4 py-2
+                ${to === location.pathname && 'bg-primary-500 dark:bg-primary-700'}
                 `}>
                 {children}
         </Link>

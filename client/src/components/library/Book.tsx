@@ -1,5 +1,6 @@
 import { Link, useLocation } from "react-router-dom"
 import Icon from "../elements/Icon"
+import bookNoCover from "../../assets/img/book-no-cover.png"
 
 type propTypes = {
     id: number
@@ -27,43 +28,91 @@ export default function Book({
 
     return (
         <Link to={`/book/${id}`} state={ {from : location.pathname } }>
-        <div className="
-            flex flex-col justify-end 
-            relative h-full 
-            text-sm rounded-xl overflow-hidden aspect-[1/1.7]
-            hover:shadow-lg hover:shadow-primary-600"
-            
-            
-        >
-                {cover?.startsWith('http') 
-                    ? <img src={cover} className="absolute inset-0 z-10 object-cover w-full h-full" />
-                    : <span className="absolute block inset-0 text-2xl text-slate-400 text-center">Cover not available</span>
-                }
+
+            <BookWrapper>
+
+                <img src={cover ? cover : bookNoCover} className="absolute inset-0 z-10 object-cover w-full" />
 
                 { showInfo && 
-                    <div className="relative z-20 flex justify-between p-1 bg-primary-900 bg-opacity-75 text-slate-200  text-sm text-opacity-50 hover:text-opacity-100">
+                    <div className="
+                        relative z-20 flex justify-between p-1 
+                        bg-primary-200 text-primary-900
+                        dark:bg-primary-900 dark:text-primary-200
+                        bg-opacity-75
+                        text-sm text-opacity-50 hover:text-opacity-100
+                    ">
 
-                        <span className="flex items-center gap-1">
+                        <BookInfoItem>
                             <Icon icon="favorite" className="text-sm" />
                             {likes}
-                        </span>
+                        </BookInfoItem>
 
-                        <span className="flex items-center gap-1">
+                        <BookInfoItem>
                             <Icon icon="chat_bubble" className="text-sm" />
                             {commentCount}
-                        </span>
+                        </BookInfoItem>
 
-                        <span className="flex items-center gap-1">
+                        <BookInfoItem>
                             <Icon icon={isRead ? 'check_box' : 'check_box_outline_blank'} className="text-sm" />
-                        </span>
+                        </BookInfoItem> 
                     </div>
                 }
 
-                <div className="relative z-20 px-2 py-1 text-center bg-primary-900 text-primary-200 h-12 overflow-hidden">
+                <div className="
+                    relative z-20 px-2 py-1 text-center 
+                    h-12 overflow-hidden
+                    bg-primary-150 text-primary-900
+                    dark:bg-primary-900 dark:text-primary-200 
+                ">
                     {title}
                 </div>
-            { username && <div>{username}</div>}
-        </div>
+                 { username && <div>{username}</div>}
+                 
+            </BookWrapper>
+
         </Link>
+    )
+}
+
+
+
+
+function BookWrapper({children}) {
+
+    return(
+        <div className="
+            flex 
+            flex-col 
+            justify-end 
+            relative 
+            h-full 
+            aspect-[1/1.7]
+            overflow-hidden 
+            rounded-xl 
+            text-sm 
+            hover:shadow-lg 
+            hover:shadow-primary-300
+            dark:hover:shadow-primary-600"
+        >
+
+            {children}
+
+        </div>
+    )
+}
+
+
+
+
+function BookInfoItem({children}) {
+
+    return(
+        <span className="
+            flex 
+            items-center 
+            gap-1
+        ">
+            {children}
+        </span>
     )
 }

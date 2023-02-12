@@ -10,7 +10,7 @@ export default function Hero() {
     const { isLoggedIn } = useContext(UserContext)
 
     return(
-        <section className="relative grid items-center gap-12 min-h-[50vh] py-8">
+        <section className="relative grid items-center gap-12 min-h-[50vh] py-8 ">
 
             <Header />
 
@@ -52,7 +52,7 @@ export default function Hero() {
 
             {/* Hero BG */}
             <div className="absolute inset-0 z-20 pl-[25vw] md:pl-56 overflow-hidden">
-                <img src={ hero } className="w-full h-full object-cover opacity-40 sm:opacity-60 md:opacity-100" />
+                <img src={ hero } className="w-full h-full object-cover opacity-40 sm:opacity-60 md:opacity-100 mix-blend-multiply" />
             </div>
 
         </section>

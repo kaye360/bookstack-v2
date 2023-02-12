@@ -3,10 +3,12 @@ import Loader from "../components/layout/Loader";
 import AddBookModal from "../components/library/AddBookModal";
 import Book from "../components/library/Book";
 import { useLibrary } from "../utils/useLibrary";
-import iconAddBook from "../assets/img/icon-add-book.png"
 import LibraryGrid from "../components/library/LibraryGrid";
 import booksMagical from "../assets/img/books-magical.png"
 import { UserContext } from "../components/app/UserContextWrapper";
+import PageHeading from "../components/elements/PageHeading";
+import { ButtonPrimaryOutlined } from "../components/elements/buttons";
+import Icon from "../components/elements/Icon";
 
 
 
@@ -23,15 +25,19 @@ export default function Library({isUserAddingBook = false}) {
 
 
     if(isLoading) {
-        return <LibraryTemplate {...libraryProps}>
-            <Loader />
-        </LibraryTemplate>
+        return (
+            <LibraryTemplate {...libraryProps}>
+                <Loader />
+            </LibraryTemplate>
+        )
     }
     
     if(library.length === 0) {
-        return <LibraryTemplate {...libraryProps}>
-            <EmptyLibrary />
-        </LibraryTemplate>
+        return (
+            <LibraryTemplate {...libraryProps}>
+                <EmptyLibrary />
+            </LibraryTemplate>
+        )
     }
 
     return <LibraryTemplate {...libraryProps}>
@@ -57,28 +63,29 @@ export default function Library({isUserAddingBook = false}) {
 function LibraryTemplate({showModal, setShowModal, refetchLibrary, children}) {
 
 
-    return <>
-        <div className="flex justify-between">
-            <h1 className="text-4xl">Library</h1>
+    return (
+        <>
+            <div className="flex justify-between">
+                <PageHeading>
+                    Library
+                </PageHeading>
 
-            <div>
-                <button 
-                    onClick={ () => setShowModal(true) }
-                    className="flex items-center gap-2 border-2 border-primary-100 bg-transparent text-primary-100"
-                >
-                    <img src={iconAddBook} />
+                <ButtonPrimaryOutlined onClick={ ()=> setShowModal(true) }>
+                    <Icon icon="library_add" /> 
                     Add Book
-                </button>
+                </ButtonPrimaryOutlined>
             </div>
-        </div>
 
-        {children}
+            {children}
 
-        { showModal && <AddBookModal 
-            setShowModal={setShowModal} 
-            refetchLibrary={refetchLibrary} 
-        /> }
-    </>
+            { showModal && 
+                <AddBookModal 
+                    setShowModal={setShowModal} 
+                    refetchLibrary={refetchLibrary} 
+                /> 
+            }
+        </>
+    )
 }
 
 

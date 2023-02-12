@@ -4,12 +4,14 @@ module.exports = {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}"
   ],
+  darkMode: 'class',
   theme: {
     extend: {
       colors : {
         primary : {
           50: 'hsl(219, 22%, 95%)',
           100: 'hsl(219, 22%, 90%)',
+          150: 'hsl(219, 22%, 85%)',
           200: 'hsl(219, 22%, 80%)',
           300: 'hsl(219, 22%, 70%)',
           400: 'hsl(219, 22%, 60%)',
@@ -47,7 +49,8 @@ module.exports = {
         }
       },
       dropShadow : {
-        'sidebar': '0 -10px 10px hsla(219, 22%, 15%, 0.5)',
+        'sidebar-dark': '0 -10px 10px hsla(219, 22%, 15%, 0.5)',
+        'sidebar-light': '0 -10px 10px hsla(219, 22%, 75%, 0.5)',
       },
       backgroundImage : {
         'stars' : "url(./assets/img/bg-stars.png)",
