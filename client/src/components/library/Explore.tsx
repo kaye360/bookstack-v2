@@ -8,6 +8,7 @@ import LibraryGrid from "./LibraryGrid";
 import { ButtonPrimaryOutlined, ButtonPrimaryPlain, ButtonSecondaryPlain } from "../elements/buttons";
 import TextInline from "../elements/TextInline";
 import Icon from "../elements/Icon";
+import TextBlock from "../elements/TextBlock";
 
 interface Ibook {
     id: number,
@@ -33,9 +34,9 @@ export default function Explore() {
     }
 
     if ( isError ) {
-        return  <div>
+        return  <TextBlock>
             Error Loading Explore Component
-        </div>
+        </TextBlock>
     }
 
     return(

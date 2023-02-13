@@ -4,6 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { API_BASE_URL } from "../../config";
 import httpReq from "../../utils/httpReq";
 import { UserContext } from "../app/UserContextWrapper";
+import { ButtonPrimaryOutlined } from "../elements/buttons";
+import Icon from "../elements/Icon";
+import TextBlock from "../elements/TextBlock";
+import TextFlex from "../elements/TextFlex";
+import TextInline from "../elements/TextInline";
 
 interface AccountCardProps {
     defaultComponent : string
@@ -25,26 +30,24 @@ export default function AccountCard({defaultComponent} : AccountCardProps) {
 
 
             {!isLoggedIn && isShown === 'login' &&
-                <p className="mt-16">
-                    Don't have an acount yet? 
-                    <button 
-                        onClick={ () => setIsShown('register')}
-                        className="bg-transparent underline hover:border-primary-500 px-2 py-1 mx-2"
-                    >
-                        Register
-                    </button>
+                <p className="mt-8">
+                    <TextFlex>
+                        Don't have an acount yet? 
+                        <ButtonPrimaryOutlined onClick={ () => setIsShown('register')}>
+                            Register
+                        </ButtonPrimaryOutlined>
+                    </TextFlex>
                 </p>
             }
             
             {!isLoggedIn && isShown === 'register' &&
-                <p className="mt-16">
-                    Already have an account?
-                    <button 
-                        onClick={ () => setIsShown('login')}
-                        className="bg-transparent underline hover:border-primary-500 px-2 py-1 mx-2"
-                    >
-                        Sign In
-                    </button>
+                <p className="mt-8">
+                    <TextFlex>
+                        Already have an account?
+                        <ButtonPrimaryOutlined onClick={ () => setIsShown('login')}>
+                            Sign In
+                        </ButtonPrimaryOutlined>
+                    </TextFlex>
                 </p>
             }
 
@@ -90,10 +93,16 @@ function Login() {
     
     return(
         <>
-            <h2 className="text-xl font-bold text-primary-100">Sign In</h2>
+            <h2 className="text-xl font-bold">
+                <TextInline>
+                    Sign In
+                </TextInline>
+            </h2>
      
             <p className="my-4">
-                Please enter your information below
+                <TextInline>
+                    Please enter your information below
+                </TextInline>
             </p>
 
             <form onSubmit={handleLogin}>
@@ -103,7 +112,7 @@ function Login() {
                     <input type="text"
                         value={username}
                         onChange={(e) => setUserName(e.target.value)}
-                        className="p-2 bg-primary-200 text-primary-800 rounded"
+                        className="p-2 bg-primary-100 dark:bg-primary-200 text-primary-800 rounded"
                     />
                 </FormRow>
 
@@ -112,7 +121,7 @@ function Login() {
                     <input type="password" 
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className="p-2 bg-primary-200 text-primary-800 rounded"
+                        className="p-2 bg-primary-100 dark:bg-primary-200 text-primary-800 rounded"
                     />
                 </FormRow>
 
@@ -120,9 +129,27 @@ function Login() {
                     <input type="submit" value="Sign In" 
                         className="px-4 py-2 rounded-lg bg-secondary-400 text-primary-800 cursor-pointer font-bold"/>
 
-                    {isLoginSuccess && <div>Sign in successful. Redirecting...</div> }
-                    {isLoginLoading && <div className="animate-pulse">Logging in, please wait...</div> }
-                    {isLoginError && <div className="text-red-400">{loginError.message}</div> }
+                    {isLoginSuccess && (
+                        <TextBlock>
+                            <Icon icon="login" />
+                            Sign in successful. Redirecting...
+                        </TextBlock> 
+                    )}
+
+                    {isLoginLoading && (
+                        <TextFlex className="animate-pulse">
+                            <Icon icon="loop" />
+                            Logging in, please wait...
+                        </TextFlex> 
+                        
+                    )}
+
+                    {isLoginError && (
+                        <TextFlex>
+                            <Icon icon="warning" />
+                            {loginError.message}
+                        </TextFlex> 
+                    )}
                 </div>
 
             </form>
@@ -204,10 +231,16 @@ function Register() {
 
     return(
         <>
-            <h2 className="text-xl font-bold">Register</h2>
+            <h2 className="text-xl font-bold">
+                <TextInline>
+                    Register
+                </TextInline>
+            </h2>
 
             <p className="my-4">
-                Please enter your information below
+                <TextInline>
+                    Please enter your information below
+                </TextInline>
             </p>
 
             <form onSubmit={handleRegister}>
@@ -217,7 +250,7 @@ function Register() {
                     <input type="text"
                         value={username}
                         onChange={(e) => setUserName(e.target.value)}
-                        className="p-2 bg-primary-200 text-primary-800 rounded"
+                        className="p-2 bg-primary-100 dark:bg-primary-200 text-primary-800 rounded"
                     />
                 </FormRow>
 
@@ -226,7 +259,7 @@ function Register() {
                     <input type="password" 
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className="p-2 bg-primary-200 text-primary-800 rounded"
+                        className="p-2 bg-primary-100 dark:bg-primary-200 text-primary-800 rounded"
                     />
                 </FormRow>
 
@@ -235,17 +268,31 @@ function Register() {
                     <input type="password" 
                         value={confirm_password}
                         onChange={(e) => setConfirmPassword(e.target.value)}
-                        className="p-2 bg-primary-200 text-primary-800 rounded"
+                        className="p-2 bg-primary-100 dark:bg-primary-200 text-primary-800 rounded"
                     />
                 </FormRow>
 
                 <div className="flex items-center gap-4 my-6">
                     <input type="submit" value="Register" className="px-4 py-2 rounded-lg bg-secondary-400 text-primary-800 cursor-pointer font-bold"/>
-                    <span>
-                        {isLoading && 'Creating your account...' }
-                        {isError && 'There was an error' }
+
+                    {isLoading && (
+                        <TextBlock>
+                            <Icon icon="loop" />
+                            'Creating your account...'
+                        </TextBlock>
+                    )}
+
+
+                    {isError && (
+                        <TextBlock>
+                            <Icon icon="warning" />
+                            There was an error
+                        </TextBlock>
+                    )}
+
+                    <TextBlock>
                         {message}
-                    </span>
+                    </TextBlock>
                 </div>
 
             </form>
@@ -262,7 +309,7 @@ function FormRow({children}) {
         <label className="
             grid sm:grid-cols-[1fr_350px] items-center gap-4
             p-4 my-4 rounded-lg 
-            bg-primary-700 text-primary-100 font-semibold">
+            bg-primary-200 dark:bg-primary-700 text-primary-800 dark:text-primary-100 font-semibold">
             {children}
         </label>
     )

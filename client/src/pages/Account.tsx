@@ -1,4 +1,5 @@
 import { useParams } from "react-router-dom";
+import PageHeading from "../components/elements/PageHeading";
 import AccountCard from "../components/layout/AccountCard";
 
 export default function Account() {
@@ -11,7 +12,9 @@ export default function Account() {
     return(
     <>
 
-        <h1 className="p-4 w-full max-w-xl mx-auto">Sign In or Register</h1>
+        <PageHeading className="w-full max-w-xl mx-auto my-4 px-4">
+            Sign In/Register
+        </PageHeading>
 
         <AccountCard defaultComponent={defaultComponent} />
 

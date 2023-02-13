@@ -4,6 +4,8 @@ import Loader from "../components/layout/Loader";
 import { API_BASE_URL } from "../config";
 import httpReq from "../utils/httpReq";
 import LibraryGrid from "../components/library/LibraryGrid";
+import PageHeading from "../components/elements/PageHeading";
+import TextInline from "../components/elements/TextInline";
 
 export default function Explore() {
     
@@ -18,10 +20,15 @@ export default function Explore() {
 
     return(
         <section className="flex flex-col gap-4 py-8">
-            <h2 className="text-4xl">Explore </h2>
 
-            <p className="p-4 rounded-xl bg-primary-900 my-8">
-                Check out some books of the books in the community
+            <PageHeading>
+                Explore 
+            </PageHeading>
+
+            <p className="p-4 rounded-xl bg-primary-200 dark:bg-primary-900 my-8">
+                <TextInline>
+                    Check out some books of the books in the community
+                </TextInline>
             </p>
 
             { isLoading && <Loader />}

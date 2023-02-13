@@ -9,6 +9,7 @@ import { UserContext } from "../components/app/UserContextWrapper";
 import PageHeading from "../components/elements/PageHeading";
 import { ButtonPrimaryOutlined } from "../components/elements/buttons";
 import Icon from "../components/elements/Icon";
+import TextBlock from "../components/elements/TextBlock";
 
 
 
@@ -96,7 +97,12 @@ function EmptyLibrary() {
         grid md:grid-cols-2 md:items-center
         my-8 text-2xl leading-relaxed overflow-hidden h-full
     ">
-        Your library is currently empty. Click the +Add Book icon to get started!
+        <TextBlock>
+            <p>
+                Your library is currently empty. Click the +Add Book icon to get started!
+            </p>
+        </TextBlock>
+        
         <img src={booksMagical} 
             className=""
         />
