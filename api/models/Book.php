@@ -303,22 +303,22 @@ class Book extends Database
 	/** 
 	 * @todo validate user ID
 	 */
-	public function destroy()
-	{
-		$req = $this->request();
+	// public function destroy()
+	// {
+	// 	$req = $this->request();
 		
-		if ( empty($req['id']) ) {
-			return [
-				'success' => false,
-				'message' => 'Book ID is required.'
-			];
-		}
+	// 	if ( empty($req['id']) ) {
+	// 		return [
+	// 			'success' => false,
+	// 			'message' => 'Book ID is required.'
+	// 		];
+	// 	}
 
-		return $this->destroy_row_by_id(
-			id: $req['id'],
-			table: self::TABLE,
-		);
-	}
+	// 	return $this->destroy_row_by_id(
+	// 		id: $req['id'],
+	// 		table: self::TABLE,
+	// 	);
+	// }
 
 
 

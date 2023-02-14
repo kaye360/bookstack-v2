@@ -195,13 +195,13 @@ class User extends Database
 
 
 
-	public function destroy($id)
-	{
-		return $this->destroy_row_by_id(
-			id: $id,
-			table: self::TABLE,
-		);
-	}
+	// public function destroy($id)
+	// {
+	// 	return $this->destroy_row_by_id(
+	// 		id: $id,
+	// 		table: self::TABLE,
+	// 	);
+	// }
 
 
 

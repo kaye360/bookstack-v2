@@ -1,19 +1,25 @@
 <?php
-
-
+/**
+ * 
+ * Custom API router by @author Josh Kaye
+ * 
+ * How it works:
+ * 1. Get/Format current REQUEST_URI
+ * 2. Define routes with callbacks
+ * 3. If current REQUEST_METHOD = route request_method,
+ *    format defined route and save route/method to an
+ * 	  assoc array: ['route' => method]
+ * 4. Call the method in the array associated with the 
+ * 	  current route via json() which gets response() and
+ * 	  renders JSON.
+ * 
+ */
 
 class Router
 {
 
 	private $url;
-	private $class;
-	private $class_file;
-	private $method;
-	private $param;
-	private $routes;
-
-
-
+	public $routes;
 
 	/**
 	 * Get/set current URL without url params
@@ -24,7 +30,8 @@ class Router
 		$url = trim($_SERVER['REQUEST_URI'], " \n\r\t\v\x00/");
 		$url = filter_var($url, FILTER_SANITIZE_URL);
 		$url = explode('?', $url);
-		$this->url = $url[0];
+		$url = str_replace('/', 'SLASH', $url[0]);
+		$this->url = $url;
 	}
 
 
@@ -37,7 +44,6 @@ class Router
 	{
 		// Get defined methods associated with current request method type (GET, POST, PUT DELETE)
 		$route_methods = $this->routes;
-		// var_dump($route_methods);
 
 		// Apply Params if GET Req
 		if($_SERVER['REQUEST_METHOD'] === 'GET') {
@@ -49,29 +55,8 @@ class Router
 			return ['error' => 'This route doesn\'t exist'];
 		}
 
-		// Check/Set Classes and Methods
-		$this->class = $route_methods[$this->url]['class'];
-		$this->method = $route_methods[$this->url]['method'];
-		$this->class_file = './models/' . ucwords($this->class) . '.php';
-
-		if( !file_exists($this->class_file) ) {
-			return $this->error("Class file $this->class_file not found");
-		}
-
-		require_once $this->class_file;
-
-		if( !class_exists($this->class) ) {
-			return $this->error("Class $this->class not found");
-		}
-
-		$this->class = new $this->class();
-
-		if( !method_exists($this->class, $this->method) ) {
-			return $this->error("Method $this->method not found");
-		}
-
 		// Everything is good, call function and return
-		return call_user_func_array([$this->class, $this->method], [$this->param]);
+		return $route_methods[$this->url]();
 	}
 
 
@@ -118,8 +103,12 @@ class Router
 	private function register_route($req_method, $route, $method)
 	{
 		if($_SERVER['REQUEST_METHOD'] !== $req_method) return;
+
 		$route = trim($route, '/');
-		$this->routes[$route] = $method();
+		$route = str_replace('/', 'SLASH', $route);
+		$route = str_replace(':', '_', $route);
+
+		$this->routes[$route] = $method;
 	}
 
 
@@ -173,14 +162,15 @@ class Router
 	private function apply_params($route_methods)
 	{
 		// Get current url and potential param
-		$current_url_array = explode('/', $this->url);
+		$current_url_array = explode('SLASH', $this->url);
 		$potential_param = end($current_url_array);
 		$this->param = $potential_param;
 
-		// replace :param with with $this->param in all routes
+		// Every :param gets replaced with _param to be array key friendly
+		// replace _param with with $this->param in all routes
 		foreach($route_methods as $key => $value) {
 
-			$new_key = str_replace(':param', $potential_param, $key);
+			$new_key = str_replace('_param', $potential_param, $key);
 
 			if( array_key_exists($new_key, $route_methods) ) continue;
 

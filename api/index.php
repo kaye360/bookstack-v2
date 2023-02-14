@@ -9,7 +9,7 @@
  */
 error_reporting(E_ALL);
 /**
- * Config Files
+ * Config
  */
 require_once './config.php';
 
@@ -33,6 +33,14 @@ header('Content-Type: application/json');
  * App Dependencies
  */
 require_once './lib/router.php';
+
+/**
+ * Models
+ */
+spl_autoload_register( function($class) {
+    if( !file_exists('./models/' . ucwords($class) . '.php')) exit(FATAL_ERROR);
+    require_once './models/' . ucwords($class) . '.php';
+});
 
 /**
  * Routes

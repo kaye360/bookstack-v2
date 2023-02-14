@@ -11,45 +11,49 @@
 
 // GET
 $route->get('/users', function() {
-    return ['class' => 'User','method' => 'get_all'];
+    // return (new User())->get_all();
+    // $test = (new User())->select('username')->table('users')->limit(5)->order('username DESC')->list();
+    $test = (new User())->table('users')->where("id=1")->count();
+
+    return $test;
 });
 
 
 $route->get('/user/:param', function() {
-    return ['class' => 'User', 'method' => 'get_single'];
+    return (new User())->get_single(30);
 });
 
 
 $route->get('/username/:param', function() {
-    return ['class' => 'User', 'method' => 'get_single_by_username'];
+    return (new User())->get_single_by_username();
 });
 
 
 // POST
 $route->post('/user', function () {
-    return ['class' => 'User','method' => 'create'];
+    return (new User)()->create();
 });
 
 
 $route->post('/user/login', function() {
-    return ['class' => 'User', 'method' => 'login'];
+    return (new User())->login();
 });
 
 
 $route->post('/user/logout', function() {
-    return ['class' => 'User', 'method' => 'logout'];
+    return (new User())->logout();
 });
 
 
 // PUT
 $route->put('/user/:param', function () {
-    return ['class' => 'User','method' => 'edit'];
+    return (new User)->edit();
 });
 
 
 // DELETE
 $route->delete('/user/:param', function() {
-    return ['class' => 'User', 'method' => 'destroy'];
+    return (new User())->destroy();
 });
 
 
@@ -63,7 +67,7 @@ $route->delete('/user/:param', function() {
 
 //  GET
 $route->get('/session/:param', function() {
-    return ['class' => 'User', 'method' => 'get_single_by_session'];
+    return (new User())->get_single_by_session();
 });
 
 
@@ -78,23 +82,23 @@ $route->get('/session/:param', function() {
 
 // GET
 $route->get('/notifications/new/:param', function() {
-    return ['class' => 'Notification', 'method' => 'get_new'];
+    return (new Notification())->get_new();
 });
 
 
 $route->get('/notifications/old/:param', function() {
-    return ['class' => 'Notification', 'method' => 'get_old'];
+    return (new Notification())->get_old();
 });
 
 
 // PUT
 $route->put('/notifications/add', function() {
-    return ['class' => 'Notification', 'method' => 'create'];
+    return (new Notification())->create();
 });
 
 
 $route->put('/notifications/clear_new', function() {
-    return ['class' => 'Notification', 'method' => 'clear_new'];
+    return (new Notification())->clear_new();
 });
 
 
@@ -108,45 +112,45 @@ $route->put('/notifications/clear_new', function() {
 
 // GET
 $route->get('/book/:param', function() {
-    return ['class' => 'Book', 'method' => 'get_single', 'id'];
+    return (new Book())->get_single();
 });
 
 
 $route->get('/books/:param', function() {
-    return ['class' => 'Book', 'method' => 'get_all', 'id'];
+    return (new Book())->get_all();
 });
 
 
 $route->get('/books/explore', function() {
-    return ['class' => 'Book', 'method' => 'get_explore'];
+    return (new Book())->get_explore();
 });
 
 
 // POST
 $route->post('/book', function() {
-    return ['class' => 'Book', 'method' => 'create'];
+    return (new Book())->create();
 });
 
 
 // PUT
 $route->put('/book/:param', function() {
-    return ['class' => 'Book', 'method' => 'edit', 'id'];
+    return (new Book())->edit();
 });
 
 
 $route->put('/book/like', function() {
-    return ['class' => 'Book', 'method' => 'like'];
+    return (new Book())->like();
 });
 
 
 $route->put('/book/read', function() {
-    return ['class' => 'Book', 'method' => 'toggle_read_status'];
+    return (new Book())->toggle_read_status();
 });
 
 
 // DELETE
 $route->delete('/book', function() {
-    return ['class' => 'Book', 'method' => 'destroy'];
+    return (new Book())->destroy();
 });
 
 
@@ -161,30 +165,30 @@ $route->delete('/book', function() {
 
 // GET
 $route->get('/comment/:param', function() {
-    return ['class' => 'Comment', 'method' => 'get_single', 'id'];
+    return (new Comment())->get_single();
 });
 
 
 $route->get('/comments/:param', function() {
-    return ['class' => 'Comment', 'method' => 'get_all', 'id'];
+    return (new Comment())->get_all();
 });
 
 
 // POST
 $route->post('/comment', function() {
-    return ['class' => 'Comment', 'method' => 'create'];
+    return (new Comment())->create();
 });
 
 
 // PUT
 $route->put('/comment/:param', function() {
-    return ['class' => 'Comment', 'method' => 'edit', 'id'];
+    return (new Comment())->edit();
 });
 
 
 // DELETE
 $route->delete('/comment/:param', function() {
-    return ['class' => 'Comment', 'method' => 'destroy', 'id'];
+    return (new Comment())->destroy();
 });
 
 
@@ -199,10 +203,10 @@ $route->delete('/comment/:param', function() {
 
 // GET
 $route->get('/community/:param', function() {
-    return ['class' => 'Community', 'method' => 'get_user_feed'];
+    return (new Community())->get_user_feed();
 });
 
 $route->get('/community', function() {
-    return ['class' => 'Community', 'method' => 'get_community_feed'];
+    return (new Community())->get_community_feed();
 });
 

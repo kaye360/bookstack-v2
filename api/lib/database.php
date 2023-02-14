@@ -14,6 +14,21 @@ class Database
 	public $dbh;
 	public $stmt;
 
+	/**
+	 * 
+	 * @var Query prep vars
+	 * 
+	 */
+	private $select = '*';
+	private $table;
+	private $where;
+	private $order = 'id DESC';
+	private $limit;
+	private $cols;
+	private $values;
+	private $set;
+
+
 
 	public function __construct()
 	{
@@ -35,7 +50,6 @@ class Database
 		}
 	}
 
-
 	/**
 	 * 
 	 * @method return the current request body
@@ -48,315 +62,207 @@ class Database
 
 	/**
 	 * 
-	 * @method Create a new table row
-	 * 
-	 * @return array of columns specified. Default *
+	 * @method return an error array
 	 * 
 	 */
-	public function create_row(
-		array $columns,
-		string $table,
-		array $return = null
-	) {
+	public function error(string $message) {
+		return ['success' => false, 'message' => $message];
+	}
 
+	/**
+	 * 
+	 * Query Prep Methods
+	 * 
+	 */
+	public function select(string $select='*')
+	{
+		$this->select = $select;
+		return $this;
+	}
+
+	public function table(string $table) 
+	{
+		$this->table = $table;
+		return $this;
+	}
+
+	public function where(string $where)
+	{
+		$this->where = $where;
+		return $this;
+	}
+
+	public function order(string $order)
+	{
+		$this->order = $order;
+		return $this;
+	}
+
+	public function limit(string $limit)
+	{
+		$this->limit = $limit;
+		return $this;
+	}
+
+	public function set(string $set)
+	{
+		$this->set = $set;
+		return $this;
+	}
+
+	/**
+	 * 
+	 * Query Execute + Return Methods
+	 * 
+	 */
+
+	public function single() {
 		try {
 
-			// Initial prep
-			foreach ($columns as &$column) {
-				$column = trim($column);
+			if( is_null($this->select) || is_null($this->table) ) {
+				return $this->error('$select, $table are required in single method');
 			}
-			unset($column);
 
-			// Prep SQL
-			$column_names = array_keys($columns);
-			$column_names = implode(', ', $column_names);
-			$column_placeholders = preg_filter('/^/', ':', array_keys($columns));
-			$column_placeholders = implode(', ', $column_placeholders);
-
-			// Add row query
-			$sql = "INSERT INTO $table ($column_names) VALUES ($column_placeholders)";
+			$sql = " SELECT $this->select FROM $this->table ";
+			
+			if( isset($this->where) ) $sql .= " WHERE $this->where ";
+			if( isset($this->order) ) $sql .= " ORDER BY $this->order";
+			if( isset($this->limit) ) $sql .= " LIMIT $this->limit ";
+			
 			$this->stmt = $this->dbh->prepare($sql);
-			$this->stmt->execute($columns);
-
-			// Get Returned values of new Row based on $return []
-			$new_id = $this->dbh->lastInsertId();
-			$returned_columns = isset($return)
-				? implode(', ', $return)
-				: '*';
-			$sql = "SELECT $returned_columns FROM $table WHERE id = $new_id";
-			$this->stmt = $this->dbh->prepare($sql);
-
-			// Execute and return success/fail response
-			if ($this->stmt->execute()) {
-
-				$new_row = $this->stmt->fetch(PDO::FETCH_ASSOC);
-				$new_row['success'] = true;
-				return $new_row;
-			} else {
-				// http_response_code(400);
-				return [
-					'success' => false,
-					'message' => 'Failed to execute query'
-				];
+			
+			if( !$this->stmt->execute() ) {
+				return $this->error('Failed to execute query');
 			}
+
+			$row = $this->stmt->fetch(PDO::FETCH_ASSOC);
+			if($row === false) return $this->error('No rows found');
+			return [ 'success' => true, 'data' => $row ];
+
 		} catch (Exception $error) {
-			// http_response_code(400);
-			return [
-				'success' => false,
-				'message' => 'Error with query'
-			];
+			return $this->error('Fatal error with query: ' . $error);
 		}
 	}
 
-	/**
-	 * 
-	 * @method get one row by ID
-	 * 
-	 * @return array of columns specified. Default *
-	 * 
-	 */
-	public function get_row_by_id(
-		int $id,
-		string $table,
-		array $return = null
-	) {
 
-		$id = trim($id);
-		$id = filter_var($id);
-
-		if (is_null($id)) {
-			return [
-				'success' => false,
-				'message' => 'No ID specified'
-			];
-		}
-
-		try {
-			$returned_columns = isset($return)
-				? implode(', ', $return)
-				: '*';
-
-			$sql = "SELECT $returned_columns FROM $table WHERE id = :id";
-			$this->stmt = $this->dbh->prepare($sql);
-			$this->stmt->bindValue(':id', $id);
-			$this->stmt->execute();
-
-			$single = $this->stmt->fetch(PDO::FETCH_ASSOC);
-			if ($single) $single['success'] = true;
-		} catch (Exception $error) {
-
-			// http_response_code(400);
-
-			return [
-				'success' => false,
-				'message' => 'Error with query'
-			];
-		}
-
-
-		if (!empty($single)) {
-			return $single;
-		} else {
-			// http_response_code(404);
-			return [
-				'success' => false,
-				'message' => 'No entries found'
-			];
-		}
-	}
-
-	/**
-	 * 
-	 * @method get one row by any column
-	 * 
-	 * @return array of columns specified. Default *
-	 * 
-	 */
-	public function get_row_by_column_name(
-		string $column,
-		string $value,
-		string $table,
-		array $return = null
-	) {
-
-		$column = trim($column);
-		$column = filter_var($column);
-
-		try {
-			$returned_columns = isset($return)
-				? implode(', ', $return)
-				: '*';
-			$sql = "SELECT $returned_columns FROM $table WHERE BINARY $column = '$value'";
-			$this->stmt = $this->dbh->prepare($sql);
-			$this->stmt->execute();
-
-			$single = $this->stmt->fetch(PDO::FETCH_ASSOC);
-			if (!empty($single)) $single['success'] = true;
-		} catch (Exception $error) {
-
-			// http_response_code(400);
-
-			return [
-				'success' => false,
-				'message' => 'Error with query'
-			];
-		}
-
-		return !empty($single)
-			? $single
-			: [
-				'success' => false,
-				'message' => 'No entries found'
-			];
-	}
-
-	/**
-	 * 
-	 * @method get all rows of a table
-	 * 
-	 * @return array of columns specified. Default *
-	 * 
-	 */
-	public function get_all_rows(
-		string $table,
-		array $return = null,
-		int $id = null,
-		string $id_col = null,
-		int $page = null,
-		int $per_page = null
-	) {
-
+	public function list() {
 		try {
 
-			$returned_columns = isset($return)
-				? implode(', ', $return)
-				: '*';
-
-			if($page < 0) $page = 0;
-			$start = $page * $per_page;
-			$limit = $per_page ? "LIMIT $start,$per_page" : '';
-
-			$where = $id && $id_col ? "WHERE $id_col = $id" : '';
-
-			$sql = "\n\n\n SELECT $returned_columns FROM $table $where ORDER BY id DESC $limit";
-			$this->stmt = $this->dbh->prepare($sql);
-			$this->stmt->execute();
-
-			$all = $this->stmt->fetchAll(PDO::FETCH_ASSOC);
-		} catch (Exception $error) {
-
-			// http_response_code(400);
-
-			return [];
-		}
-
-		return !empty($all) ? $all : [];
-	}
-
-	/**
-	 * 
-	 * @method update a single row based on @var columns to update
-	 * 
-	 * @return array of columns specified. Default *
-	 * 
-	 */
-	public function update_row(
-		int $id,
-		string $table,
-		array $columns,
-		array $return = null
-	) {
-
-		try {
-
-			$id = trim($id);
-			$id = filter_var($id);
-
-			// Generate SQL to select which columns to update
-			$column_sql = '';
-			foreach ($columns as $column => $col_title) {
-				$column_sql = "$column_sql $column = :$column,";
+			if( is_null($this->select) || is_null($this->table) ) {
+				return $this->error('$select, $table are required in list method');
 			}
-			$column_sql = rtrim($column_sql, ',');
 
-			// PDO query
-			$sql = "UPDATE $table SET $column_sql WHERE id = $id";
+			$sql = " SELECT $this->select FROM $this->table ";
+			
+			if( isset($this->where) ) $sql .= " WHERE $this->where ";
+			if( isset($this->order) ) $sql .= " ORDER BY $this->order";
+			if( isset($this->limit) ) $sql .= " LIMIT $this->limit ";
+			
 			$this->stmt = $this->dbh->prepare($sql);
-			$this->stmt->execute($columns);
+			
+			if( !$this->stmt->execute() ) {
+				return $this->error('Failed to execute query');
+			}
 
-			// Return New Values
-			$all = $this->get_row_by_id(
-				id: $id,
-				table: $table,
-				return: $return
-			);
-			return $all;
+			$rows = $this->stmt->fetchAll(PDO::FETCH_ASSOC);
+			if($rows === false) return $this->error('No rows found');
+			return [ 'success' => true, 'data' => $rows ];
+
 		} catch (Exception $error) {
-
-			// http_response_code(400);
-
-			return [
-				'success' => false,
-				'message' => 'error with query' . $error
-			];
+			return $this->error('Fatal error with query: ' . $error);
 		}
 	}
 
-	/**
-	 * 
-	 * @method delete one row based on id
-	 * 
-	 * @return assoc array with success element
-	 * 
-	 */
-	public function destroy_row_by_id(
-		int $id,
-		string $table,
-	) {
-
+	public function create() {
 		try {
 
-			$id = trim($id);
-			$id = filter_var($id);
-
-			$sql = "DELETE FROM $table WHERE id = $id";
-			$this->stmt = $this->dbh->prepare($sql);
-
-			if ($this->stmt->execute()) {
-				return ['success' => true];
-			} else {
-
-				// http_response_code(400);
-				return [
-					'success' => false,
-					'message' => 'Error with query'
-				];
+			if( is_null($this->table) || is_null($this->cols) || is_null($this->values) ) {
+				return $this->error('$table, $where are required in destroy method.');
 			}
-		} catch (\Throwable $th) {
 
-			// http_response_code(400);
-			return [
-				'success' => false,
-				'message' => 'Error with query'
-			];
+			$sql = " INSERT INTO $this->table ($this->cols) VALUES $this->values";
+			
+			$this->stmt = $this->dbh->prepare($sql);
+			
+			if( !$this->stmt->execute() ) {
+				return $this->error('Failed to execute query');
+			}
+
+			return [ 'success' => true ];
+
+		} catch (Exception $error) {
+			return $this->error('Fatal error with query: ' . $error);
 		}
 	}
 
-	/**
-	 * 
-	 * @method get a row count of a table.
-	 * 
-	 * @var col and @var id are for an optional where statment
-	 * 
-	 * @return int
-	 * 
-	 */
-	protected function get_row_count(string $table, string $col = '', int $id = null) {
-		$where = isset($id) && isset($col) ? "WHERE $col = $id" : '';
-		$sql = "SELECT COUNT(*) FROM $table $where";
-		$this->stmt = $this->dbh->prepare($sql);
-		$this->stmt->execute();
-		return $this->stmt->fetchColumn();
+	public function destroy() {
+		try {
+
+			if( is_null($this->table) || is_null($this->where) ) {
+				return $this->error('$table, $where are required in destroy method.');
+			}
+
+			$sql = " DELETE FROM $this->table WHERE $this->where";
+			
+			$this->stmt = $this->dbh->prepare($sql);
+			
+			if( !$this->stmt->execute() ) {
+				return $this->error('Failed to execute query');
+			}
+
+			return [ 'success' => true ];
+
+		} catch (Exception $error) {
+			return $this->error('Fatal error with query: ' . $error);
+		}
+	}
+	
+	public function update() {
+		try {
+
+			if( is_null($this->table) || is_null($this->set) || is_null($this->where) ) {
+				return $this->error('$table, $set, $where are required in update method.');
+			}
+
+			$sql = " UPDATE $this->table SET $this->set WHERE $this->where";
+			
+			$this->stmt = $this->dbh->prepare($sql);
+			
+			if( !$this->stmt->execute() ) {
+				return $this->error('Failed to execute query');
+			}
+
+			return [ 'success' => true ];
+
+		} catch (Exception $error) {
+			return $this->error('Fatal error with query: ' . $error);
+		}
+	}
+
+	public function count() {
+		try {
+
+			if( is_null($this->table) || is_null($this->select) ) {
+				return $this->error('$table, $select, $where are required in update method.');
+			}
+
+			$sql = " SELECT COUNT($this->select) FROM $this->table";
+			
+			if( isset($this->where) ) $sql .= " WHERE $this->where";
+			
+			$this->stmt = $this->dbh->prepare($sql);
+			
+			if( !$this->stmt->execute() ) {
+				return $this->error('Failed to execute query');
+			}
+
+			$count = $this->stmt->fetchColumn();
+
+			return [ 'success' => true, 'data' => $count ];
+
+		} catch (Exception $error) {
+			return $this->error('Fatal error with query: ' . $error);
+		}
 	}
 
 	/**
