@@ -2,7 +2,6 @@
 
 
 
-
 /**
  * 
  * User Routes
@@ -10,52 +9,44 @@
  */
 
 // GET
-$route->get('/users', function() {
-    // return (new User())->get_all();
-    // $test = (new User())->select('username')->table('users')->limit(5)->order('username DESC')->list();
-    $test = (new User())->table('users')->where("id=1")->count();
-
-    return $test;
+$route->get('/users', function() 
+{
+    return (new User())->table('users')->list();
 });
 
 
-$route->get('/user/:param', function() {
-    return (new User())->get_single(30);
+$route->get('/user/:param', function() use($route) 
+{
+    return (new User())->table('users')
+        ->where("id = $route->param")->single();
 });
 
 
-$route->get('/username/:param', function() {
-    return (new User())->get_single_by_username();
+$route->get('/username/:param', function() use($route) 
+{
+    return (new User())->table('users')
+        ->where("username = '$route->param'")->single();
 });
 
 
 // POST
-$route->post('/user', function () {
-    return (new User)()->create();
-});
-
-
-$route->post('/user/login', function() {
-    return (new User())->login();
-});
-
-
-$route->post('/user/logout', function() {
-    return (new User())->logout();
+$route->post('/user', function() 
+{
+    return (new User())->create();
 });
 
 
 // PUT
-$route->put('/user/:param', function () {
-    return (new User)->edit();
+$route->put('/login', function() 
+{
+    return (new User())->login();
 });
 
 
-// DELETE
-$route->delete('/user/:param', function() {
-    return (new User())->destroy();
+$route->put('/logout', function() 
+{
+    return (new User())->logout();
 });
-
 
 
 
@@ -66,11 +57,11 @@ $route->delete('/user/:param', function() {
  */
 
 //  GET
-$route->get('/session/:param', function() {
-    return (new User())->get_single_by_session();
+$route->get('/session/:param', function() use($route)
+{
+    return (new User())->select('id, username')
+        ->table('users')->where("session = '$route->param' ")->single();
 });
-
-
 
 
 
@@ -81,26 +72,33 @@ $route->get('/session/:param', function() {
  */
 
 // GET
-$route->get('/notifications/new/:param', function() {
-    return (new Notification())->get_new();
+$route->get('/new-notifications/:param', function() use($route)
+{
+    return (new Notification())->select('new_notifications')
+        ->table('users')
+        ->where("id = $route->param")
+        ->single();
 });
 
 
-$route->get('/notifications/old/:param', function() {
-    return (new Notification())->get_old();
+$route->get('/old-notifications/:param', function() use($route)
+{
+    return (new Notification())->select('old_notifications')
+        ->table('users')
+        ->where("id = $route->param")
+        ->single();
 });
 
 
 // PUT
-$route->put('/notifications/add', function() {
+$route->put('/add-notifications', function() {
     return (new Notification())->create();
 });
 
 
-$route->put('/notifications/clear_new', function() {
+$route->put('/clear-new-notifications', function() {
     return (new Notification())->clear_new();
 });
-
 
 
 
@@ -155,8 +153,6 @@ $route->delete('/book', function() {
 
 
 
-
-
 /**
  * 
  * Comment Routes
@@ -190,8 +186,6 @@ $route->put('/comment/:param', function() {
 $route->delete('/comment/:param', function() {
     return (new Comment())->destroy();
 });
-
-
 
 
 

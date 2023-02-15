@@ -49,12 +49,13 @@ export default function useAuth() {
         if(!localToken) return
 
         const res = await httpReq.get(API_BASE_URL + '/session/' + localToken)
+        console.log(res)
 
         if(res.success) {
             setIsLoggedIn(true)
             setUser({
-                id: res.id,
-                username: res.username,
+                id: res.data.id,
+                username: res.data.username,
                 token: localToken
             })
         } else {
@@ -84,16 +85,17 @@ export default function useAuth() {
     async function loginQuery() {
 
         const postData = { username, password }
-        const res = await httpReq.post(API_BASE_URL + '/user/login', postData )
+        const res = await httpReq.put(API_BASE_URL + '/login', postData )
+        console.log(res)
 
         if(res.success) {
             setTimeout( () => {
-                localStorage.setItem('token', res.uuid)
+                localStorage.setItem('token', res.data.uuid)
                 setIsLoggedIn(true)
                 setUser({
-                    id: Number(res.id),
-                    username: res.username,
-                    token: res.uuid
+                    id: Number(res.data.id),
+                    username: res.data.username,
+                    token: res.data.uuid
                 })
                 queryClient.removeQueries('login', { exact : true } )
             }, 1500)
@@ -118,7 +120,7 @@ export default function useAuth() {
         const postData = {
             id: user.id
         }
-        const res = await httpReq.post(API_BASE_URL + '/user/logout', postData)
+        const res = await httpReq.put(API_BASE_URL + '/logout', postData)
     }
 
     /**

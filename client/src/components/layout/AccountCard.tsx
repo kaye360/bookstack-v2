@@ -30,25 +30,21 @@ export default function AccountCard({defaultComponent} : AccountCardProps) {
 
 
             {!isLoggedIn && isShown === 'login' &&
-                <p className="mt-8">
-                    <TextFlex>
+                    <TextFlex className="mt-8">
                         Don't have an acount yet? 
                         <ButtonPrimaryOutlined onClick={ () => setIsShown('register')}>
                             Register
                         </ButtonPrimaryOutlined>
                     </TextFlex>
-                </p>
             }
             
             {!isLoggedIn && isShown === 'register' &&
-                <p className="mt-8">
-                    <TextFlex>
+                    <TextFlex className="mt-8">
                         Already have an account?
                         <ButtonPrimaryOutlined onClick={ () => setIsShown('login')}>
                             Sign In
                         </ButtonPrimaryOutlined>
                     </TextFlex>
-                </p>
             }
 
         </section>
@@ -186,6 +182,7 @@ function Register() {
 
         // Attempt Register
         const postData = { username, password, confirm_password }
+        console.log(postData)
         const res : IResponse = await httpReq.post(API_BASE_URL + '/user', postData)
         if(res.success) {
             setMessage('')
@@ -193,7 +190,6 @@ function Register() {
             // login and set token
             const loginPostData = { username, password }
             const loginRes = await httpReq.post(API_BASE_URL + '/user/login', postData )
-            console.log(loginRes)
 
             localStorage.setItem('token', loginRes.uuid)
             setIsLoggedIn(true)

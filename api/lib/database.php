@@ -104,6 +104,18 @@ class Database
 		return $this;
 	}
 
+	public function cols(string $cols)
+	{
+		$this->cols = $cols;
+		return $this;
+	}
+
+	public function values(string $values)
+	{
+		$this->values = $values;
+		return $this;
+	}
+
 	public function set(string $set)
 	{
 		$this->set = $set;
@@ -128,7 +140,6 @@ class Database
 			if( isset($this->where) ) $sql .= " WHERE $this->where ";
 			if( isset($this->order) ) $sql .= " ORDER BY $this->order";
 			if( isset($this->limit) ) $sql .= " LIMIT $this->limit ";
-			
 			$this->stmt = $this->dbh->prepare($sql);
 			
 			if( !$this->stmt->execute() ) {
@@ -140,7 +151,7 @@ class Database
 			return [ 'success' => true, 'data' => $row ];
 
 		} catch (Exception $error) {
-			return $this->error('Fatal error with query: ' . $error);
+			return $this->error('Fatal error with query: ' . $error->getMessage());
 		}
 	}
 
@@ -169,18 +180,18 @@ class Database
 			return [ 'success' => true, 'data' => $rows ];
 
 		} catch (Exception $error) {
-			return $this->error('Fatal error with query: ' . $error);
+			return $this->error('Fatal error with query: ' . $error->getMessage());
 		}
 	}
 
-	public function create() {
+	public function new() {
 		try {
 
 			if( is_null($this->table) || is_null($this->cols) || is_null($this->values) ) {
-				return $this->error('$table, $where are required in destroy method.');
+				return $this->error('$table, $where, $values are required in destroy method.');
 			}
 
-			$sql = " INSERT INTO $this->table ($this->cols) VALUES $this->values";
+			$sql = " INSERT INTO $this->table ($this->cols) VALUES ($this->values)";
 			
 			$this->stmt = $this->dbh->prepare($sql);
 			
@@ -191,7 +202,7 @@ class Database
 			return [ 'success' => true ];
 
 		} catch (Exception $error) {
-			return $this->error('Fatal error with query: ' . $error);
+			return $this->error('Fatal error with query: ' . $error->getMessage());
 		}
 	}
 
@@ -213,7 +224,7 @@ class Database
 			return [ 'success' => true ];
 
 		} catch (Exception $error) {
-			return $this->error('Fatal error with query: ' . $error);
+			return $this->error('Fatal error with query: ' . $error->getMessage());
 		}
 	}
 	
@@ -235,7 +246,7 @@ class Database
 			return [ 'success' => true ];
 
 		} catch (Exception $error) {
-			return $this->error('Fatal error with query: ' . $error);
+			return $this->error('Fatal error with query: ' . $error->getMessage());
 		}
 	}
 
@@ -261,7 +272,7 @@ class Database
 			return [ 'success' => true, 'data' => $count ];
 
 		} catch (Exception $error) {
-			return $this->error('Fatal error with query: ' . $error);
+			return $this->error('Fatal error with query: ' . $error->getMessage());
 		}
 	}
 
@@ -330,7 +341,7 @@ class Database
 	 * @return bool
 	 * 
 	 */
-	protected function validate_req(array $request, array $required_keys) 
+	protected function validate_req(array|null $request, array $required_keys) 
 	{
 		if( !is_array($request) || !is_array($required_keys) ) return false;
 

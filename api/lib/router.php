@@ -18,82 +18,33 @@
 class Router
 {
 
-	private $url;
-	public $routes;
+	private string $url = '';
+	public ?string $param = null;
+	public array $routes = [];
 
 	/**
-	 * Get/set current URL without url params
+	 * Get/set current URL without url filters and param 
 	 */
 	public function __construct()
 	{
-		if (!isset($_SERVER['REQUEST_URI'])) $url = '/';
 		$url = trim($_SERVER['REQUEST_URI'], " \n\r\t\v\x00/");
 		$url = filter_var($url, FILTER_SANITIZE_URL);
-		$url = explode('?', $url);
-		$url = str_replace('/', 'SLASH', $url[0]);
-		$this->url = $url;
-	}
 
-
-
-
-	/**
-	 * Generate response based on current route
-	 */
-	public function response()
-	{
-		// Get defined methods associated with current request method type (GET, POST, PUT DELETE)
-		$route_methods = $this->routes;
-
-		// Apply Params if GET Req
-		if($_SERVER['REQUEST_METHOD'] === 'GET') {
-			$route_methods = $this->apply_params($route_methods);
+		if( empty($url) ) {
+			echo json_encode( $this->error('No route specified') );
+			die();
 		}
 
-		// Check if current route exists in routes
-		if(!array_key_exists( $this->url, $route_methods  )) {
-			return ['error' => 'This route doesn\'t exist'];
-		}
+		$url_no_query_string = explode('?', $url)[0];
 
-		// Everything is good, call function and return
-		return $route_methods[$this->url]();
+		$url_formatted_as_key = str_replace('/', 'SLASH', $url_no_query_string);
+		$this->url = $url_formatted_as_key;
+		
+		$url_array_by_slashes = explode('/', $url_no_query_string);
+		if( isset($url_array_by_slashes[1]) ) {
+			$this->param = $url_array_by_slashes[1];
+		} 
 	}
-
-
-
-
-
-	/**
-	 * Render response in JSON format
-	 */
-	public function json()
-	{
-		if ( $_SERVER['HTTP_HOST'] === 'bookstackapi.joshkaye.ca' ) {
-			ob_clean();
-		}
-
-		$json = json_encode( $this->response(), JSON_PRETTY_PRINT );
-		$error = json_encode(['error' => 'Error encoding JSON']);
-		http_response_code(200);
-
-		if ( $json === false) {
-			echo $error;
-		} else { 
-			echo $json;
-		}
-	}
-
-
-
-	
-	/**
-	 * Render Error Message
-	 */
-	public function error($message) 
-	{
-		return ['error' => $message];
-	}
-
 
 
 
@@ -123,7 +74,6 @@ class Router
 	
 
 
-
 	/**
 	 * Register a Post Request
 	 */
@@ -141,7 +91,6 @@ class Router
 	{
 		$this->register_route('DELETE', $route, $method);	
 	}
-	
 
 
 
@@ -155,22 +104,60 @@ class Router
 
 
 
+	/**
+	 * Render response in JSON format
+	 */
+	public function json()
+	{
+		if ( $_SERVER['HTTP_HOST'] === 'bookstackapi.joshkaye.ca' ) {
+			ob_clean();
+		}
+
+		$json = json_encode( $this->response(), JSON_PRETTY_PRINT );
+		$error = json_encode(['error' => 'Error encoding JSON']);
+		http_response_code(200);
+
+		if ( $json === false) {
+			echo $error;
+		} else { 
+			echo $json;
+		}
+	}
+
+
+
+	/**
+	 * Generate response based on current route
+	 */
+	public function response()
+	{
+		// Swap :param with requested param if GET route
+		if($_SERVER['REQUEST_METHOD'] === 'GET') {
+			$this->routes = $this->apply_params($this->routes);
+		}
+
+		// Check if current route exists in routes
+		if(!array_key_exists( $this->url, $this->routes )) {
+			return ['error' => 'This route doesn\'t exist'];
+		}
+
+		return $this->routes[$this->url]();
+	}
+
+
 
 	/**
 	 * Apply Params to $route_methods in $this->response
 	 */
 	private function apply_params($route_methods)
 	{
-		// Get current url and potential param
-		$current_url_array = explode('SLASH', $this->url);
-		$potential_param = end($current_url_array);
-		$this->param = $potential_param;
+		if( is_null($this->param) ) return $route_methods;
 
 		// Every :param gets replaced with _param to be array key friendly
 		// replace _param with with $this->param in all routes
 		foreach($route_methods as $key => $value) {
 
-			$new_key = str_replace('_param', $potential_param, $key);
+			$new_key = str_replace('_param', $this->param, $key);
 
 			if( array_key_exists($new_key, $route_methods) ) continue;
 
@@ -179,6 +166,16 @@ class Router
 		}
 
 		return $route_methods;
+	}
+
+
+	
+	/**
+	 * Render Error Message
+	 */
+	public function error($message) 
+	{
+		return ['error' => $message];
 	}
 	
 }

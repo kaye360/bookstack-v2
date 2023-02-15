@@ -76,21 +76,21 @@ export const useNotifications = (userID: number) => {
      * 
      */
     async function getNewNotifications() {
-        const res = await httpReq.get(API_BASE_URL + '/notifications/new/' + userID)
-        return res
+        const res = await httpReq.get(API_BASE_URL + '/new-notifications/' + userID)
+        return res.data
     }
 
     async function getOldNotifications() {
-        const res = await httpReq.get(API_BASE_URL + '/notifications/old/' + userID)
-        return res
+        const res = await httpReq.get(API_BASE_URL + '/old-notifications/' + userID)
+        return res.data
     }
 
     async function clearNewNotifications() {
         const body = { user_id : userID }
-        const res = await httpReq.put(API_BASE_URL +  '/notifications/clear_new', body)
+        const res = await httpReq.put(API_BASE_URL +  '/clear-new-notifications/', body)
         refetchNew()
         refetchOld()
-        return res
+        return res.data
     }
 
     /**
