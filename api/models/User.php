@@ -27,7 +27,7 @@ class User extends Database
 	{
 		$request = $this->request();
 
-		if( !$this->validate_req($request, ['username', 'password', 'confirm_password']) ) {
+		if( !$this->is_valid_request($request, ['username', 'password', 'confirm_password']) ) {
 			return $this->error('Username, password and password confirmation are required.');
 		}
 
@@ -70,7 +70,7 @@ class User extends Database
 		$request = $this->request();
 		$uuid = $this->make_UUID();
 
-		if( !$this->validate_req($request, ['username', 'password']) ) {
+		if( !$this->is_valid_request($request, ['username', 'password']) ) {
 			return $this->error('$username, $password are required in User->login');
 		}
 
@@ -111,7 +111,7 @@ class User extends Database
 	{
 		$request = $this->request();
 
-		if( !$this->validate_req($request, ['id']) ) {
+		if( !$this->is_valid_request($request, ['id']) ) {
 			return $this->error('$id is required for User->logout');
 		}
 

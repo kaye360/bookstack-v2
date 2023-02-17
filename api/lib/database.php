@@ -192,14 +192,15 @@ class Database
 			}
 
 			$sql = " INSERT INTO $this->table ($this->cols) VALUES ($this->values)";
-			
 			$this->stmt = $this->dbh->prepare($sql);
 			
 			if( !$this->stmt->execute() ) {
 				return $this->error('Failed to execute query');
 			}
 
-			return [ 'success' => true ];
+			$data = $this->dbh->lastInsertId();
+
+			return [ 'success' => true, 'data' => $data ];
 
 		} catch (Exception $error) {
 			return $this->error('Fatal error with query: ' . $error->getMessage());
@@ -214,7 +215,6 @@ class Database
 			}
 
 			$sql = " DELETE FROM $this->table WHERE $this->where";
-			
 			$this->stmt = $this->dbh->prepare($sql);
 			
 			if( !$this->stmt->execute() ) {
@@ -236,7 +236,7 @@ class Database
 			}
 
 			$sql = " UPDATE $this->table SET $this->set WHERE $this->where";
-			
+			echo $sql;
 			$this->stmt = $this->dbh->prepare($sql);
 			
 			if( !$this->stmt->execute() ) {
@@ -258,9 +258,7 @@ class Database
 			}
 
 			$sql = " SELECT COUNT($this->select) FROM $this->table";
-			
 			if( isset($this->where) ) $sql .= " WHERE $this->where";
-			
 			$this->stmt = $this->dbh->prepare($sql);
 			
 			if( !$this->stmt->execute() ) {
@@ -341,7 +339,7 @@ class Database
 	 * @return bool
 	 * 
 	 */
-	protected function validate_req(array|null $request, array $required_keys) 
+	protected function is_valid_request(array|null $request, array $required_keys) 
 	{
 		if( !is_array($request) || !is_array($required_keys) ) return false;
 

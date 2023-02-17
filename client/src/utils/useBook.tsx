@@ -25,7 +25,8 @@ export const useBook = (bookID: number | undefined) => {
      */
     async function getBook() {
         const res = await httpReq.get(API_BASE_URL + '/book/' + bookID)
-        return res
+        console.log(res);
+        return res.data
     }
 
     /**

@@ -49,7 +49,6 @@ export default function useAuth() {
         if(!localToken) return
 
         const res = await httpReq.get(API_BASE_URL + '/session/' + localToken)
-        console.log(res)
 
         if(res.success) {
             setIsLoggedIn(true)

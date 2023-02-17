@@ -11,44 +11,10 @@ require_once './lib/database.php';
 class Notification extends Database
 {
 
-	private const TABLE = 'users';
-
-
-
-
 	function __construct()
 	{
 		parent::__construct();
 	}
-
-
-
-	
-	public function get_new($id) 
-	{
-		if(empty($id)) return ['error' => 'No ID given']; 
-
-		return $this->get_row_by_id(
-			id: $id,
-			table: self::TABLE,
-			return: ['new_notifications']
-		);
-	}
-
-
-
-
-	public function get_old($id) 
-	{
-		if (empty($id)) return ['error' => 'No ID given'];
-
-		return $this->get_row_by_id(
-			id: $id,
-			table: self::TABLE,
-			return: ['old_notifications']
-		);
-	}
-
 
 
 
@@ -65,39 +31,40 @@ class Notification extends Database
 			empty($recieving_user_id) ||
 			empty($message) ||
 			empty($url) ||
-			empty($type) 
+			empty($type)
 		) {
-			return;
+			return $this->error('$sending_user_id, $recieving_user_id, $message, $url, $type are required');
 		}
 
-		if($sending_user_id === $recieving_user_id) return;
+		if( $sending_user_id === $recieving_user_id ) return;
 
 		try {
 
-			$user = $this->get_row_by_id(
-				id: $recieving_user_id,
-				table: self::TABLE,
-				return: ['new_notifications']
-			);
+			$recieving_user = $this->select('new_notifications')
+				->table('users')
+				->where("id = '$recieving_user_id' ")
+				->single();
 
-			$current_new_notifications = json_decode($user['new_notifications']);
-			$new_notification = [
-				'message' => $message,
-				'url' => $url,
-				'type' => $type
-			];
+			if( !$recieving_user['success'] ) {
+				return $this->error('Error getting users notifications');
+			}
+
+			$current_new_notifications = json_decode(
+				$recieving_user['data']['new_notifications'], true
+			);
+			
+			$new_notification = ['message' => $message, 'url' => $url, 'type' => $type ];
 
 			array_unshift($current_new_notifications, $new_notification);
 			
-			return $this->update_row(
-				id: $recieving_user_id,
-				table: self::TABLE,
-				columns: [
-					'new_notifications' => json_encode($current_new_notifications)
-				]
-			);
-		} catch(Exception $error) {
+			$updated_new_notifications_json = json_encode($current_new_notifications);
+
+			return $this->set("new_notifications = '$updated_new_notifications_json' ")
+				->where("id = '$recieving_user_id' ")
+				->update();
 			
+		} catch(Exception $error) {
+			return $this->error($error->getMessage());
 		}
 	}
 
@@ -107,30 +74,38 @@ class Notification extends Database
 
 	public function clear_new()
 	{
-		$put_data = $this->request();
+		$request = $this->request();
 
-		$user = $this->get_row_by_id(
-			id: $put_data['user_id'],
-			table: self::TABLE,
-			return: ['new_notifications', 'old_notifications']
-		);
+			try {
 
-		$new_notifications = json_decode($user['new_notifications'], true);
-		$old_notifications = json_decode($user['old_notifications'], true);
-		
-		$updated_old_notifications = array_merge($new_notifications, $old_notifications);
-		$updated_old_notifications = array_slice($updated_old_notifications, 0, 20);
+			if( !$this->is_valid_request($request, ['user_id']) ) {
+				return $this->error('$user_id required in Notification->clear_new');
+			}
 
-		return $this->update_row(
-			id: $put_data['user_id'],
-			table: self::TABLE,
-			columns: [
-				'new_notifications' => '[]',
-				'old_notifications' => json_encode($updated_old_notifications)
-			],
-			return: ['old_notifications']
-		);
+			$user = $this->select('new_notifications, old_notifications')
+				->table('users')
+				->where(" id = '$request[user_id]' ")
+				->single();
 
+			if( !$user['success'] ) {
+				return $this->error('User not found');
+			}
+
+			$new_notifications = json_decode($user['data']['new_notifications'], true);
+			$old_notifications = json_decode($user['data']['old_notifications'], true);
+
+			$updated_old_notifications = array_merge($new_notifications, $old_notifications);
+			$updated_old_notifications = array_slice($updated_old_notifications, 0, 20);
+			$updated_old_notifications_json = json_encode($updated_old_notifications);
+
+			return $this->table('users')
+				->set(" new_notifications = '[]', old_notifications = '$updated_old_notifications_json' ")
+				->where(" id = '$request[user_id]' ")
+				->update();
+
+		} catch (Exception $error) {
+			return $this->error($error->getMessage());
+		}
 	}
 
 

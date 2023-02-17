@@ -29,47 +29,36 @@ class Book extends Database
 
 	public function create()
 	{
-		$post_data = $this->request();
-
-		// Validate empty fields
-		if (
-			empty($post_data['isbn']) ||
-			empty($post_data['user_id']) ||
-			empty($post_data['username'])
-		) {
-			// http_response_code(400);
-			return [
-				'success' => false,
-				'message' => 'ISBN and User Id are required'
-			];
+		$request = $this->request();
+		
+		if( !$this->is_valid_request($request, ['isbn', 'title', 'author', 'is_read', 'cover_url', 'user_id' ]) ) {
+			return $this->error('isbn, title, author, is_read, cover_url, user_id are required in Book->create');
 		}
 
-		// Create Book
-		$new_book = $this->create_row(
-			columns: [
-				'isbn' => $post_data['isbn'],
-				'title' => $post_data['title'],
-				'author' => $post_data['author'],
-				'is_read' => $post_data['is_read'],
-				'likes' => '[]',
-				'cover_url' => $post_data['cover_url'],
-				'user_id' => $post_data['user_id']
-			],
-			return: ['title', 'id'],
-			table: self::TABLE
-		);
-		
-		// Add entry to Community Feed
-		$this->community_feed->create(
-			type: 'upload',
-			message: "$post_data[username] added a book to their library: $post_data[title]",
-			link: '/book/' . $new_book['id'],
-			user_id: $post_data['user_id'],
-			image_url: $post_data['cover_url'],
-			username: $post_data['username']
-		);
+		$create_new_book = $this->table('books')
+			->cols('isbn, title, author, is_read, likes, cover_url, user_id')
+			->values(" 
+				'$request[isbn]', 
+				'$request[title]',
+				'$request[author]', 
+				'$request[is_read]', 
+				'[]', 
+				'$request[cover_url]', 
+				'$request[user_id]' ")
+			->new();
 
-		return $new_book;
+		$community_feed_entry = $this->table('community')
+			->cols('type, message, link, user_id, image_url, username')
+			->values("
+				'add',
+				'$request[username] added a book to their library: $request[title]',
+				'/book/$create_new_book[data]',
+				'$request[user_id]',
+				'$request[cover_url]',
+				'$request[username]' ")
+			->new();
+
+		return $create_new_book;
 	}
 
 
@@ -78,182 +67,100 @@ class Book extends Database
 	/**
 	 * @todo possbily make this into 1 sql query instead of 2
 	 */
-	public function get_single($id)
+	public function get_single($book_id)
 	{
-		$book = $this->get_row_by_id(
-			id: $id,
-			table: self::TABLE,
-		);
-		
-		$book['comments'] = $this->get_all_rows(
-			id: $id,
-			id_col : 'book_id',
-			table: 'comments'
-		);
+		if( !$book_id ) {
+			return $this->error('$book_id is required');
+		}
 
+		$book = $this->table('books')
+			->where("id = '$book_id' ")
+			->single();
+
+		if( !$book['success'] ) {
+			return $this->error('Book not found');
+		}
+
+		$comments = $this->table('comments')
+			->where("book_id = '$book_id' ")
+			->list();
+
+		$book['data']['comments'] = $comments['data'];
 		return $book;
 		
 	}
 
 
 
-
-	public function get_all($id)
-	{
-		$id = $id === 'all' ? false : $id;
-		return $this->get_all_rows(
-			id: $id,
-			id_col: 'user_id',
-			table: self::TABLE,
-		);
-	}
-
-
-
-
-	public function get_explore() 
-	{
-		try {
-			$sql = 'SELECT * FROM books ORDER BY RAND() LIMIT 20';
-			$this->stmt = $this->dbh->prepare($sql);
-			$this->stmt->execute();
-		} catch(Exception $error) {
-			return [];
-		}
-		return $this->stmt->fetchAll(PDO::FETCH_ASSOC);
-	}
-
-
-
-
-	public function edit($id)
-	{
-		$put_data = $this->request();
-
-		// Validate empty fields
-		if (
-			empty($put_data['isbn']) ||
-			empty($put_data['user_id'])
-		) {
-			// http_response_code(400);
-			return [
-				'success' => false,
-				'message' => 'ISBN and User Id are required'
-			];
-		}
-
-		// Validate characters
-		if ($this->has_forbidden_chars(
-			values: [
-				$put_data['isbn'],
-				$put_data['title'],
-				$put_data['author']
-			],
-			regex: '/^[a-zA-Z0-9_\- :]+$/'
-		)) {
-			// http_response_code(400);
-			return [
-				'success' => false,
-				'message' => 'Username or password have forbidden characters.'
-			];
-		}
-
-		// Update Book
-		return $this->update_row(
-			id: $id,
-			table: self::TABLE,
-			columns: [
-				'isbn' => $put_data['isbn'],
-				'title' => $put_data['title'],
-				'author' => $put_data['author'],
-				'is_read' => $put_data['is_read'],
-			],
-		);
-	}
-
-
-
-	/**
-	 * @todo rename this to toggle_like_status
-	 */
-	public function like()
+	public function toggle_like_status()
 	{
 
 		try {
 
-			$put_data = $this->request();
+			$request = $this->request();
 
-			// Validate request
-			if ( !$this->validate_req($put_data, ['id', 'user_id', 'username']) ) {
-				// http_response_code(400);
-				return [
-					'success' => false,
-					'message' => 'Request validation failed in Book->like'
-				];
+			if ( !$this->is_valid_request($request, ['id', 'user_id', 'username']) ) {
+				return $this->error('id, user_id, username are required in Book->like');
 			}
 
-			// Get current book likes
-			$current_book = $this->get_row_by_id(
-				id: $put_data['id'],
-				table: self::TABLE,
-				return: ['likes', 'title', 'user_id', 'id', 'cover_url']
-			);
+			$book = $this->select('likes, title, user_id, id, cover_url')
+				->table('books')
+				->where(" id = $request[id] ")
+				->single();
 
-			if ($current_book['success'] === false) {
-				// http_response_code(404);
-				return [
-					'success' => false,
-					'message' => 'Book not found'
-				];
+			if ( !$book['success'] ) {
+				$this->error('Book not found');
 			}
-			
-			$current_book['likes'] = json_decode($current_book['likes'], true);
 
-			// Toggle Like/Unlike
-			if (in_array($put_data['user_id'], $current_book['likes'])) {
+			$book['data']['likes'] = json_decode($book['data']['likes'], true);
 
-				// UnLike
-				$user_id_key = array_search($put_data['user_id'], $current_book['likes']);
-				unset($current_book['likes'][$user_id_key]);
+			$is_book_liked = in_array($request['user_id'], $book['data']['likes']);
 
-			} else {
+			if ( $is_book_liked ) { // Then Unlike
 
-				// Like
-				array_push($current_book['likes'], $put_data['user_id']);
+				$user_id_key = array_search($request['user_id'], $book['data']['likes']);
+				unset($book['data']['likes'][$user_id_key]);
 
-				// Add to community feed
-				$this->community_feed->create(
-					type: 'like',
-					message: $put_data['username'] . ' liked the book: ' . $current_book['title'],
-					link: '/book/' . $put_data['id'],
-					user_id : $put_data['user_id'],
-					image_url: $current_book['cover_url'],
-					username: $put_data['username']
-				);
+			} else { // Else Like
 
-				// Create notification
-				$this->notifications->create(
-					sending_user_id: $put_data['user_id'],
-					recieving_user_id: $current_book['user_id'],
-					type: 'like',
-					message: $put_data['username'] . ' liked your book: ' . $current_book['title'],
-					url: '/book/' . $current_book['id'],
+				array_push($book['data']['likes'], $request['user_id']);
+
+				$message = $request['username'] . ' liked the book: ' . $book['data']['title'];
+				$link = '/book/' . $request['id'];
+				$cover = $book['data']['cover_url'];
+
+				$new_community_feed_entry = $this->table('community')
+					->cols('type, message, link, user_id, image_url, username')
+					->values(" 
+						'like',
+						'$message',
+						'$link',
+						'$request[user_id]',
+						'$cover',
+						'$request[username]'
+					")
+					->new();
+
+				$new_notification = (new Notification())->create(
+					sending_user_id: $request['user_id'],
+					recieving_user_id: $book['data']['user_id'],
+					message: $message,
+					url: $link,
+					type: 'like'
 				);
 			}
 
-			$current_book['likes'] = (array) $current_book['likes'];
+			$updated_book_likes_json = json_encode($book['data']['likes']);
 
-			return $this->update_row(
-				id: $put_data['id'],
-				table: self::TABLE,
-				columns: [
-					'likes' => json_encode($current_book['likes'])
-				],
-				return: ['likes']
-			);
+			$update_book_likes = $this->table('books')
+				->set(" likes = '$updated_book_likes_json' ")
+				->where(" id = '$request[id]' ")
+				->update();
+
+			return $update_book_likes;
 
 		} catch(Exception $error) {
-			return ['error' => 'Something went wrong...'];
+			return ['error' => $error->getMessage()];
 		}
 	}
 
@@ -265,7 +172,7 @@ class Book extends Database
 	 */
 	public function toggle_read_status()
 	{
-		$put_data = $this->request();
+		$request = $this->request();
 
 		// Validate request
 		if (empty($put_data['id'])) {
@@ -297,62 +204,4 @@ class Book extends Database
 		);
 	}
 
-
-
-
-	/** 
-	 * @todo validate user ID
-	 */
-	// public function destroy()
-	// {
-	// 	$req = $this->request();
-		
-	// 	if ( empty($req['id']) ) {
-	// 		return [
-	// 			'success' => false,
-	// 			'message' => 'Book ID is required.'
-	// 		];
-	// 	}
-
-	// 	return $this->destroy_row_by_id(
-	// 		id: $req['id'],
-	// 		table: self::TABLE,
-	// 	);
-	// }
-
-
-
-
-	/**
-	 * 
-	 * Dev Functions only
-	 * 
-	 */
-	public function reset()
-	{
-
-		include_once('./fake-data/books.php');
-
-		$sql = "TRUNCATE TABLE books";
-		$this->stmt = $this->dbh->prepare($sql);
-		$this->stmt->execute();
-
-		foreach ($books as $book) {
-			$is_read = $book['is_read'] == 1 ? 'true' : 'false';
-			$this->create_row(
-				columns: [
-					'isbn' => $book['isbn'],
-					'title' => $book['title'],
-					'author' => $book['author'],
-					'is_read' => $is_read,
-					'likes' => json_encode([]),
-					'cover_url' => 'cover_url',
-					'user_id' => $book['user_id']
-				],
-				table: self::TABLE
-			);
-		}
-
-		return 'Books table reset';
-	}
 }

@@ -15,11 +15,10 @@ import { UserContext } from "../components/app/UserContextWrapper";
 import bookNoCover from "../assets/img/book-no-cover.png"
 import Icon from "../components/elements/Icon";
 import PageHeading from "../components/elements/PageHeading";
-import TextInline from "../components/elements/TextInline";
 import TextFlex from "../components/elements/TextFlex";
 import Separator from "../components/layout/Separator";
 import TextBlock from "../components/elements/TextBlock";
-import { ButtonBasic, ButtonPrimaryPlain } from "../components/elements/buttons";
+import { ButtonBasic } from "../components/elements/buttons";
 
 
 export default function Book() {

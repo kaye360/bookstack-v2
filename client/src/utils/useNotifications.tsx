@@ -54,7 +54,7 @@ export const useNotifications = (userID: number) => {
     const { data: recent, refetch: refetchNew  } = queries[0]
     const { data: old, refetch: refetchOld } = queries[1]
     const { refetch : clearRecentNotifications } = queries[2]
-    
+
     /**
      * 
      * Early exit if userID is not a number
@@ -77,12 +77,12 @@ export const useNotifications = (userID: number) => {
      */
     async function getNewNotifications() {
         const res = await httpReq.get(API_BASE_URL + '/new-notifications/' + userID)
-        return res.data
+        return res
     }
 
     async function getOldNotifications() {
         const res = await httpReq.get(API_BASE_URL + '/old-notifications/' + userID)
-        return res.data
+        return res
     }
 
     async function clearNewNotifications() {
@@ -90,7 +90,7 @@ export const useNotifications = (userID: number) => {
         const res = await httpReq.put(API_BASE_URL +  '/clear-new-notifications/', body)
         refetchNew()
         refetchOld()
-        return res.data
+        return res
     }
 
     /**
@@ -108,21 +108,24 @@ export const useNotifications = (userID: number) => {
         old : 0,
     }
 
+    console.log(recent, old)
     if( recent?.success && old?.success ) {
-        const newNotifications = JSON.parse( recent.new_notifications )
-        const oldNotifications = JSON.parse( old.old_notifications )
+        const newNotifications = JSON.parse( recent.data.new_notifications )
+        const oldNotifications = JSON.parse( old.data.old_notifications )
+
 
         notifications = { 
             recent : newNotifications ? newNotifications : [],  
             old : oldNotifications ? oldNotifications : []
         }
+
+        console.log(notifications)
         
         amount = {
             recent : notifications.recent.length,
             old : notifications.old.length
         }
     }
-
 
     return {notifications, amount, clearRecentNotifications }
 }

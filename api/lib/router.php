@@ -115,13 +115,9 @@ class Router
 
 		$json = json_encode( $this->response(), JSON_PRETTY_PRINT );
 		$error = json_encode(['error' => 'Error encoding JSON']);
+		
 		http_response_code(200);
-
-		if ( $json === false) {
-			echo $error;
-		} else { 
-			echo $json;
-		}
+		echo $json === false ? $error : $json;
 	}
 
 

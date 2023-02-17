@@ -91,12 +91,8 @@ $route->get('/old-notifications/:param', function() use($route)
 
 
 // PUT
-$route->put('/add-notifications', function() {
-    return (new Notification())->create();
-});
-
-
-$route->put('/clear-new-notifications', function() {
+$route->put('/clear-new-notifications', function() 
+{
     return (new Notification())->clear_new();
 });
 
@@ -109,35 +105,40 @@ $route->put('/clear-new-notifications', function() {
  */
 
 // GET
-$route->get('/book/:param', function() {
-    return (new Book())->get_single();
+$route->get('/book/:param', function() use($route)
+{
+    return (new Book())->get_single($route->param);
 });
 
 
-$route->get('/books/:param', function() {
-    return (new Book())->get_all();
+$route->get('/books/:param', function() use($route)
+{
+    return (new Book())->table('books')
+        ->where("user_id = '$route->param' ")
+        ->list();
 });
 
 
-$route->get('/books/explore', function() {
-    return (new Book())->get_explore();
+$route->get('/books/explore', function()
+{
+    return (new Book())->table('books')
+        ->order('RAND()')
+        ->limit('20')
+        ->list();
 });
 
 
 // POST
-$route->post('/book', function() {
+$route->post('/book', function() 
+{
     return (new Book())->create();
 });
 
 
 // PUT
-$route->put('/book/:param', function() {
-    return (new Book())->edit();
-});
-
-
-$route->put('/book/like', function() {
-    return (new Book())->like();
+$route->put('/book/like', function() 
+{
+    return (new Book())->toggle_like_status();
 });
 
 
