@@ -115,7 +115,7 @@ interface IfeedItem {
 function DashboardCommunityFeed() {
 
     async function getFeed() {
-        const res = await httpReq.get(API_BASE_URL + '/community?perpage=5&page=1')
+        const res = await httpReq.get(API_BASE_URL + '/community')
         return res
     }
 

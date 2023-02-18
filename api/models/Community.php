@@ -1,23 +1,18 @@
 <?php
 
 
-
 require_once './lib/database.php';
-
 
 
 
 class Community extends Database
 {
 
-	private const TABLE = 'community';
-
 
 	function __construct()
 	{
 		parent::__construct();
 	}
-
 
 
 
@@ -59,7 +54,6 @@ class Community extends Database
 
 
 
-
     public function get_community_feed()
     {
         // Needed count for front end pagination
@@ -97,7 +91,6 @@ class Community extends Database
             'data' => $rows_sliced
         ];
     }
-
 
 
 

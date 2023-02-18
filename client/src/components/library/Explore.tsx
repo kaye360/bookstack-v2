@@ -27,7 +27,7 @@ export default function Explore() {
     const { data, isLoading, isError } = useQuery(
         'usersBooks', getBooks
     )
-    let exploreBooks = data?.slice(-6).reverse()
+    let exploreBooks = data?.data?.slice(-6).reverse()
 
     if ( isLoading ) {
         return <Loader />

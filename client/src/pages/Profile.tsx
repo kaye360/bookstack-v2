@@ -43,17 +43,17 @@ export default function Profile() {
             {
                 isSuccess &&
                 <>
-                    <LibraryPreview userID={user.id} username={username} />
+                    <LibraryPreview userID={user.data.id} username={username} />
 
                     <Separator className="my-8" />
 
                     <h2 className="my-6 text-xl">
                         <TextInline>
-                            {user.username}'s recent activity
+                            {user.data.username}'s recent activity
                         </TextInline>
                     </h2>
 
-                    <UsersPublicFeed userID={user.id} />
+                    <UsersPublicFeed userID={user.data.id} />
                 </>
             }
 
@@ -134,6 +134,7 @@ function UsersPublicFeed({userID}) {
             data : []
         }
     })
+    console.log(feed)
 
 
     if(isError) { 
@@ -151,11 +152,11 @@ function UsersPublicFeed({userID}) {
         comment : 'chat_bubble',
         like : 'favorite',
     }
-    
+
     return (
         <ul className="flex flex-col gap-8">
             { feed.data.length !== 0 ? (
-                feed.data.slice(0,10).map( (feedItem : IfeedItem) => (
+                feed.data.data.slice(0,10).map( (feedItem : IfeedItem) => (
 
                     <li key={feedItem.id} className="grid grid-cols-[1fr_2fr] gap-6 p-8 bg-primary-150 dark:bg-primary-750 rounded-2xl">
                         <img src={feedItem.image_url ? feedItem.image_url : bookNoCover} alt="Book Cover"

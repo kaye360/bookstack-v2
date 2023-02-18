@@ -108,7 +108,6 @@ export const useNotifications = (userID: number) => {
         old : 0,
     }
 
-    console.log(recent, old)
     if( recent?.success && old?.success ) {
         const newNotifications = JSON.parse( recent.data.new_notifications )
         const oldNotifications = JSON.parse( old.data.old_notifications )
@@ -119,8 +118,6 @@ export const useNotifications = (userID: number) => {
             old : oldNotifications ? oldNotifications : []
         }
 
-        console.log(notifications)
-        
         amount = {
             recent : notifications.recent.length,
             old : notifications.old.length

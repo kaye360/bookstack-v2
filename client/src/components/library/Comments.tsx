@@ -35,14 +35,14 @@ export function Comments({isLoading, isError, book}) {
         return <TextBlock>Error Loading Comments</TextBlock>
     }
 
-    if(book.comments.success === false) {
+    if(book.success === false) {
         return <TextBlock>No comments were found on this book. Be the first!</TextBlock>
     }
 
     return (
         <ul className="flex flex-col gap-8 text-left" id="comments">
 
-            { book.comments.map( (comment: Icomment) =>(
+            { book.data.comments.map( (comment: Icomment) =>(
                 <li key={comment.id}>
                     <h3 className="w-fit px-4 py-2 rounded-2xl font-bold text-xl bg-primary-300 dark:bg-primary-900">
                         <Link to={`/user/${comment.username}`}>

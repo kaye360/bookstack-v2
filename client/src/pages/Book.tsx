@@ -33,15 +33,15 @@ export default function Book() {
     
 
     if(bookQuery.isError) {
-        return <div>Error Getting Book</div>
+        return <TextBlock>Error Getting Book</TextBlock>
     }
 
     if(bookQuery.isLoading) {
         return <Loader />
     }
 
-    if(bookQuery.data.success === false) {
-        return <div>Book not found</div>
+    if( bookQuery.data.success === false ) {
+        return <TextBlock>Book not found</TextBlock>
     }
 
     /**
@@ -75,15 +75,15 @@ export default function Book() {
      * 
      */
     
-    title = bookQuery.data.title
-    author = bookQuery.data.author
-    isRead = bookQuery.data?.is_read === 'true'
-    coverUrl = bookQuery.data.cover_url || bookNoCover
-    commentCount = bookQuery.data.comment_count
-    bookUserID = bookQuery.data.user_id
+    title = bookQuery.data.data.title
+    author = bookQuery.data.data.author
+    isRead = bookQuery.data.data?.is_read === 'true'
+    coverUrl = bookQuery.data.data.cover_url || bookNoCover
+    commentCount = bookQuery.data.data.comment_count
+    bookUserID = bookQuery.data.data.user_id
     
-    if(bookQuery.data.likes) {
-        likes = JSON.parse(bookQuery.data.likes) || []
+    if(bookQuery.data.data.likes) {
+        likes = JSON.parse(bookQuery.data.data.likes) || []
         isLikedByUser = Array.isArray(likes) && likes.includes(user.id)
     }
     

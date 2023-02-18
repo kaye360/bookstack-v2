@@ -37,7 +37,7 @@ export default function Explore() {
 
             { isFetched && 
                 <LibraryGrid>
-                    { data && data.map( (book: Ibook ) => {
+                    { data.data && data.data?.map( (book: Ibook ) => {
 
                         const likes = JSON.parse(book.likes)
 

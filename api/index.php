@@ -47,6 +47,5 @@ spl_autoload_register( function($class) {
  */
 $route = new Router();
 require_once './routes/routes.php';
-// var_dump($route->routes);
 $route->json();
 

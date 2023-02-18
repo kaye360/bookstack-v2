@@ -60,9 +60,9 @@ export const useLibrary = (userId: number) => {
 
     let library: IBook[] = []
 
-    if(data) {
+    if(data?.data) {
 
-        library = data.map( (book: IBookAPI) => {
+        library = data?.data.map( (book: IBookAPI) => {
             return {
                 author : book.author,
                 commentCount : book.comment_count,

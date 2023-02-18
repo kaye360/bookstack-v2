@@ -88,7 +88,7 @@ class Comment extends Database
 		$recieving_user_id = $book['data']['user_id'];
 
 		$community_feed = new Community();
-		$test = $community_feed->create(
+		$community_feed->create(
 			type: 'comment',
 			message : $message,
 			link: $link,
@@ -97,7 +97,6 @@ class Comment extends Database
 			username: $request['username'],
 			comment: $request['comment']
 		);
-		var_dump($test);
 
 		$new_notification = new Notification();
 		$new_notification->create(
