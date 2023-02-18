@@ -28,194 +28,88 @@ class Comment extends Database
 
 	public function create()
 	{
-		$post_data = $this->request();
+		$request = $this->request();
 
-		// Validate empty fields
-		if (
-			empty($post_data['comment']) ||
-			empty($post_data['user_id']) ||
-			empty($post_data['book_id']) ||
-			empty($post_data['username']) ||
-			empty($post_data['image_url'])
-		) {
-			// http_response_code(400);
-			return [
-				'success' => false,
-				'message' => 'Missing fields. Comment is required.'
-			];
+		if( !$this->is_valid_request($request, ['comment', 'user_id', 'book_id', 'username', 'image_url']) ) {
+			return $this->error('Comment, user_id, book_id, username, image_url are required in Comment->create');
 		}
 
 		// Validate comment length
-		if ( $this->has_too_many_chars(
-			string: $post_data['comment'],
-			limit: 200
-		)) {
-			$comment_length = strlen($post_data['comment']);
-			return [
-				'success' => false,
-				'message' => "Comment is too many characters. Maximum is 200, your comment has $comment_length"
-			];
+		if ( $this->has_too_many_chars($request['comment'], 200)) {
+			$comment_length = strlen($request['comment']);
+			return $this->error("Comment is too many characters. Maximum is 200, your comment has $comment_length");
 		}
 
 		// Validate allowed chars
 		if ( $this->has_forbidden_chars( 
-			values: [$post_data['comment']],
-			regex: '/^[a-zA-Z0-9_\-!@#$%&*{}()<>.,;:"\' ]+$/'
-		)) {
-			return [
-				'success' => false,
-				'message' => 'Comment has forbidden characters.'
-			];
+			[$request['comment']], 
+			'/^[a-zA-Z0-9_\-!@#$%&*{}()<>.,;:"\' ]+$/')
+		) {
+			return $this->error('Comment has forbidden characters.');
 		}
 
-		// Create Comment
-		$new_comment = $this->create_row(
-		  columns: [
-			'username' => $post_data['username'],
-			'user_id' => $post_data['user_id'],
-			'book_id' => $post_data['book_id'],
-			'comment' => $post_data['comment']
-		  ],
-		  return: ['comment', 'username'],
-		  table: self::TABLE
-		);
+		$create_new_comment = $this->table('comments')
+			->cols('username, user_id, book_id, comment')
+			->values("
+				'$request[username]', 
+				'$request[user_id]', 
+				'$request[book_id]', 
+				'$request[comment]'
+			")
+			->new();
+
+		if( !$create_new_comment['success'] ) {
+			return $this->error('Failed to add comment');
+		}
 
 		// Get updated comment count of book after creating new comment
-		$updated_comment_count = count( $this->get_all($post_data['book_id']) );
-
+		$updated_comment_count = $this->table('comments')
+			->where(" book_id = '$request[book_id]' ")
+			->count();
+		
 		// Update Comment count in table 'books'
-		$updated_book = $this->update_row(
-			id: $post_data['book_id'],
-			table: 'books',
-			columns: [ 'comment_count' => $updated_comment_count]
-		);
+		$update_comment_count = $this->table('books')
+			->set(" comment_count = '$updated_comment_count[data]' ")
+			->where(" id = '$request[book_id]' ")
+			->update();
+		
+		$book = $this->select('user_id, title')
+			->table('books')
+			->where(" id = $request[book_id] ")
+			->single();
 
-		// Add entry to Community Feed
-		$this->community_feed->create(
+		if( !$book['success'] ) {
+			return $this->error('Failed to get updated book information');
+		}
+
+		$title = $book['data']['title'];
+		$message = "$request[username] commented on a book: $title";
+		$link = '/book/' . $request['book_id'];
+		$recieving_user_id = $book['data']['user_id'];
+
+		$community_feed = new Community();
+		$test = $community_feed->create(
 			type: 'comment',
-			message: "$post_data[username] commented on a book: $post_data[book_title]",
-			link: '/book/' . $post_data['book_id'],
-			user_id: $post_data['user_id'],
-			image_url: $post_data['image_url'],
-			comment: $post_data['comment'],
-			username: $post_data['username']
+			message : $message,
+			link: $link,
+			user_id: $request['user_id'],
+			image_url: $request['image_url'],
+			username: $request['username'],
+			comment: $request['comment']
 		);
+		var_dump($test);
 
-		// Add notificaiton
-		$this->notifications->create(
-			sending_user_id: $post_data['user_id'],
-			recieving_user_id: $updated_book['user_id'],
-			message : "$post_data[username] commented on your book: $post_data[book_title]",
-			url: '/book/' . $post_data['book_id'],
+		$new_notification = new Notification();
+		$new_notification->create(
+			sending_user_id: $request['user_id'],
+			recieving_user_id: $recieving_user_id,
+			message: $message,
+			url: $link,
 			type: 'comment'
 		);
 
-		return $new_comment;
+		return $book;
 	}
 
 
-
-
-	public function get_single($id)
-	{
-		return $this->get_row_by_id(
-			id: $id,
-			table: self::TABLE,
-		);
-	}
-
-
-
-
-	public function get_all($id)
-	{
-		return $this->get_all_rows(
-			id: $id,
-			id_col: 'book_id',
-			table: self::TABLE,
-		);
-	}
-
-
-
-
-	public function edit($id)
-	{
-		$put_data = $this->request();
-
-		// Validate empty fields
-		if ( empty($put_data['comment'])) {
-			http_response_code(400);
-			return [
-				'success' => false,
-				'message' => 'Comment text is required'
-			];
-		}
-
-		// Validate characters
-		if ($this->has_forbidden_chars(
-			values: [
-				$put_data['comment']
-			],
-			regex: '/^[a-zA-Z0-9_\-!@#$%&*{}()<>.,;:"\' ]+$/'
-		)) {
-			http_response_code(400);
-			return [
-				'success' => false,
-				'message' => 'Username or password have forbidden characters.'
-			];
-		}
-
-		// Update Book
-		return $this->update_row(
-			id: $id,
-			table: self::TABLE,
-			columns: [
-				"comment" => $put_data['comment']
-			],
-		);
-	}
-
-
-
-
-	// public function destroy($id)
-	// {
-	// 	return $this->destroy_row_by_id(
-	// 		id: $id,
-	// 		table: self::TABLE,
-	// 	);
-	// }
-
-
-
-
-	/**
-	 * 
-	 * Dev Functions only
-	 * 
-	 */
-	public function reset()
-	{
-
-		include_once('./fake-data/comments.php');
-
-		$sql = "TRUNCATE TABLE comments";
-		$this->stmt = $this->dbh->prepare($sql);
-		$this->stmt->execute();
-
-		foreach ($comments as $comment) {
-			$this->create_row(
-				columns: [
-					'username' => $comment['username'],
-					'comment' => $comment['comment'],
-					'user_id' => $comment['user_id'],
-					'book_id' => $comment['book_id'],
-				],
-				table: self::TABLE
-			);
-		}
-
-		return 'Comments table reset';
-	}
 }

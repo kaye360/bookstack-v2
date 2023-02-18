@@ -169,6 +169,7 @@ class Database
 			if( isset($this->order) ) $sql .= " ORDER BY $this->order";
 			if( isset($this->limit) ) $sql .= " LIMIT $this->limit ";
 			
+			echo "$sql \n\n\n";
 			$this->stmt = $this->dbh->prepare($sql);
 			
 			if( !$this->stmt->execute() ) {
@@ -215,6 +216,7 @@ class Database
 			}
 
 			$sql = " DELETE FROM $this->table WHERE $this->where";
+			echo $sql;
 			$this->stmt = $this->dbh->prepare($sql);
 			
 			if( !$this->stmt->execute() ) {
@@ -236,7 +238,6 @@ class Database
 			}
 
 			$sql = " UPDATE $this->table SET $this->set WHERE $this->where";
-			echo $sql;
 			$this->stmt = $this->dbh->prepare($sql);
 			
 			if( !$this->stmt->execute() ) {
@@ -346,7 +347,10 @@ class Database
 		$validated = true;
 
 		foreach($required_keys as $key) {
-			if( !array_key_exists($key, $request) ) $validated = false;
+			if( !array_key_exists($key, $request) ) {
+				$validated = false;
+				echo $key;
+			}
 		}
 
 		return $validated;

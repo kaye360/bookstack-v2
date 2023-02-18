@@ -142,14 +142,18 @@ $route->put('/book/like', function()
 });
 
 
-$route->put('/book/read', function() {
+$route->put('/book/read', function() 
+{
     return (new Book())->toggle_read_status();
 });
 
 
 // DELETE
-$route->delete('/book', function() {
-    return (new Book())->destroy();
+$route->delete('/book', function() use($route)
+{
+    return (new Book())->table('books')
+        ->where(" id = '$route->param' ")
+        ->destroy();
 });
 
 
@@ -161,31 +165,18 @@ $route->delete('/book', function() {
  */
 
 // GET
-$route->get('/comment/:param', function() {
-    return (new Comment())->get_single();
-});
-
-
-$route->get('/comments/:param', function() {
-    return (new Comment())->get_all();
+$route->get('/comments/:param', function() use($route)
+{
+    return (new Comment())->table('comments')
+        ->where(" book_id = '$route->param' ")
+        ->list();
 });
 
 
 // POST
-$route->post('/comment', function() {
+$route->post('/comment', function() 
+{
     return (new Comment())->create();
-});
-
-
-// PUT
-$route->put('/comment/:param', function() {
-    return (new Comment())->edit();
-});
-
-
-// DELETE
-$route->delete('/comment/:param', function() {
-    return (new Comment())->destroy();
 });
 
 
@@ -197,11 +188,13 @@ $route->delete('/comment/:param', function() {
  */
 
 // GET
-$route->get('/community/:param', function() {
-    return (new Community())->get_user_feed();
+$route->get('/community/:param', function() use($route)
+{
+    return (new Community())->get_user_feed($route->param);
 });
 
-$route->get('/community', function() {
+$route->get('/community', function() 
+{
     return (new Community())->get_community_feed();
 });
 

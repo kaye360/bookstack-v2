@@ -129,6 +129,9 @@ class Book extends Database
 				$link = '/book/' . $request['id'];
 				$cover = $book['data']['cover_url'];
 
+				/**
+				 * @todo Once Community class is refactored, change this to a new instance of Community->create(), just like how notifications are handled
+				 */
 				$new_community_feed_entry = $this->table('community')
 					->cols('type, message, link, user_id, image_url, username')
 					->values(" 
@@ -166,42 +169,35 @@ class Book extends Database
 
 
 
-
-	/**
-	 * @todo validate correct user ID
-	 */
 	public function toggle_read_status()
 	{
 		$request = $this->request();
 
-		// Validate request
-		if (empty($put_data['id'])) {
-			// http_response_code(400);
-			return [
-				'success' => false,
-				'message' => 'Book ID is required.'
-			];
+		if( !$this->is_valid_request($request, ['id', 'user_id']) ) {
+			return $this->error('$id, $user_id is required in Book->toggle_read_status');
 		}
 
-		// Get current book read status
-		$current_book = $this->get_row_by_id(
-			id: $put_data['id'],
-			table: self::TABLE,
-			return: ['is_read']
-		);
+		$book = $this->select('id, user_id, is_read')
+			->table('books')
+			->where(" id = $request[id] ")
+			->single();
 
-		// Get new read status
-		$new_read_status = ($current_book['is_read'] === 'true') ? 'false' : 'true';
+		if( !$book['success']) {
+			return $this->error('No Book found');
+		}
 
-		// Update status
-		return $this->update_row(
-			id: $put_data['id'],
-			table: self::TABLE,
-			columns: [
-				'is_read' => $new_read_status
-			],
-			return: ['is_read']
-		);
+		if( $request['user_id'] !== $book['data']['user_id'] ) {
+			return $this->error('Book ID must equal $request user_id');
+		}
+
+		$new_read_status = ($book['data']['is_read'] === 'true') ? 'false' : 'true';
+
+		$update_book_read_status = $this->table('books')
+			->set(" is_read = '$new_read_status' ")
+			->where(" id = '$request[id]' ")
+			->update();
+
+		return $update_book_read_status;
 	}
 
 }

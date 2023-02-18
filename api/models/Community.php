@@ -21,21 +21,35 @@ class Community extends Database
 
 
 
-    public function get_user_feed(
-        string $id
-    ) {
-        $count = $this->get_row_count(table: self::TABLE, col: 'user_id', id: $id);
+    public function get_user_feed(string $id) {
 
-        $page = isset($_GET['page']) ? $_GET['page'] - 1 : 1;
-        $per_page = isset($_GET['perpage']) ? $_GET['perpage'] : null;
+        if( !$id ) {
+            return $this->error('Id required in Community->get_user_feed');
+        }
 
-        $rows = $this->get_all_rows(
-            table: self::TABLE,
-            id: $id,
-            id_col: 'user_id',
-            page:  $page,
-            per_page: $per_page
-        );
+        // Needed count for front end pagination
+        $count = $this->table('community')
+            ->where(" user_id = $id ")
+            ->count();
+
+        if( isset($_GET['page']) && isset($_GET['perpage']) ) {
+
+            $page = $_GET['page'] - 1;
+            $page = $page < 0 ? 0 : $page;
+            $per_page = $_GET['perpage'];
+            $start = $page * $per_page;
+            $limit = "$start, $per_page";
+
+        } else {
+
+            $limit = '0, 10';
+
+        }
+
+        $rows = $this->table('community')
+            ->where(" user_id = $id ")
+            ->limit($limit)
+            ->list();
 
         return [
             'count' => $count,
@@ -48,22 +62,39 @@ class Community extends Database
 
     public function get_community_feed()
     {
-        $count = $this->get_row_count(table: self::TABLE);
-        $page = isset($_GET['page']) ? $_GET['page'] - 1 : 1;
-        $per_page = isset($_GET['perpage']) ? $_GET['perpage'] : null;
-        $isShuffled = !(isset($_GET['shuffle']) && $_GET['shuffle'] === 'false');
+        // Needed count for front end pagination
+        $count = $this->table('community')->count();
+        $per_page = 50;
 
-        $rows = $this->get_all_rows(
-            table: self::TABLE,
-            page: $page,
-            per_page: $per_page
-        );
+        if( isset($_GET['page'])  ) {
 
-        if($isShuffled) shuffle($rows);
+            $page = $_GET['page'] - 1;
+            $page = $page < 0 ? 0 : $page;
+            $start = $page * $per_page;
+            $limit = "$start, $per_page";
+
+        } else {
+
+            $limit = "0, $per_page";
+
+        }
+
+        $rows = $this->table('community')
+            ->limit($limit)
+            ->list();
+
+        $rows_sliced = [];
+        $offset = array_rand( range(0,4) );
+
+        for($i = $offset; $i < $per_page; $i += 5) {
+            if( isset($rows['data'][$i]) ) {
+                $rows_sliced[] =  $rows['data'][$i];
+            }
+        }
 
         return [
             'count' => $count,
-            'data' => $rows
+            'data' => $rows_sliced
         ];
     }
 
@@ -80,18 +111,10 @@ class Community extends Database
         string $comment = '',
     ) {
 
-        return $this->create_row(
-            table: self::TABLE,
-            columns: [
-                'type' => $type,
-                'message' => $message,
-                'link' => $link,
-                'user_id' => $user_id,
-                'image_url' => $image_url,
-                'comment' => $comment,
-                'username' => $username
-            ]
-        );
+        return $this->table('community')
+            ->cols('type, message, link, user_id, image_url, comment, username')
+            ->values("'$type', '$message', '$link', '$user_id', '$image_url', '$comment', '$username'")
+            ->new();
     }
 
 }
