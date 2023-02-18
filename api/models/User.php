@@ -156,12 +156,4 @@ class User extends Database
 		// Found Here: https://stackoverflow.com/questions/2040240/php-function-to-generate-v4-uuid
 		return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex(random_bytes(16)), 4));
 	}
-
-
-
-	/**
-	 * 
-	 * Dev Functions only
-	 * 
-	 */
 }

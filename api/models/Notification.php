@@ -108,14 +108,4 @@ class Notification extends Database
 		}
 	}
 
-
-
-
-
-
-
-
-
-
-
 }
