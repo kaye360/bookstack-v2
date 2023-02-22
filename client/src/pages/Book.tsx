@@ -74,7 +74,6 @@ export default function Book() {
      * Local BookStack API data formating
      * 
      */
-    
     title = bookQuery.data.data.title
     author = bookQuery.data.data.author
     isRead = bookQuery.data.data?.is_read === 'true'
@@ -110,7 +109,6 @@ export default function Book() {
         googleQuery.data.totalItems > 0 &&
         Array.isArray(googleQuery.data.items)
     ) {
-        author = googleQuery.data.items[0].volumeInfo.author || 'Not Available'
         subtitle = googleQuery.data.items[0].volumeInfo.subtitle || 'Not Available'
         category = googleQuery.data.items[0].volumeInfo.categories || 'Not Available'
         pageCount = googleQuery.data.items[0].volumeInfo.pageCount || 'Not Available'

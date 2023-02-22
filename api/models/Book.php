@@ -149,7 +149,7 @@ class Book extends Database
 					recieving_user_id: $book['data']['user_id'],
 					message: $message,
 					url: $link,
-					type: 'like'
+					type: 'like',
 				);
 			}
 

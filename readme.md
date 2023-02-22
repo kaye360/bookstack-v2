@@ -2,6 +2,8 @@
 
 BookStack is a social media web app for avid book readers! I have created this as a portfolio project from scratch. No tutorials were used. Any code found on the internet is credited to the author of the code.
 
+[View Project](https://bookstack.joshkaye.ca)
+
 
 
 ## Features
@@ -39,12 +41,14 @@ Tailwind was used as the CSS framework for this project.
 Can be found in the /api_docs folder. Crucial information for each class and method can be found here. 
 
 
+## What's New?
+- Feb 18, 2023: Refactored and updated Backed Router and Database Class for more flexibility
+- Feb 12, 2023: Add Dark/Light mode and Material UI icons
+- Feb 08, 2023: Infinite Scroll on Community Feed
+
 
 ## TODO
-- update api docs: router
-- update api docs: where PUT POST DELETE requests had arguents
-- update api docs: community->create() with image)url, comment, and username fields
-- add communtiy api docs
+- update API docs
 
 ## Bugs
 
@@ -59,4 +63,3 @@ Can be found in the /api_docs folder. Crucial information for each class and met
 - live search library with debouncing
 - use proper response codes on api fails
 - user auth on protected api routes. send user id and uuid front frontend on 
-- dark/light mode

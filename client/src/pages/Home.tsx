@@ -4,23 +4,42 @@ import Explore from "../components/library/Explore";
 import booksScattered from "../assets/img/books-scattered.png"
 import booksAngled from "../assets/img/books-angled.png"
 import TextBlock from "../components/elements/TextBlock";
+import logoFigma from "../assets/img/logo-figma.png"
+import logoMysql from "../assets/img/logo-mysql.png"
+import logoPhp from "../assets/img/logo-php.png"
+import logoPostman from "../assets/img/logo-postman.png"
+import logoReact from "../assets/img/logo-react.png"
+import logoTailwind from "../assets/img/logo-tailwind.png"
 
 export default function Home() {
 
     
     return(
-    <div className="flex flex-col gap-12 pb-12">
+    <div className="flex flex-col gap-16 pb-12">
         
         <Hero />
+        
+        <div>
+            <h2 className="text-3xl text-primary-500"> 
+                Made With
+            </h2>
+
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 items-center justify-between gap-12 my-12 text-center">
+                <img src={logoReact} alt="React Logo" />
+                <img src={logoPhp} alt="PHP Logo" />
+                <img src={logoMysql} alt="MYSQL Logo" />
+                <img src={logoTailwind} alt="Tailwind Logo" />
+                <img src={logoPostman} alt="Postman Logo" />
+                <img src={logoFigma} alt="Figma Logo" />
+            </div>
+        </div>
 
         <div className="grid md:grid-cols-2 gap-x-2 gap-y-12 items-center">
 
-            <div className="">
-                <img src={booksAngled} 
-                    className="w-full max-h-80 object-cover 
-                    md:max-h-screen md:w-4/5" 
-                />
-            </div>
+            <img src={booksAngled} 
+                className="w-full max-h-80 object-cover 
+                md:max-h-screen md:w-4/5" 
+            />
 
             <TextBlock>
 
@@ -46,12 +65,10 @@ export default function Home() {
 
             </TextBlock>
 
-            <div className="">
-                <img src={booksScattered} 
-                    className="w-full max-h-80 object-cover 
-                    md:max-h-screen md:w-4/5 md:ml-auto"
-                /> 
-            </div>
+            <img src={booksScattered} 
+                className="w-full max-h-80 object-cover 
+                md:max-h-screen md:w-4/5 md:ml-auto"
+            /> 
 
         </div>
 
